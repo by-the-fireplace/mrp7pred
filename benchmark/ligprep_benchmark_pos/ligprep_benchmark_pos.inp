@@ -1,0 +1,7 @@
+INPUT_FILE_NAME   ligprep_benchmark_pos.maegz
+OUT_MAE   ligprep_benchmark_pos-out.maegz
+FORCE_FIELD   14
+EPIK   yes
+DETERMINE_CHIRALITIES   no
+IGNORE_CHIRALITIES   no
+NUM_STEREOISOMERS   32

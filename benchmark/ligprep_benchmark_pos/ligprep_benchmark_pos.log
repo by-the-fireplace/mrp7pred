@@ -1,0 +1,103 @@
+--------------------------------------------------------------------------------
+JobId          : Jamess-MBP-0-5f98ead8
+Name           : ligprep_benchmark_pos
+Program        : LigPrep
+MMshareExec    : /opt/schrodinger/suites2018-4/mmshare-v4.4/bin/Darwin-x86_64
+Host           : Jamess-MBP.lan
+Dir            : /Users/Jphild/Documents/Papers/_***Thesis/ml/benchmark/ligprep_benchmark_pos
+HostEntry      : localhost
+JobHost        : Jamess-MBP.lan
+JobDir         : /Users/Jphild/.schrodinger/tmp/ligprep_benchmark_pos
+JobMMshareExec : /opt/schrodinger/suites2018-4/mmshare-v4.4/bin/Darwin-x86_64
+Commandline    : /opt/schrodinger/suites2018-4/ligprep -inp ligprep_benchmark_pos.inp -HOST localhost:2 -NJOBS 1 -PROJ /var/folders/cp/mjt3b8wj2wq2lbp8hj0fzd840000gn/T/Jphild/tproj10779a76426 -DISP append -VIEWNAME ligprep_gui.LigPrepPanel -TMPLAUNCHDIR -ATTACHED
+StartTime      : 2020-10-27-23:51:53
+--------------------------------------------------------------------------------
+LigPrep: preparing subjobs
+
+Running subjobs on hosts:
+  localhost (Max: 2)
+Number of jobs:       1
+Max retries per job:  2
+Max allowed failures: unlimited
+Run with -LOCAL:      False
+Verbosity:            normal
+
+Starting JobDJ...
+
+Keep one job on driver host: False
+JobDJ columns:
+  C: Number of completed subjobs
+  A: Number of active subjobs (e.g., submitted, running)
+  W: Number of waiting/pending subjobs
+
+C A W | Activity  JobId  JobName  JobHost
+- - - | --------- -----------------------
+0 1 0 | launched  Jamess-MBP-0-5f98eade ligprep_benchmark_pos-1 localhost [Jamess-MBP]
+1 0 0 | finished  Jamess-MBP-0-5f98eade ligprep_benchmark_pos-1 localhost [Jamess-MBP]
+
+All jobs have completed.
+
+1 of 1 job(s) succeeded; 0 job(s) failed.
+
+--------------------------------------------------------------------------------
+SUBJOB:  ligprep_benchmark_pos-1 
+
+--------------------------------------------------------------------------------
+ JobId          : Jamess-MBP-0-5f98eade
+ Name           : ligprep_benchmark_pos-1
+ Program        : LigPrep
+ MMshareExec    : /opt/schrodinger/suites2018-4/mmshare-v4.4/bin/Darwin-x86_64
+ Host           : Jamess-MBP.lan
+ Dir            : /Users/Jphild/.schrodinger/tmp/ligprep_benchmark_pos
+ HostEntry      : localhost
+ JobHost        : Jamess-MBP.lan
+ JobDir         : /Users/Jphild/.schrodinger/tmp/ligprep_benchmark_pos-1
+ JobMMshareExec : /opt/schrodinger/suites2018-4/mmshare-v4.4/bin/Darwin-x86_64
+ Commandline    : /opt/schrodinger/suites2018-4/ligprep -bff 14 -epik -s 32 -orig_file ligprep_benchmark_pos.maegz -orig_file_index 1 -imae in_ligprep_benchmark_pos-1.maegz -omae ligprep_benchmark_pos-1.maegz -HOST localhost
+ StartTime      : 2020-10-27-23:51:58
+ --------------------------------------------------------------------------------
+ LigPrep (version 48012). Copyright Schrodinger, LLC. All rights reserved.
+ 
+ LigPrep command:
+ $SCHRODINGER/ligprep -bff 14 -epik -s 32 -orig_file ligprep_benchmark_pos.maegz -orig_file_index 1 -imae in_ligprep_benchmark_pos-1.maegz -omae ligprep_benchmark_pos-1.maegz
+ 
+ Processing steps:
+ $DO/sdstereoexpander.py -add_hydrogens -max_output 32 -max_generated 1024 <infile.mae> <outfile.mae>
+ $DO/htreat.py -t All-None -a all -s -l 200 <infile.mae> <outfile.mae>
+ $DO/desalter.py <infile.mae> <outfile.mae>
+ $DO/neutralizer.py -m 200 <infile.mae> <outfile.mae>
+ $DO/epik.py -ph 7.0 -tn 8 -ma 200 -imae <infile.mae> -omae <outfile.mae>
+ $DO/guard.py <infile.mae> <outfile.mae>
+ $DO/stereoizer.py -label_specified_chiralities -n 32 <infile.mae> <outfile.mae>
+ $DO/cgx.py -optimize -ffld 14 -epsilon 10.0 <infile.mae> <outfile.mae>
+ $DO/filterstereo.py -max_stereo 32 <infile.mae> <outfile.mae>
+ 
+ DO=$SCHRODINGER/run -FROM macromodel ../../lib/Darwin-x86_64/python_packages/ligprep3/
+ 
+ # counts of output and dropped structures after processing steps
+ # index  sdstex  htreat  desalt  neutra   epik    guard  stereo    cgx   filter  title
+        1   1/0     1/0     1/0     1/0     3/0     3/0     3/0     3/0     3/0   'masitinib'
+        2   1/0     1/0     1/0     1/0     2/0     2/0     2/0     2/0     2/0   '5-aza'
+        3   1/0     1/0     1/0     1/0     2/0     2/0     2/0     2/0     2/0   'PMEA'
+        4   4/0     4/0     4/0     4/0     8/0     8/0     8/0     8/0     2/0   'ddC'
+        5   1/0     1/0     1/0     1/0     1/0     1/0     1/0     1/0     1/0   '16alpha,17beta-Estriol 3-(beta-D-glucuronide)'
+        6   1/0     1/0     1/0     1/0     1/0     1/0     1/0     1/0     1/0   'taurocholate'
+        7   1/0     1/0     1/0     1/0     1/0     1/0     1/0     1/0     1/0   'glycolithocholate-3-sulfate'
+        8   1/0     1/0     1/0     1/0     1/0     1/0     1/0     1/0     1/0   'sulfinpyrazone'
+        9   1/0     1/0     1/0     1/0     2/0     2/0     2/0     2/0     2/0   'doxorubicin'
+       10   1/0     1/0     1/0     1/0     2/0     2/0     2/0     2/0     2/0   'sildenafil '
+       11   1/0     1/0     1/0     1/0     2/0     2/0     2/0     2/0     2/0   'Vemurafenib'
+       12  16/0    16/0    16/0    16/0    16/0    16/0    16/0    16/0    16/0   'ltc4'
+       13   1/0     1/0     1/0     1/0     4/0     4/0     9/0     9/0     9/0   'vincristine'
+       14   1/0     1/0     1/0     1/0     1/0     1/0     1/0     1/0     1/0   'paclitaxel'
+ 
+ # of processed structures in "ligprep_benchmark_pos-1.maegz" : 45
+ # of dropped structures in "ligprep_benchmark_pos-1-dropped.maegz" : 0
+ 
+ backend run time: 0 hours 0 minutes 47.929 seconds
+ --------------------------------------------------------------------------------
+
+# of processed structures in "ligprep_benchmark_pos-out.maegz" : 45
+# of dropped structures in "ligprep_benchmark_pos-dropped.maegz" : 0
+
+total run time: 0 hours 0 minutes 57.606 seconds

@@ -1,0 +1,549 @@
+######## begin of glide-dock_SP_mrp7_optimized_benchmark_pos-0001.log #########
+Glide version 81012 (mmshare version 44012)
+Copyright (c) Schrodinger, LLC.
+All Rights Reserved.
+
+--------------------------------------------------------------------------------
+JobId          : Jamess-MBP-0-5f98ec19
+Name           : glide-dock_SP_mrp7_optimized_benchmark_pos-0001
+Program        : Glide
+MMshareExec    : /opt/schrodinger/suites2018-4/mmshare-v4.4/bin/Darwin-x86_64
+Host           : Jamess-MBP.lan
+Dir            : /Users/Jphild/.schrodinger/tmp/glide-dock_SP_mrp7_optimized_benchmark_pos
+HostEntry      : localhost
+JobHost        : Jamess-MBP.lan
+JobDir         : /Users/Jphild/.schrodinger/tmp/glide-dock_SP_mrp7_optimized_benchmark_pos-0001
+JobMMshareExec : /opt/schrodinger/suites2018-4/mmshare-v4.4/bin/Darwin-x86_64
+Commandline    : /opt/schrodinger/suites2018-4/glide -RESTART -serial glide-dock_SP_mrp7_optimized_benchmark_pos-0001.inp -HOST localhost
+StartTime      : 2020-10-27-23:57:13
+--------------------------------------------------------------------------------
+
+[running at reduced cpu priority]
+ VdW radii of ligand atoms scaled by   0.800000000000000     
+ Charge cutoff for polarity   0.150000000000000     
+ After readscreen, (nx, ny, nz) = (          30 ,           30 ,           30 ).
+  Receptor setup: (nsites, nx, ny, nz, bsize)=(         125 ,           30 , 
+          30 ,           30 ,    1.00000000000000      ).
+ Screening setup finished.
+ DOCKMAIN: getting receptor.
+  DOCKMAIN after grid: (nx, ny, nz) = (          80 ,           80 , 
+          80 ).
+ DOCKMAIN: Grid setup finished
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+  
+  Penalizing non-planar amide torsions 
+  
+ Number of rotatable bonds            8
+ Using templates for ring conformations.
+
+GlideScore version SP5.0 will be used
+
+  
+ Buried polar penalty      0.000
+ Coulomb vdW cutoff        0.000
+ H bond cutoff             0.000
+ Metal-ligand cutoff      10.000
+Assigning GlideScore SP5.0 parameters
+Postdocking minimization:   5 poses; CvdW cutoffs   100.0 kcal/mol for min,     0.0 kcal/mol for report.
+GlideScore(   -7.46)+Epik State Penalty(    0.21) =    -7.25 kcal/mol
+DOCKING RESULTS FOR LIGAND        1 (masitinib)
+Best Emodel=   -74.75 E=   -56.51 Eint=    14.52 GlideScore=    -7.46
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds            8
+ Using templates for ring conformations.
+GlideScore(   -6.50)+Epik State Penalty(    0.75) =    -5.74 kcal/mol
+DOCKING RESULTS FOR LIGAND        2 (masitinib)
+Best Emodel=   -68.70 E=   -48.48 Eint=     5.58 GlideScore=    -6.50
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds            8
+ Using templates for ring conformations.
+GlideScore(   -7.67)+Epik State Penalty(    2.50) =    -5.17 kcal/mol
+DOCKING RESULTS FOR LIGAND        3 (masitinib)
+Best Emodel=   -72.58 E=   -55.41 Eint=    13.81 GlideScore=    -7.67
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds            5
+ Using templates for ring conformations.
+GlideScore(   -5.16)+Epik State Penalty(    0.02) =    -5.14 kcal/mol
+DOCKING RESULTS FOR LIGAND        4 (5-aza)
+Best Emodel=   -42.81 E=   -32.94 Eint=     1.66 GlideScore=    -5.16
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds            5
+ Using templates for ring conformations.
+GlideScore(   -6.31)+Epik State Penalty(    2.11) =    -4.19 kcal/mol
+DOCKING RESULTS FOR LIGAND        5 (5-aza)
+Best Emodel=   -49.73 E=   -33.47 Eint=     3.14 GlideScore=    -6.31
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds            6
+ Using templates for ring conformations.
+GlideScore(   -5.43)+Epik State Penalty(    0.28) =    -5.15 kcal/mol
+DOCKING RESULTS FOR LIGAND        6 (PMEA)
+Best Emodel=   -48.60 E=   -33.16 Eint=     4.27 GlideScore=    -5.43
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds            5
+ Using templates for ring conformations.
+GlideScore(   -5.58)+Epik State Penalty(    0.58) =    -4.99 kcal/mol
+DOCKING RESULTS FOR LIGAND        7 (PMEA)
+Best Emodel=   -52.89 E=   -32.35 Eint=     3.73 GlideScore=    -5.58
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds            8
+ Using templates for ring conformations.
+GlideScore(   -5.03)+Epik State Penalty(    0.07) =    -4.96 kcal/mol
+DOCKING RESULTS FOR LIGAND        8 (ddC)
+Best Emodel=   -65.57 E=   -39.14 Eint=     8.58 GlideScore=    -5.03
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds            9
+ Using templates for ring conformations.
+GlideScore(   -5.88)+Epik State Penalty(    1.29) =    -4.59 kcal/mol
+DOCKING RESULTS FOR LIGAND        9 (ddC)
+Best Emodel=   -68.70 E=   -42.34 Eint=    12.22 GlideScore=    -5.88
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds            8
+ Using templates for ring conformations.
+GlideScore(   -5.47)+Epik State Penalty(   -0.00) =    -5.47 kcal/mol
+DOCKING RESULTS FOR LIGAND       10 (16alpha,17beta-Estriol 3-(beta-D-glucuronide))
+Best Emodel=   -60.38 E=   -42.03 Eint=     3.38 GlideScore=    -5.47
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           11
+ Using templates for ring conformations.
+GlideScore(   -7.24)+Epik State Penalty(   -0.00) =    -7.24 kcal/mol
+DOCKING RESULTS FOR LIGAND       11 (taurocholate)
+Best Emodel=   -69.14 E=   -46.01 Eint=     3.93 GlideScore=    -7.24
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds            9
+ Using templates for ring conformations.
+GlideScore(   -5.67)+Epik State Penalty(   -0.00) =    -5.67 kcal/mol
+DOCKING RESULTS FOR LIGAND       12 (glycolithocholate-3-sulfate)
+Best Emodel=   -59.72 E=   -40.56 Eint=     2.85 GlideScore=    -5.67
+  
+ REPORT OF DOCKED POSES
+  
+ The ligand structures were written to the file
+glide-dock_SP_mrp7_optimized_benchmark_pos-0001_raw.maegz
+
+Exiting Glide
+Date: Wednesday, October 28 2020, at 00:02:11 EDT
+CPU time (s): 222.6 user, 4.8 system, 293.9 real
+Total elapsed time = 294 seconds (4 minutes, 54 seconds)
+[running at reduced cpu priority]
+######## end of glide-dock_SP_mrp7_optimized_benchmark_pos-0001.log #########
+######## begin of glide-dock_SP_mrp7_optimized_benchmark_pos-0002.log #########
+Glide version 81012 (mmshare version 44012)
+Copyright (c) Schrodinger, LLC.
+All Rights Reserved.
+
+--------------------------------------------------------------------------------
+JobId          : Jamess-MBP-0-5f98ec1e
+Name           : glide-dock_SP_mrp7_optimized_benchmark_pos-0002
+Program        : Glide
+MMshareExec    : /opt/schrodinger/suites2018-4/mmshare-v4.4/bin/Darwin-x86_64
+Host           : Jamess-MBP.lan
+Dir            : /Users/Jphild/.schrodinger/tmp/glide-dock_SP_mrp7_optimized_benchmark_pos
+HostEntry      : localhost
+JobHost        : Jamess-MBP.lan
+JobDir         : /Users/Jphild/.schrodinger/tmp/glide-dock_SP_mrp7_optimized_benchmark_pos-0002
+JobMMshareExec : /opt/schrodinger/suites2018-4/mmshare-v4.4/bin/Darwin-x86_64
+Commandline    : /opt/schrodinger/suites2018-4/glide -RESTART -serial glide-dock_SP_mrp7_optimized_benchmark_pos-0002.inp -HOST localhost
+StartTime      : 2020-10-27-23:57:18
+--------------------------------------------------------------------------------
+
+[running at reduced cpu priority]
+Offsetting ligand numbers by 12
+ VdW radii of ligand atoms scaled by   0.800000000000000     
+ Charge cutoff for polarity   0.150000000000000     
+ After readscreen, (nx, ny, nz) = (          30 ,           30 ,           30 ).
+  Receptor setup: (nsites, nx, ny, nz, bsize)=(         125 ,           30 , 
+          30 ,           30 ,    1.00000000000000      ).
+ Screening setup finished.
+ DOCKMAIN: getting receptor.
+  DOCKMAIN after grid: (nx, ny, nz) = (          80 ,           80 , 
+          80 ).
+ DOCKMAIN: Grid setup finished
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+  
+  Penalizing non-planar amide torsions 
+  
+ Number of rotatable bonds            6
+ Using templates for ring conformations.
+
+GlideScore version SP5.0 will be used
+
+  
+ Buried polar penalty      0.000
+ Coulomb vdW cutoff        0.000
+ H bond cutoff             0.000
+ Metal-ligand cutoff      10.000
+Assigning GlideScore SP5.0 parameters
+Postdocking minimization:   5 poses; CvdW cutoffs   100.0 kcal/mol for min,     0.0 kcal/mol for report.
+GlideScore(   -7.34)+Epik State Penalty(    0.00) =    -7.34 kcal/mol
+DOCKING RESULTS FOR LIGAND       13 (sulfinpyrazone)
+Best Emodel=   -67.42 E=   -45.42 Eint=     5.60 GlideScore=    -7.34
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           10
+ Using templates for ring conformations.
+GlideScore(   -7.43)+Epik State Penalty(    0.03) =    -7.40 kcal/mol
+DOCKING RESULTS FOR LIGAND       14 (doxorubicin)
+Best Emodel=   -82.30 E=   -55.25 Eint=     5.67 GlideScore=    -7.43
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           10
+ Using templates for ring conformations.
+GlideScore(   -7.63)+Epik State Penalty(    1.84) =    -5.79 kcal/mol
+DOCKING RESULTS FOR LIGAND       15 (doxorubicin)
+Best Emodel=   -73.30 E=   -51.17 Eint=     1.34 GlideScore=    -7.63
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds            7
+ Using templates for ring conformations.
+GlideScore(   -6.05)+Epik State Penalty(    0.18) =    -5.87 kcal/mol
+DOCKING RESULTS FOR LIGAND       16 (sildenafil)
+Best Emodel=   -64.09 E=   -47.73 Eint=     2.28 GlideScore=    -6.05
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds            7
+ Using templates for ring conformations.
+GlideScore(   -6.54)+Epik State Penalty(    0.82) =    -5.72 kcal/mol
+DOCKING RESULTS FOR LIGAND       17 (sildenafil)
+Best Emodel=   -67.27 E=   -47.70 Eint=     3.45 GlideScore=    -6.54
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds            7
+ Using templates for ring conformations.
+GlideScore(   -6.64)+Epik State Penalty(    0.38) =    -6.26 kcal/mol
+DOCKING RESULTS FOR LIGAND       18 (Vemurafenib)
+Best Emodel=   -74.51 E=   -53.85 Eint=     2.13 GlideScore=    -6.64
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds            7
+ Using templates for ring conformations.
+GlideScore(   -7.62)+Epik State Penalty(    0.44) =    -7.18 kcal/mol
+DOCKING RESULTS FOR LIGAND       19 (Vemurafenib)
+Best Emodel=   -73.80 E=   -49.75 Eint=     6.55 GlideScore=    -7.62
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           28
+ Using templates for ring conformations.
+GlideScore(   -8.05)+Epik State Penalty(   -0.00) =    -8.05 kcal/mol
+DOCKING RESULTS FOR LIGAND       20 (ltc4)
+Best Emodel=  -100.69 E=   -57.96 Eint=    17.19 GlideScore=    -8.05
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           28
+ Using templates for ring conformations.
+GlideScore(   -7.88)+Epik State Penalty(   -0.00) =    -7.88 kcal/mol
+DOCKING RESULTS FOR LIGAND       21 (ltc4)
+Best Emodel=   -98.59 E=   -54.66 Eint=    15.60 GlideScore=    -7.88
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           28
+ Using templates for ring conformations.
+GlideScore(   -8.15)+Epik State Penalty(   -0.00) =    -8.15 kcal/mol
+DOCKING RESULTS FOR LIGAND       22 (ltc4)
+Best Emodel=  -101.44 E=   -60.34 Eint=    26.98 GlideScore=    -8.15
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           28
+ Using templates for ring conformations.
+GlideScore(   -8.48)+Epik State Penalty(   -0.00) =    -8.48 kcal/mol
+DOCKING RESULTS FOR LIGAND       23 (ltc4)
+Best Emodel=   -97.68 E=   -54.38 Eint=    19.93 GlideScore=    -8.48
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           28
+ Using templates for ring conformations.
+GlideScore(   -8.38)+Epik State Penalty(   -0.00) =    -8.38 kcal/mol
+DOCKING RESULTS FOR LIGAND       24 (ltc4)
+Best Emodel=  -107.85 E=   -60.38 Eint=    12.49 GlideScore=    -8.38
+  
+ REPORT OF DOCKED POSES
+  
+ The ligand structures were written to the file
+glide-dock_SP_mrp7_optimized_benchmark_pos-0002_raw.maegz
+
+Exiting Glide
+Date: Wednesday, October 28 2020, at 00:10:39 EDT
+CPU time (s): 535.7 user, 27.9 system, 796.3 real
+Total elapsed time = 796 seconds (13 minutes, 16 seconds)
+[running at reduced cpu priority]
+######## end of glide-dock_SP_mrp7_optimized_benchmark_pos-0002.log #########
+######## begin of glide-dock_SP_mrp7_optimized_benchmark_pos-0003.log #########
+Glide version 81012 (mmshare version 44012)
+Copyright (c) Schrodinger, LLC.
+All Rights Reserved.
+
+--------------------------------------------------------------------------------
+JobId          : Jamess-MBP-0-5f98ed4b
+Name           : glide-dock_SP_mrp7_optimized_benchmark_pos-0003
+Program        : Glide
+MMshareExec    : /opt/schrodinger/suites2018-4/mmshare-v4.4/bin/Darwin-x86_64
+Host           : Jamess-MBP.lan
+Dir            : /Users/Jphild/.schrodinger/tmp/glide-dock_SP_mrp7_optimized_benchmark_pos
+HostEntry      : localhost
+JobHost        : Jamess-MBP.lan
+JobDir         : /Users/Jphild/.schrodinger/tmp/glide-dock_SP_mrp7_optimized_benchmark_pos-0003
+JobMMshareExec : /opt/schrodinger/suites2018-4/mmshare-v4.4/bin/Darwin-x86_64
+Commandline    : /opt/schrodinger/suites2018-4/glide -RESTART -serial glide-dock_SP_mrp7_optimized_benchmark_pos-0003.inp -HOST localhost
+StartTime      : 2020-10-28-00:02:21
+--------------------------------------------------------------------------------
+
+[running at reduced cpu priority]
+Offsetting ligand numbers by 24
+ VdW radii of ligand atoms scaled by   0.800000000000000     
+ Charge cutoff for polarity   0.150000000000000     
+ After readscreen, (nx, ny, nz) = (          30 ,           30 ,           30 ).
+  Receptor setup: (nsites, nx, ny, nz, bsize)=(         125 ,           30 , 
+          30 ,           30 ,    1.00000000000000      ).
+ Screening setup finished.
+ DOCKMAIN: getting receptor.
+  DOCKMAIN after grid: (nx, ny, nz) = (          80 ,           80 , 
+          80 ).
+ DOCKMAIN: Grid setup finished
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+  
+  Penalizing non-planar amide torsions 
+  
+ Number of rotatable bonds           28
+ Using templates for ring conformations.
+
+GlideScore version SP5.0 will be used
+
+  
+ Buried polar penalty      0.000
+ Coulomb vdW cutoff        0.000
+ H bond cutoff             0.000
+ Metal-ligand cutoff      10.000
+Assigning GlideScore SP5.0 parameters
+Postdocking minimization:   5 poses; CvdW cutoffs   100.0 kcal/mol for min,     0.0 kcal/mol for report.
+GlideScore(   -8.24)+Epik State Penalty(   -0.00) =    -8.24 kcal/mol
+DOCKING RESULTS FOR LIGAND       25 (ltc4)
+Best Emodel=  -104.11 E=   -57.82 Eint=    13.75 GlideScore=    -8.24
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           28
+ Using templates for ring conformations.
+GlideScore(   -9.18)+Epik State Penalty(   -0.00) =    -9.18 kcal/mol
+DOCKING RESULTS FOR LIGAND       26 (ltc4)
+Best Emodel=  -103.00 E=   -62.27 Eint=    27.77 GlideScore=    -9.18
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           28
+ Using templates for ring conformations.
+GlideScore(   -6.86)+Epik State Penalty(   -0.00) =    -6.86 kcal/mol
+DOCKING RESULTS FOR LIGAND       27 (ltc4)
+Best Emodel=   -89.36 E=   -54.47 Eint=    13.88 GlideScore=    -6.86
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           28
+ Using templates for ring conformations.
+GlideScore(   -8.71)+Epik State Penalty(   -0.00) =    -8.71 kcal/mol
+DOCKING RESULTS FOR LIGAND       28 (ltc4)
+Best Emodel=  -102.76 E=   -59.08 Eint=    19.40 GlideScore=    -8.71
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           28
+ Using templates for ring conformations.
+GlideScore(   -7.80)+Epik State Penalty(   -0.00) =    -7.80 kcal/mol
+DOCKING RESULTS FOR LIGAND       29 (ltc4)
+Best Emodel=  -101.94 E=   -62.84 Eint=    20.73 GlideScore=    -7.80
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           28
+ Using templates for ring conformations.
+GlideScore(   -8.56)+Epik State Penalty(   -0.00) =    -8.56 kcal/mol
+DOCKING RESULTS FOR LIGAND       30 (ltc4)
+Best Emodel=  -108.18 E=   -60.15 Eint=    11.14 GlideScore=    -8.56
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           28
+ Using templates for ring conformations.
+GlideScore(  -10.09)+Epik State Penalty(   -0.00) =   -10.09 kcal/mol
+DOCKING RESULTS FOR LIGAND       31 (ltc4)
+Best Emodel=  -115.30 E=   -62.15 Eint=    20.19 GlideScore=   -10.09
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           28
+ Using templates for ring conformations.
+GlideScore(   -6.55)+Epik State Penalty(   -0.00) =    -6.55 kcal/mol
+DOCKING RESULTS FOR LIGAND       32 (ltc4)
+Best Emodel=   -79.48 E=   -50.10 Eint=    17.36 GlideScore=    -6.55
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           28
+ Using templates for ring conformations.
+GlideScore(   -8.66)+Epik State Penalty(   -0.00) =    -8.66 kcal/mol
+DOCKING RESULTS FOR LIGAND       33 (ltc4)
+Best Emodel=  -111.14 E=   -64.31 Eint=    12.46 GlideScore=    -8.66
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           28
+ Using templates for ring conformations.
+GlideScore(   -8.85)+Epik State Penalty(   -0.00) =    -8.85 kcal/mol
+DOCKING RESULTS FOR LIGAND       34 (ltc4)
+Best Emodel=  -104.50 E=   -57.87 Eint=    20.99 GlideScore=    -8.85
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           28
+ Using templates for ring conformations.
+GlideScore(   -9.43)+Epik State Penalty(   -0.00) =    -9.43 kcal/mol
+DOCKING RESULTS FOR LIGAND       35 (ltc4)
+Best Emodel=  -111.08 E=   -59.02 Eint=    15.17 GlideScore=    -9.43
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           13
+ Failed to generate ring conformations.
+ Will use conformations from input structure.
+GlideScore(   -6.12)+Epik State Penalty(    0.32) =    -5.80 kcal/mol
+DOCKING RESULTS FOR LIGAND       36 (vincristine)
+Best Emodel=   -77.26 E=   -61.15 Eint=     8.44 GlideScore=    -6.12
+  
+ REPORT OF DOCKED POSES
+  
+ The ligand structures were written to the file
+glide-dock_SP_mrp7_optimized_benchmark_pos-0003_raw.maegz
+
+Exiting Glide
+Date: Wednesday, October 28 2020, at 00:26:04 EDT
+CPU time (s): 946.6 user, 57.4 system, 1417.0 real
+Total elapsed time = 1417 seconds (23 minutes, 37 seconds)
+[running at reduced cpu priority]
+######## end of glide-dock_SP_mrp7_optimized_benchmark_pos-0003.log #########
+######## begin of glide-dock_SP_mrp7_optimized_benchmark_pos-0004.log #########
+Glide version 81012 (mmshare version 44012)
+Copyright (c) Schrodinger, LLC.
+All Rights Reserved.
+
+--------------------------------------------------------------------------------
+JobId          : Jamess-MBP-0-5f98ef4c
+Name           : glide-dock_SP_mrp7_optimized_benchmark_pos-0004
+Program        : Glide
+MMshareExec    : /opt/schrodinger/suites2018-4/mmshare-v4.4/bin/Darwin-x86_64
+Host           : Jamess-MBP.lan
+Dir            : /Users/Jphild/.schrodinger/tmp/glide-dock_SP_mrp7_optimized_benchmark_pos
+HostEntry      : localhost
+JobHost        : Jamess-MBP.lan
+JobDir         : /Users/Jphild/.schrodinger/tmp/glide-dock_SP_mrp7_optimized_benchmark_pos-0004
+JobMMshareExec : /opt/schrodinger/suites2018-4/mmshare-v4.4/bin/Darwin-x86_64
+Commandline    : /opt/schrodinger/suites2018-4/glide -RESTART -serial glide-dock_SP_mrp7_optimized_benchmark_pos-0004.inp -HOST localhost
+StartTime      : 2020-10-28-00:10:53
+--------------------------------------------------------------------------------
+
+[running at reduced cpu priority]
+Offsetting ligand numbers by 36
+ VdW radii of ligand atoms scaled by   0.800000000000000     
+ Charge cutoff for polarity   0.150000000000000     
+ After readscreen, (nx, ny, nz) = (          30 ,           30 ,           30 ).
+  Receptor setup: (nsites, nx, ny, nz, bsize)=(         125 ,           30 , 
+          30 ,           30 ,    1.00000000000000      ).
+ Screening setup finished.
+ DOCKMAIN: getting receptor.
+  DOCKMAIN after grid: (nx, ny, nz) = (          80 ,           80 , 
+          80 ).
+ DOCKMAIN: Grid setup finished
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+  
+  Penalizing non-planar amide torsions 
+  
+ Number of rotatable bonds           13
+ Failed to generate ring conformations.
+ Will use conformations from input structure.
+
+GlideScore version SP5.0 will be used
+
+  
+ Buried polar penalty      0.000
+ Coulomb vdW cutoff        0.000
+ H bond cutoff             0.000
+ Metal-ligand cutoff      10.000
+Assigning GlideScore SP5.0 parameters
+Postdocking minimization:   5 poses; CvdW cutoffs   100.0 kcal/mol for min,     0.0 kcal/mol for report.
+GlideScore(   -6.57)+Epik State Penalty(    0.32) =    -6.24 kcal/mol
+DOCKING RESULTS FOR LIGAND       37 (vincristine)
+Best Emodel=   -83.61 E=   -63.43 Eint=     7.58 GlideScore=    -6.57
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           13
+ Failed to generate ring conformations.
+ Will use conformations from input structure.
+NO POSES STORED FOR LIGAND       38 (vincristine)
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           13
+ Failed to generate ring conformations.
+ Will use conformations from input structure.
+GlideScore(   -5.97)+Epik State Penalty(    0.32) =    -5.64 kcal/mol
+DOCKING RESULTS FOR LIGAND       39 (vincristine)
+Best Emodel=   -59.42 E=   -55.09 Eint=    16.91 GlideScore=    -5.97
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           13
+ Failed to generate ring conformations.
+ Will use conformations from input structure.
+GlideScore(   -5.21)+Epik State Penalty(    0.93) =    -4.28 kcal/mol
+DOCKING RESULTS FOR LIGAND       40 (vincristine)
+Best Emodel=   -69.45 E=   -57.36 Eint=    10.20 GlideScore=    -5.21
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           13
+ Failed to generate ring conformations.
+ Will use conformations from input structure.
+GlideScore(   -5.81)+Epik State Penalty(    0.93) =    -4.88 kcal/mol
+DOCKING RESULTS FOR LIGAND       41 (vincristine)
+Best Emodel=   -79.80 E=   -61.01 Eint=     4.78 GlideScore=    -5.81
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           13
+ Failed to generate ring conformations.
+ Will use conformations from input structure.
+GlideScore(   -5.31)+Epik State Penalty(    1.09) =    -4.22 kcal/mol
+DOCKING RESULTS FOR LIGAND       42 (vincristine)
+Best Emodel=   -68.02 E=   -58.00 Eint=    17.59 GlideScore=    -5.31
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           13
+ Failed to generate ring conformations.
+ Will use conformations from input structure.
+GlideScore(   -6.76)+Epik State Penalty(    1.09) =    -5.66 kcal/mol
+DOCKING RESULTS FOR LIGAND       43 (vincristine)
+Best Emodel=   -81.36 E=   -61.18 Eint=     6.50 GlideScore=    -6.76
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           13
+ Failed to generate ring conformations.
+ Will use conformations from input structure.
+GlideScore(   -6.16)+Epik State Penalty(    1.70) =    -4.46 kcal/mol
+DOCKING RESULTS FOR LIGAND       44 (vincristine)
+Best Emodel=   -54.35 E=   -42.53 Eint=    12.25 GlideScore=    -6.16
+Calling OPLS_2005 atomtyping ...
+Finished parameter assignment
+ Number of rotatable bonds           18
+ Using templates for ring conformations.
+GlideScore(   -9.10)+Epik State Penalty(    0.00) =    -9.10 kcal/mol
+DOCKING RESULTS FOR LIGAND       45 (paclitaxel)
+Best Emodel=  -120.04 E=   -83.44 Eint=    21.43 GlideScore=    -9.10
+  
+ REPORT OF DOCKED POSES
+  
+ The ligand structures were written to the file
+glide-dock_SP_mrp7_optimized_benchmark_pos-0004_raw.maegz
+
+Exiting Glide
+Date: Wednesday, October 28 2020, at 00:17:55 EDT
+CPU time (s): 285.8 user, 6.9 system, 416.2 real
+Total elapsed time = 416 seconds (6 minutes, 56 seconds)
+[running at reduced cpu priority]
+######## end of glide-dock_SP_mrp7_optimized_benchmark_pos-0004.log #########
