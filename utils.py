@@ -32,6 +32,14 @@ sns.set()
 __author__ = "Jingquan Wang"
 __email__ = "jq.wang1214@gmail.com"
 
+def ensure_folder(path: str) -> None:
+	"""
+	Make sure dir exists, if not, create one
+	"""
+	if not os.path.isdir(path):
+		os.mkdir(path)
+		
+
 def tp(y_true: np.ndarray, y_pred: np.ndarray) -> int:
     try:
         rval = float(confusion_matrix(y_true, y_pred)[1, 1])
