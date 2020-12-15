@@ -15,10 +15,15 @@ from sklearn.model_selection import (
     KFold,
     StratifiedKFold
 )
+
 from grid import grid
+from utils import DATA, OUTPUT
+from preprocess_training import load_data, preprocess
+
 
 __author__ = "Jingquan Wang"
 __email__ = "jq.wang1214@gmail.com"
+
 
 class DummyClassifier(BaseEstimator):
     def __init__(self, estimator=XGBClassifier()):
@@ -100,8 +105,18 @@ def train(
         
     clf_best = mscv.best_estimator_
     clf_best_score = mscv.best_score_
+    
+    
+def test() -> None:
+    """
+    Test best model with test data
+    """
 
 
+def main() -> None:
+    df = load_data(f"{DATA}/merged.csv")
+    df_feat = preprocess(df)
+    
 
 
 

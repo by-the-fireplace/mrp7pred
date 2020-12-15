@@ -1,5 +1,5 @@
 """
-Grid for simple predictor
+Grid for training non-NN models
 """
 
 from sklearn.svm import SVC
