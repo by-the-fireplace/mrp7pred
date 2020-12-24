@@ -16,6 +16,7 @@ __author__ = "Jingquan Wang"
 __email__ = "jq.wang1214@gmail.com"
 
 from pandas import DataFrame
+from tqdm import tqdm
 
 from rdkit import Chem
 from rdkit.Chem import rdMolDescriptors as _rdMolDescriptors
@@ -124,15 +125,15 @@ def featurize(df: DataFrame) -> DataFrame:
     Generate featurized dataframe
     """
     if set(df.columns) != {"name", "smiles", "label"}:
-        raise ValueError("DataFrame column names don't match, should be ['name', 'smiles', 'label']")
+        raise ValueError(f"DataFrame column names don't match, should be ['name', 'smiles', 'label'], got {df.columns}")
     
     # add new feature columns
-    df = df.reindex(columns=df.columns+feature_list)
+    df = df.reindex(columns=df.columns.tolist()+feature_list)
     
     # populate features
     for index, row in tqdm(enumerate(df.itertuples()), total=len(df)):
         try:
-            feats = rdk_features(row.get('smiles'))
+            feats = rdk_features(getattr(row, 'smiles'))
         except TypeError as e:
             print(e)
             print(getattr(row, 'name'), getattr(row, 'smiles'))

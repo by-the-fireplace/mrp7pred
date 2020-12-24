@@ -11,6 +11,7 @@ tqdm.pandas()
 import numpy as np
 import pandas as pd
 from typing import Dict, Union
+from numpy import ndarray
 
 from sklearn.metrics import (
     accuracy_score,
@@ -35,6 +36,12 @@ __email__ = "jq.wang1214@gmail.com"
 DATA = "./data"
 OUTPUT = "./output"
 
+
+def get_current_time() -> str:
+    now = datetime.now()
+    return now.strftime("%Y%m%d-%H%M%S")
+    
+
 def ensure_folder(path: str) -> None:
 	"""
 	Make sure dir exists, if not, create one
@@ -43,7 +50,7 @@ def ensure_folder(path: str) -> None:
 		os.mkdir(path)
     
 
-def tp(y_true: np.ndarray, y_pred: np.ndarray) -> int:
+def tp(y_true: ndarray, y_pred: ndarray) -> int:
     try:
         rval = float(confusion_matrix(y_true, y_pred)[1, 1])
     except IndexError:
@@ -51,7 +58,7 @@ def tp(y_true: np.ndarray, y_pred: np.ndarray) -> int:
     return rval
 
         
-def fp(y_true: np.ndarray, y_pred: np.ndarray) -> int:
+def fp(y_true: ndarray, y_pred: ndarray) -> int:
     try:
         rval = float(confusion_matrix(y_true, y_pred)[0, 1])
     except IndexError:
@@ -59,7 +66,7 @@ def fp(y_true: np.ndarray, y_pred: np.ndarray) -> int:
     return rval
         
 
-def tn(y_true: np.ndarray, y_pred: np.ndarray) -> int:
+def tn(y_true: ndarray, y_pred: ndarray) -> int:
     try:
         rval = float(confusion_matrix(y_true, y_pred)[0, 0])
     except IndexError:
@@ -67,7 +74,7 @@ def tn(y_true: np.ndarray, y_pred: np.ndarray) -> int:
     return rval
         
         
-def fn(y_true: np.ndarray, y_pred: np.ndarray) -> int:
+def fn(y_true: ndarray, y_pred: ndarray) -> int:
     try:
         rval = float(confusion_matrix(y_true, y_pred)[1, 0])
     except IndexError:
@@ -75,7 +82,7 @@ def fn(y_true: np.ndarray, y_pred: np.ndarray) -> int:
     return rval
 
 
-def specificity(y_true: np.ndarray, y_pred: np.ndarray) -> float:
+def specificity(y_true: ndarray, y_pred: ndarray) -> float:
     _tn = tn(y_true, y_pred)
     _fp = fp(y_true, y_pred)
     if _tn == 0:
@@ -83,23 +90,23 @@ def specificity(y_true: np.ndarray, y_pred: np.ndarray) -> float:
     return _tn / (_tn + _fp)
 
 
-def recall(y_true: np.ndarray, y_pred: np.ndarray) -> float:
+def recall(y_true: ndarray, y_pred: ndarray) -> float:
     return recall_score(y_true, y_pred, average="binary")
 
 
-def precision(y_true: np.ndarray, y_pred: np.ndarray) -> float:
+def precision(y_true: ndarray, y_pred: ndarray) -> float:
     return precision_score(y_true, y_pred, average="binary")
     
     
-def f1(y_true: np.ndarray, y_pred: np.ndarray) -> float:
+def f1(y_true: ndarray, y_pred: ndarray) -> float:
     return f1_score(y_true, y_pred, average="binary")
 
 
-def accuracy(y_true: np.ndarray, y_pred: np.ndarray) -> float:
+def accuracy(y_true: ndarray, y_pred: ndarray) -> float:
     return accuracy_score(y_true, y_pred)
 
 
-def log_loss(y_true: np.ndarray, y_pred: np.ndarray) -> float:
+def log_loss(y_true: ndarray, y_pred: ndarray) -> float:
     try:
         rval = log_loss(y_true, y_pred)
     except ValueError:
@@ -108,8 +115,8 @@ def log_loss(y_true: np.ndarray, y_pred: np.ndarray) -> float:
 
 
 def roc_auc(
-	y_true: np.ndarray,
-	y_score: np.ndarray
+	y_true: ndarray,
+	y_score: ndarray
 ) -> float:
     try:
         rval = np.float(roc_auc_score(y_true, y_score, average="macro"))
@@ -119,9 +126,9 @@ def roc_auc(
 
     
 def get_scoring(
-	y_true: np.ndarray,
-	y_score: np.ndarray,
-	y_pred: np.ndarray
+	y_true: ndarray,
+	y_score: ndarray,
+	y_pred: ndarray
 ) -> Dict[str, Dict[str, Union[int, float]]]:
     return {
         'stats': {
@@ -135,18 +142,24 @@ def get_scoring(
             'accuracy': accuracy(y_true, y_pred),
         }
     }
+    
 
-
-
-
-def plot_roc_auc(y_test: nd.array, y_score: nd.array) -> None:
+def plot_roc_auc(
+    y_test: ndarray,
+    y_score: ndarray,
+    title: str="ROC Curve",
+    out_dir: str=f"{OUTPUT}/fig"
+    ) -> None:
+    
+    ensure_folder(out_dir)
+    
     fpr = dict()
     tpr = dict()
     roc_auc = dict()
     fpr, tpr, _ = roc_curve(y_test, y_score)
     roc_auc = auc(fpr, tpr)
 
-    fig = plt.figure(figsize=(8,8))
+    fig = plt.figure(figsize=(8, 8))
 
     plt.plot(fpr, tpr, label="AUC={:.3f}".format(roc_auc))
     plt.plot([0,1], [0,1], color='orange', linestyle='--')
@@ -157,7 +170,7 @@ def plot_roc_auc(y_test: nd.array, y_score: nd.array) -> None:
     plt.yticks(np.arange(0.0, 1.1, step=0.1))
     plt.ylabel("True Positive Rate", fontsize=15)
 
-    plt.title('ROC Curve', fontweight='bold', fontsize=15)
+    plt.title(title, fontweight='bold', fontsize=15)
     plt.legend(prop={'size':13}, loc='lower right')
-
+    fig.savefig(f"{out_dir}/ROC_{get_current_time()}.png")
     plt.show()

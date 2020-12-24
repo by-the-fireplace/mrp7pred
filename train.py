@@ -7,6 +7,7 @@ from numpy import ndarray
 import pandas as pd
 import pickle
 from typing import Union
+from tqdm import tqdm
 
 from sklearn.pipeline import Pipeline
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -18,8 +19,8 @@ from sklearn.model_selection import (
 )
 
 from grid import grid
-from utils import DATA, OUTPUT
-from preprocess_training import load_data, featurize_and_split
+from utils import DATA, OUTPUT, plot_roc_auc, get_scoring, get_current_time, ensure_folder
+from preprocess import load_data, featurize_and_split
 
 
 __author__ = "Jingquan Wang"
@@ -78,10 +79,13 @@ def train(
         X_train: ndarray,
         y_train: ndarray,
         logging: bool=True,
-        log_dir: str = "./output/scores.csv",
-        model_dir: str = "./output/best_model.pkl"
-    ) -> float:
-
+        log_dir: str = OUTPUT,
+        model_dir: str = f"{OUTPUT}/model"
+    ) -> Pipeline:
+    
+    ensure_folder(log_dir)
+    ensure_folder(model_dir)
+    
     pipeline = Pipeline([("sclr", DummyScaler()), ("clf", DummyClassifier()),])
 
     # TODO: KFold vs StratifiedKfold
@@ -99,7 +103,7 @@ def train(
 
     mscv.fit(X_train, y_train)
 
-    def logging(model, path=log_dir):
+    def logging(model, path=f"{log_dir}/scores_{get_current_time()}.csv"):
         score_df = pd.DataFrame(model.cv_results_).T
         print(f"Cross-validation scores {score_df}")
         score_df.to_csv(path)
@@ -108,20 +112,43 @@ def train(
         logging(mscv)
         
     clf_best = mscv.best_estimator_
-    pickle.dump(clf_best, open(model_dir, "wb"))
+    with open(f"{model_dir}/best_model_{get_current_time()}.pkl", "wb") as mo:
+        pickle.dump(clf_best, mo)
     
     clf_best_score = mscv.best_score_
-    return clf_best_score
+    print(f"Best score: {clf_best_score}")
+    
+    return clf_best
 
 
 def main() -> None:
     df = load_data(f"{DATA}/merged.csv")
     
     # clean, featurization, splitting
-    X_train, y_train = featurize_and_split(df)
+    RATIO = 0.8
+    name_train, name_test, X_train, y_train, X_test, y_test = featurize_and_split(df, ratio=RATIO)
     
-    print("Start training...", end="", flush=True)
-    best_score = train(X_train, y_train)
+    print("Start training ...", end="", flush=True)
+    clf_best = train(X_train, y_train)
     print("Done!")
+    
+    print(f"Best model:\n{clf_best}")
+    
+    print("Evaluate model on test data ... ", end="", flush=True)
+    test_score = clf_best.score(X_test, y_test)
+    y_pred = clf_best.predict(X_test)
+    y_score = [score[1] for score in clf_best.predict_proba(X_test)]
+    print(f"Done! Score: {test_score}")
+    
+    print("Getting full score set ... ", end="", flush=True)
+    test_scores = get_scoring(y_test, y_score, y_pred)
+    print(f"Done! Full scores: {test_scores}")
+    
+    print("Plotting ROC for test data ... ", end="", flush=True)
+    plot_roc_auc(y_test, y_score, title=f"ROC Curve, train/test={RATIO}")
+    print("Done!")
+
+if __name__ == "__main__":
+    main()
     
 

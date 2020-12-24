@@ -2,6 +2,8 @@
 Grid for training non-NN models
 """
 
+import numpy as np
+
 from sklearn.svm import SVC
 from sklearn.preprocessing import MinMaxScaler, Normalizer, StandardScaler
 from sklearn.neural_network import MLPClassifier

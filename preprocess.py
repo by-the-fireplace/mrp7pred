@@ -23,7 +23,7 @@ import pandas as pd
 import numpy as np
 import pickle
 
-from typing import Tuple
+from typing import Tuple, Union
 from pandas import DataFrame
 from numpy import ndarray
 
@@ -46,7 +46,7 @@ def load_data(path: str) -> DataFrame:
 	df : pandas.DataFrame
 		Cleaned dataset
 	"""
-	df = pd.read_csv(path)
+	df = pd.read_csv(path, index_col=0)
 	df = df.dropna(subset=["smiles"])
 	
 	# TODO: if name is empty, make smiles as name
@@ -76,17 +76,19 @@ def split_train_test(
 	Returns
 	--------
 	(df_train, df_test) : DataFrame
-		As names indicate
 	"""
 	# sample training data
 	chosen_idx = np.random.choice(len(df), replace=False, size=int(ratio*(len(df))))
-	df_train = df.iloc[chosen_idx, 1:]
+	df_train = df.iloc[chosen_idx, :]
 	mask = ~df.index.isin(df_train.index)
-	df_test = df.loc[mask].iloc[:, 1:]
+	df_test = df.loc[mask]
 	return df_train, df_test
 	
 	
-def featurize_and_split(df: DataFrame, ratio: float=0.7) -> Tuple[DataFrame]:
+def featurize_and_split(
+		df: DataFrame,
+		ratio: float=0.7
+	) -> Tuple[Union[DataFrame, ndarray]]:
 	"""
 	Feturize and split
 	
@@ -106,7 +108,12 @@ def featurize_and_split(df: DataFrame, ratio: float=0.7) -> Tuple[DataFrame]:
 	print("Done!")
 	
 	print("Spliting training and test data ... ", end="", flush=True)
-	X_train, y_train = split_train_test(df, ratio=ratio)
+	df_train, df_test = split_train_test(df, ratio=ratio)
+	
+	# col0: "name", col1: "smiles", col2: "label", col3-130: feaatures
+	name_train, name_test = df_train["name"], df_test["name"]
+	X_train, y_train = df_train.iloc[:, 3:], df_train.iloc[:, 2]
+	X_test, y_test = df_test.iloc[:, 3:], df_test.iloc[:, 2]
 	print("Done!")
 	
-	return X_train, y_train
+	return name_train, name_test, X_train, y_train, X_test, y_test
