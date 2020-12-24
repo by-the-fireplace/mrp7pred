@@ -5,6 +5,7 @@ Main training script
 import numpy as np
 from numpy import ndarray
 import pandas as pd
+import pickle
 from typing import Union
 
 from sklearn.pipeline import Pipeline
@@ -18,7 +19,7 @@ from sklearn.model_selection import (
 
 from grid import grid
 from utils import DATA, OUTPUT
-from preprocess_training import load_data, preprocess
+from preprocess_training import load_data, featurize_and_split
 
 
 __author__ = "Jingquan Wang"
@@ -76,8 +77,10 @@ class DummyScaler(BaseEstimator, TransformerMixin):
 def train(
         X_train: ndarray,
         y_train: ndarray,
-        log_dir: "./output/scores.csv"
-    ) -> None:
+        logging: bool=True,
+        log_dir: str = "./output/scores.csv",
+        model_dir: str = "./output/best_model.pkl"
+    ) -> float:
 
     pipeline = Pipeline([("sclr", DummyScaler()), ("clf", DummyClassifier()),])
 
@@ -100,23 +103,25 @@ def train(
         score_df = pd.DataFrame(model.cv_results_).T
         print(f"Cross-validation scores {score_df}")
         score_df.to_csv(path)
-        
-    logging(mscv)
+    
+    if logging:
+        logging(mscv)
         
     clf_best = mscv.best_estimator_
+    pickle.dump(clf_best, open(model_dir, "wb"))
+    
     clf_best_score = mscv.best_score_
-    
-    
-def test() -> None:
-    """
-    Test best model with test data
-    """
+    return clf_best_score
 
 
 def main() -> None:
     df = load_data(f"{DATA}/merged.csv")
-    df_feat = preprocess(df)
     
-
-
+    # clean, featurization, splitting
+    X_train, y_train = featurize_and_split(df)
+    
+    print("Start training...", end="", flush=True)
+    best_score = train(X_train, y_train)
+    print("Done!")
+    
 

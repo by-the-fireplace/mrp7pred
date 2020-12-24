@@ -86,7 +86,7 @@ def split_train_test(
 	return df_train, df_test
 	
 	
-def preprocess(df: DataFrame, ratio: float=0.7) -> DataFrame:
+def featurize_and_split(df: DataFrame, ratio: float=0.7) -> Tuple[DataFrame]:
 	"""
 	Feturize and split
 	
@@ -106,7 +106,7 @@ def preprocess(df: DataFrame, ratio: float=0.7) -> DataFrame:
 	print("Done!")
 	
 	print("Spliting training and test data ... ", end="", flush=True)
-	df = split_train_test(df, ratio=ratio)
+	X_train, y_train = split_train_test(df, ratio=ratio)
 	print("Done!")
 	
-	return df
+	return X_train, y_train
