@@ -12,6 +12,7 @@ import numpy as np
 import pandas as pd
 from typing import Dict, Union
 from numpy import ndarray
+from pandas import DataFrame
 
 from sklearn.metrics import (
     accuracy_score,
@@ -35,9 +36,14 @@ __email__ = "jq.wang1214@gmail.com"
 
 DATA = "./data"
 OUTPUT = "./output"
-
+MODEL_DIR = f"{OUTPUT}/model"
+FIG_DIR = f"{OUTPUT}/fig"
+    
 
 def get_current_time() -> str:
+    """
+    TODO: Add a description here
+    """
     now = datetime.now()
     return now.strftime("%Y%m%d-%H%M%S")
     

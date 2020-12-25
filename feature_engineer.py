@@ -123,10 +123,8 @@ def rdk_features(smi: str) -> list:
 def featurize(df: DataFrame) -> DataFrame:
     """
     Generate featurized dataframe
+    df must have columns named "name" and "smiles"
     """
-    if set(df.columns) != {"name", "smiles", "label"}:
-        raise ValueError(f"DataFrame column names don't match, should be ['name', 'smiles', 'label'], got {df.columns}")
-    
     # add new feature columns
     df = df.reindex(columns=df.columns.tolist()+feature_list)
     
