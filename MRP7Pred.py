@@ -69,6 +69,7 @@ class MRP7Pred(object):
         df_out["score"] = scores
         df_out.to_csv(f"{OUTPUT}/predicted_{get_current_time()}.csv")
         print("Done!")
+        return df_out
     
     
 def main() -> None:

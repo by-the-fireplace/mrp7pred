@@ -112,8 +112,8 @@ def featurize_and_split(
 	
 	# col0: "name", col1: "smiles", col2: "label", col3-130: feaatures
 	name_train, name_test = df_train["name"], df_test["name"]
-	X_train, y_train = df_train.iloc[:, 3:], df_train.iloc[:, 2]
-	X_test, y_test = df_test.iloc[:, 3:], df_test.iloc[:, 2]
+	X_train, y_train = df_train.iloc[:, 3:], df_train["label"]
+	X_test, y_test = df_test.iloc[:, 3:], df_test["label"]
 	print("Done!")
 	
 	return name_train, name_test, X_train, y_train, X_test, y_test

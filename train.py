@@ -78,7 +78,8 @@ class DummyScaler(BaseEstimator, TransformerMixin):
 def train(
         X_train: ndarray,
         y_train: ndarray,
-        logging: bool=True,
+        print_log: bool = False,
+        verbose: int = 10,
         log_dir: str = OUTPUT,
         model_dir: str = f"{OUTPUT}/model"
     ) -> Pipeline:
@@ -98,18 +99,20 @@ def train(
         ),
         return_train_score=True,
         n_jobs=-1,
-        verbose=10,
+        verbose=verbose,
         refit="f1")
 
     mscv.fit(X_train, y_train)
 
-    def logging(model, path=f"{log_dir}/scores_{get_current_time()}.csv"):
+    def logging(
+            model,
+            path=f"{log_dir}/scores_{get_current_time()}.csv",
+            print_log = print_log
+        ) -> None:
         score_df = pd.DataFrame(model.cv_results_).T
-        print(f"Cross-validation scores {score_df}")
+        if print_log:
+            print(f"Cross-validation scores {score_df}")
         score_df.to_csv(path)
-    
-    if logging:
-        logging(mscv)
         
     clf_best = mscv.best_estimator_
     with open(f"{model_dir}/best_model_{get_current_time()}.pkl", "wb") as mo:
