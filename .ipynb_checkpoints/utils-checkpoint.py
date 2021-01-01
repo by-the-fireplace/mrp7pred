@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 tqdm.pandas()
 
-from typing import Dict, Union, Any, Tuple
+from typing import Dict, Union
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -22,8 +22,6 @@ from sklearn.metrics import (accuracy_score, auc, confusion_matrix, f1_score,
                              log_loss, make_scorer, precision_score, r2_score,
                              recall_score, roc_auc_score, roc_curve)
 
-from rdkit import Chem
-
 sns.set()
 
 __author__ = "Jingquan Wang"
@@ -33,50 +31,6 @@ DATA = "./data"
 OUTPUT = "./output"
 MODEL_DIR = f"{OUTPUT}/model"
 FIG_DIR = f"{OUTPUT}/fig"
-
-
-def standardize_smiles(smiles: str) -> str:
-    """
-    TODO: Eventually return a smiles string
-    """
-    mol = Chem.CanonSmiles(smiles)
-    return mol
-    
-
-def draw_molecule(
-        smiles: str,
-        highlight: str=None,
-        subImgSize: Tuple[int]=(300, 300)
-    ) -> Any:
-    """
-    Draw 2D structure given a smiles string
-    Highlight given substrings
-    """
-    mol = Chem.MolFromSmiles(smiles)
-    if highlight:
-        query = Chem.MolFromSmarts(highlight)
-        # list of atom groups
-        substructures = list(mol.GetSubstructMatches(query))
-        atoms_l = [atom for atoms in substructures for atom in atoms]
-        
-        bonds_l = []
-        for substructure in substructures:
-            for bond in query.GetBonds():
-                aid1 = substructure[bond.GetBeginAtomIdx()]
-                aid2 = substructure[bond.GetEndAtomIdx()]
-                bonds_l.append(mol.GetBondBetweenAtoms(aid1, aid2).GetIdx())
-        
-        return Chem.Draw.MolToImage(
-            mol=mol,
-            size=subImgSize,
-            highlightAtoms=atoms_l,
-            highlightBonds=bonds_l
-        )
-    else:
-        return Chem.Draw.MolToImage(
-            mol=mol, 
-            size=subImgSize
-        )
 
 
 def get_current_time() -> str:
