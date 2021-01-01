@@ -1,8 +1,8 @@
 """
 Data preprocessing for training a new model
 
-Input: A csv file with three columns: 
-	name, smiles, label
+Input: A csv file with three columns:
+        name, smiles, label
 
 1. Drop nulls
 2. Remove duplicates
@@ -10,16 +10,15 @@ Input: A csv file with three columns:
 4. Randomly split train/test
 
 Output: pandas dataframe as pickle files:
-	X_train.pkl, X_test.pkl, y_train.pkl, y_test.pkl
+        X_train.pkl, X_test.pkl, y_train.pkl, y_test.pkl
 Columns:
-	X -> name, [features]
-	y -> name, label
+        X -> name, [features]
+        y -> name, label
 """
 
 __author__ = "Jingquan Wang"
 __email__ = "jq.wang1214@gmail.com"
 
-import pickle
 from typing import Tuple, Union
 
 import numpy as np
@@ -28,7 +27,6 @@ from numpy import ndarray
 from pandas import DataFrame
 
 from feature_engineer import featurize
-from utils import ensure_folder
 
 
 def load_data(path: str) -> DataFrame:
@@ -61,7 +59,10 @@ def load_data(path: str) -> DataFrame:
     return df
 
 
-def split_train_test(df: DataFrame, ratio: float = 0.7) -> Tuple[DataFrame, DataFrame]:
+def split_train_test(
+        df: DataFrame,
+        ratio: float = 0.7
+        ) -> Tuple[DataFrame, DataFrame]:
     """
     Split processed data into training and test data
 
@@ -77,7 +78,11 @@ def split_train_test(df: DataFrame, ratio: float = 0.7) -> Tuple[DataFrame, Data
     (df_train, df_test) : DataFrame
     """
     # sample training data
-    chosen_idx = np.random.choice(len(df), replace=False, size=int(ratio * (len(df))))
+    chosen_idx = np.random.choice(
+        len(df),
+        replace=False,
+        size=int(ratio * (len(df)))
+        )
     df_train = df.iloc[chosen_idx, :]
     mask = ~df.index.isin(df_train.index)
     df_test = df.loc[mask]

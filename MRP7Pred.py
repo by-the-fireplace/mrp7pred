@@ -3,17 +3,17 @@ MRP7Pred class
 """
 
 import pickle
+import warnings
 
 import pandas as pd
-from numpy import ndarray
 from pandas import DataFrame
 
 from feature_engineer import featurize
 from train import DummyClassifier, DummyScaler, NoScaler
 from utils import MODEL_DIR, OUTPUT, get_current_time
 
-import warnings
 warnings.filterwarnings("ignore")
+
 
 class MRP7Pred(object):
     def __init__(

@@ -5,14 +5,12 @@ Main training script
 import pickle
 from typing import Union
 
-import numpy as np
 import pandas as pd
 from numpy import ndarray
 from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.model_selection import GridSearchCV, KFold, StratifiedKFold
+from sklearn.model_selection import GridSearchCV, StratifiedKFold
 from sklearn.pipeline import Pipeline
-from tqdm import tqdm
-from xgboost import XGBClassifier, XGBRegressor
+from xgboost import XGBClassifier
 
 from grid import grid
 from preprocess import featurize_and_split, load_data
@@ -97,7 +95,8 @@ def train(
     mscv.fit(X_train, y_train)
 
     def logging(
-        model, path=f"{log_dir}/scores_{get_current_time()}.csv", print_log=print_log
+        model, path=f"{log_dir}/scores_{get_current_time()}.csv",
+        print_log=print_log
     ) -> None:
         score_df = pd.DataFrame(model.cv_results_).T
         if print_log:

@@ -4,10 +4,10 @@ Grid for training non-NN models
 
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import GaussianNB
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import MinMaxScaler, Normalizer, StandardScaler
 from sklearn.svm import SVC
-from sklearn.naive_bayes import GaussianNB
 
 __author__ = "Jingquan Wang"
 __email__ = "jq.wang1214@gmail.com"

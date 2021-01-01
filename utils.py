@@ -3,27 +3,18 @@ Helper functions
 """
 
 import os
-import pickle
 from datetime import datetime
-
-from tqdm import tqdm
-
-tqdm.pandas()
-
-from typing import Dict, Union, Any, Tuple
-
+from typing import Any, Dict, Tuple, Union
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 import seaborn as sns
 from numpy import ndarray
-from pandas import DataFrame
-from sklearn.metrics import (accuracy_score, auc, confusion_matrix, f1_score,
-                             log_loss, make_scorer, precision_score, r2_score,
-                             recall_score, roc_auc_score, roc_curve)
-
 from rdkit import Chem
-
+from sklearn.metrics import (accuracy_score, auc, confusion_matrix, f1_score,
+                             log_loss, precision_score, recall_score,
+                             roc_auc_score, roc_curve)
+from tqdm import tqdm
+tqdm.pandas()
 sns.set()
 
 __author__ = "Jingquan Wang"
@@ -41,13 +32,11 @@ def standardize_smiles(smiles: str) -> str:
     """
     mol = Chem.CanonSmiles(smiles)
     return mol
-    
+
 
 def draw_molecule(
-        smiles: str,
-        highlight: str=None,
-        subImgSize: Tuple[int]=(300, 300)
-    ) -> Any:
+    smiles: str, highlight: str = None, subImgSize: Tuple[int] = (300, 300)
+) -> Any:
     """
     Draw 2D structure given a smiles string
     Highlight given substrings
@@ -58,14 +47,14 @@ def draw_molecule(
         # list of atom groups
         substructures = list(mol.GetSubstructMatches(query))
         atoms_l = [atom for atoms in substructures for atom in atoms]
-        
+
         bonds_l = []
         for substructure in substructures:
             for bond in query.GetBonds():
                 aid1 = substructure[bond.GetBeginAtomIdx()]
                 aid2 = substructure[bond.GetEndAtomIdx()]
                 bonds_l.append(mol.GetBondBetweenAtoms(aid1, aid2).GetIdx())
-        
+
         return Chem.Draw.MolToImage(
             mol=mol,
             size=subImgSize,
@@ -73,10 +62,7 @@ def draw_molecule(
             highlightBonds=bonds_l
         )
     else:
-        return Chem.Draw.MolToImage(
-            mol=mol, 
-            size=subImgSize
-        )
+        return Chem.Draw.MolToImage(mol=mol, size=subImgSize)
 
 
 def get_current_time() -> str:

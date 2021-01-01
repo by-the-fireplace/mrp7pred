@@ -8,7 +8,7 @@ Input: cleaned dataframe with columns:
 Output: featurized dataframe
 
 Number of features: 127
-    
+
 feature details see notebook/preprocessing.ipynb
 """
 
@@ -84,8 +84,12 @@ def rdk_features(smi: str) -> list:
     """
     mol = Chem.MolFromSmiles(smi)
     bcut2d = _rdMolDescriptors.BCUT2D(mol)  # rdkit.rdBase._vectd, len=8
-    chiNn = [_rdMolDescriptors.CalcChiNn(mol, i) for i in range(5)]  # list, len=5
-    chiNv = [_rdMolDescriptors.CalcChiNv(mol, i) for i in range(5)]  # list, len=5
+    chiNn = [
+        _rdMolDescriptors.CalcChiNn(mol, i) for i in range(5)
+    ]  # list, len=5
+    chiNv = [
+        _rdMolDescriptors.CalcChiNv(mol, i) for i in range(5)
+    ]  # list, len=5
     mollogp, molmr = _rdMolDescriptors.CalcCrippenDescriptors(mol)  # floats
     molwt = _rdMolDescriptors.CalcExactMolWt(mol)  # float
     csp3 = _rdMolDescriptors.CalcFractionCSP3(mol)  # float
