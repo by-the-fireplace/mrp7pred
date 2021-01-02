@@ -28,9 +28,12 @@ FIG_DIR = f"{OUTPUT}/fig"
 
 def standardize_smiles(smiles: str) -> str:
     """
-    TODO: Eventually return a smiles string
+    Convert smiles to rdk CanonSmiles
     """
-    mol = Chem.CanonSmiles(smiles)
+    try:
+        mol = Chem.CanonSmiles(smiles)
+    except:
+        return "error"
     return mol
 
 

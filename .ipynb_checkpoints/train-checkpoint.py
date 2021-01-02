@@ -69,7 +69,7 @@ def train(
     verbose: int = 10,
     log_dir: str = OUTPUT,
     model_dir: str = f"{OUTPUT}/model",
-    ) -> Pipeline:
+) -> Pipeline:
 
     ensure_folder(log_dir)
     ensure_folder(model_dir)
@@ -113,14 +113,15 @@ def train(
     return clf_best
 
 
-def run(df: DataFrame, ratio: float=0.8) -> Any:
-    """
-    Start training with output info.
-    """
+def main() -> None:
+    df = load_data(f"{DATA}/merged.csv")
+
+    # clean, featurization, splitting
+    RATIO = 0.8
     name_train, name_test, X_train, y_train, X_test, y_test = featurize_and_split(
-        df, ratio=ratio
+        df, ratio=RATIO
     )
-    
+
     print("Start training ...", end="", flush=True)
     clf_best = train(X_train, y_train)
     print("Done!")
@@ -140,14 +141,6 @@ def run(df: DataFrame, ratio: float=0.8) -> Any:
     print("Plotting ROC for test data ... ", end="", flush=True)
     plot_roc_auc(y_test, y_score, title=f"ROC Curve, train/test={RATIO}")
     print("Done!")
-    
-    return clf_best
-
-def main() -> None:
-    df = load_data(f"{DATA}/merged.csv")
-
-    # clean, featurization, splitting
-    run(df, ratio=0.8)
 
 
 if __name__ == "__main__":
