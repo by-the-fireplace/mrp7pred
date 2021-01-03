@@ -11,7 +11,7 @@ from numpy import ndarray
 from sklearn.pipeline import Pipeline
 from typing import Optional, Union, Dict, Any, List
 
-from mrp7pred.feature_engineer import featurize
+from mrp7pred.featurization import featurize
 from mrp7pred.preprocess import featurize_and_split
 from mrp7pred.train import DummyClassifier, DummyScaler, NoScaler, run
 from mrp7pred.utils import DATA, MODEL_DIR, OUTPUT, get_current_time

@@ -26,7 +26,7 @@ import pandas as pd
 from numpy import ndarray
 from pandas import DataFrame
 
-from mrp7pred.feature_engineer import featurize
+from mrp7pred.featurization import featurize
 
 
 def load_data(path: str) -> DataFrame:

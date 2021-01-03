@@ -10,6 +10,7 @@ Output: featurized dataframe
 Number of features: 127
 
 feature details see notebook/preprocessing.ipynb
+feature selection details see notebook/feature_engineering.ipynb
 """
 
 __author__ = "Jingquan Wang"
