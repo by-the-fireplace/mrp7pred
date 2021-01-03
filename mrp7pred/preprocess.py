@@ -26,7 +26,7 @@ import pandas as pd
 from numpy import ndarray
 from pandas import DataFrame
 
-from feature_engineer import featurize
+from mrp7pred.feature_engineer import featurize
 
 
 def load_data(path: str) -> DataFrame:
@@ -59,7 +59,7 @@ def load_data(path: str) -> DataFrame:
     return df
 
 
-def split_train_test(
+def _split_train_test(
         df: DataFrame,
         ratio: float = 0.7
         ) -> Tuple[DataFrame, DataFrame]:
@@ -111,12 +111,16 @@ def featurize_and_split(
     print("Done!")
 
     print("Spliting training and test data ... ", end="", flush=True)
-    df_train, df_test = split_train_test(df, ratio=ratio)
+    df_train, df_test = _split_train_test(df, ratio=ratio)
 
-    # col0: "name", col1: "smiles", col2: "label", col3-130: feaatures
+    # col0: "name", col1: "smiles", col2: "label", col3-130: features
+    idx_name = df.columns.get_loc("name")
+    idx_smiles = df.columns.get_loc("smiles")
+    idx_label = df.columns.get_loc("label")
+    idx_max = max(idx_name, idx_smiles, idx_label)
     name_train, name_test = df_train["name"], df_test["name"]
-    X_train, y_train = df_train.iloc[:, 3:], df_train["label"]
-    X_test, y_test = df_test.iloc[:, 3:], df_test["label"]
+    X_train, y_train = df_train.iloc[:, idx_max+1:], df_train["label"]
+    X_test, y_test = df_test.iloc[:, idx_max+1:], df_test["label"]
     print("Done!")
-
+    
     return name_train, name_test, X_train, y_train, X_test, y_test

@@ -16,6 +16,7 @@ __author__ = "Jingquan Wang"
 __email__ = "jq.wang1214@gmail.com"
 
 from pandas import DataFrame
+import numpy as np
 from rdkit import Chem
 from rdkit.Chem import rdMolDescriptors as _rdMolDescriptors
 from tqdm import tqdm
@@ -78,7 +79,7 @@ feature_list = (
 )
 
 
-def rdk_features(smi: str) -> list:
+def _rdk_features(smi: str) -> list:
     """
     Featurization single smiles
     """
@@ -160,15 +161,22 @@ def featurize(df: DataFrame) -> DataFrame:
     df must have columns named "name" and "smiles"
     """
     # add new feature columns
-    df = df.reindex(columns=df.columns.tolist() + feature_list)
+    df = df.reindex(columns=df.columns.tolist() + feature_list).reset_index()
 
     # populate features
     for index, row in tqdm(enumerate(df.itertuples()), total=len(df)):
         try:
-            feats = rdk_features(getattr(row, "smiles"))
-        except TypeError as e:
+            feats = _rdk_features(getattr(row, "smiles"))
+        except Exception as e:
+            print(f"Error found when processing compound {getattr(row, 'name')}")
+            print(f"Smiles: {getattr(row, 'smiles')}")
             print(e)
-            print(getattr(row, "name"), getattr(row, "smiles"))
+            continue
         df.loc[index, "atomic_mass_high":"MQN42"] = feats
-
+    
+    input_len = len(df)
+    df = df.dropna()
+    output_len = len(df)
+    if input_len != output_len:
+        print(f"Dropped {input_len-output_len} unfeaturizable compounds.")
     return df

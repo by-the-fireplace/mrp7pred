@@ -9,13 +9,13 @@ import pandas as pd
 from pandas import DataFrame
 from numpy import ndarray
 from sklearn.pipeline import Pipeline
-from typing import Optional, Union, Dict, Any
+from typing import Optional, Union, Dict, Any, List
 
-from feature_engineer import featurize
-from preprocess import featurize_and_split
-from train import DummyClassifier, DummyScaler, NoScaler, train, run
-from utils import MODEL_DIR, OUTPUT, get_current_time
-from grid import grid
+from mrp7pred.feature_engineer import featurize
+from mrp7pred.preprocess import featurize_and_split
+from mrp7pred.train import DummyClassifier, DummyScaler, NoScaler, run
+from mrp7pred.utils import DATA, MODEL_DIR, OUTPUT, get_current_time
+from mrp7pred.grid import grid
 
 warnings.filterwarnings("ignore")
 
@@ -33,19 +33,18 @@ class MRP7Pred(object):
         train_new: bool
             Set train_new as True if want to train new model
         """
+        self.train_new = train_new
         if not train_new:
             print("Loading trained model ... ", end="", flush=True)
             with open(clf_dir, "rb") as ci:
                 self.clf = pickle.load(ci)
             print("Done!")
-        else:
-            self.grid = grid
         
     def run_train(
         self,
         df: DataFrame,
         train_test_ratio: float=0.8,
-        grid: Dict[Union[List[Any], ndarray]]=self.grid,
+        grid: Dict[str, Union[List[Any], ndarray]]=grid,
         ):
         """
         Featurize and train models
@@ -65,7 +64,7 @@ class MRP7Pred(object):
         self.clf: sklearn.pipeline.Pipeline
             Best model
         """
-        self.clf_best = run(df, ratio=0.8)
+        self.clf_best = run(df, ratio=train_test_ratio)
         
     
     def predict(self, compound_csv_dir: str) -> DataFrame:
@@ -82,7 +81,7 @@ class MRP7Pred(object):
         --------
         pred: ndarray
         """
-
+        
         df_all = pd.read_csv(compound_csv_dir)
         if "name" not in df_all.columns or "smiles" not in df_all.columns:
             raise ValueError(
@@ -108,13 +107,13 @@ class MRP7Pred(object):
         df_out["pred"] = preds
         df_out["score"] = scores
         df_out.to_csv(f"{OUTPUT}/predicted_{get_current_time()}.csv")
-        print("Done!")
+        print(f"Done! Results saved to: {OUTPUT}/predicted_{get_current_time()}.csv")
         return df_out
 
 
 def main() -> None:
     m7p = MRP7Pred()
-    m7p.predict("./data/unknown.csv")
+    m7p.predict(f"{DATA}/unknown.csv")
 
 
 if __name__ == "__main__":

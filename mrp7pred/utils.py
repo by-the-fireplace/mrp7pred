@@ -20,8 +20,8 @@ sns.set()
 __author__ = "Jingquan Wang"
 __email__ = "jq.wang1214@gmail.com"
 
-DATA = "./data"
-OUTPUT = "./output"
+DATA = "../data"
+OUTPUT = "../output"
 MODEL_DIR = f"{OUTPUT}/model"
 FIG_DIR = f"{OUTPUT}/fig"
 
