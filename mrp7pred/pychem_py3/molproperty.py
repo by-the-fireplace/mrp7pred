@@ -175,7 +175,7 @@ def CalculateHydrophilicityFactor(mol):
         Output: result is a numeric value.
     #################################################################
     """
-    nheavy=mol.GetNumAtoms(onlyHeavy=1)
+    nheavy=mol.GetNumHeavyAtoms()
     nc=0
     for atom in mol.GetAtoms():
         if atom.GetAtomicNum()==6:
@@ -267,7 +267,7 @@ if __name__ =='__main__':
     smi5=['CCCCCC','CCC(C)CC','CC(C)CCC','CC(C)C(C)C','CCCCCN','c1ccccc1N']
     for index, smi in enumerate(smis):
         m = Chem.MolFromSmiles(smi)
-        print index+1
-        print smi      
-        print '\t',GetMolecularProperty(m)
+        print (index+1)
+        print (smi)  
+        print ('\t',GetMolecularProperty(m))
     #f.close()

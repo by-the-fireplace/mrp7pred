@@ -12,6 +12,7 @@ from __future__ import (
     print_function,
     unicode_literals
 )
+
 from mrp7pred.pychem_py3 import (
     constitution,
     topology,
@@ -30,6 +31,9 @@ from mrp7pred.pychem_py3 import (
 
 from rdkit import Chem
 from mrp7pred.utils import standardize_smiles
+
+import warnings
+warnings.filterwarnings("ignore")
 
 def _chemopy_features(smi: str):
     """
@@ -53,31 +57,31 @@ def _chemopy_features(smi: str):
     feat_kappa = kappa.GetKappa(mol) # 7
     feat_burden1 = bcut.CalculateBurdenVDW(mol) # 16
     feat_burden2 = bcut.CalculateBurdenPolarizability(mol) # 16
-    feat_basak = basak.GetBasak(mol) # 21 
+    feat_basak = basak.Getbasak(mol) # 21 
     feat_estate = estate.GetEstate(mol) # 89
     feats_moran = moran.GetMoranAuto(mol) # 32
     feats_geary = geary.GetGearyAuto(mol) # 32
-    feats_molproperty = molproperty.GetMolecularProtey(mol) # 6
+    feats_molproperty = molproperty.GetMolecularProperty(mol) # 6
     feat_charge = charge.GetCharge(mol) # 25
     feat_moe = moe.GetMOE(mol) # 60
     feat_moreau_broto_auto = moreaubroto.GetMoreauBrotoAuto(mol) # 32
     
-    feats_dict = (
-        feat_constitution
-        & feat_topo
-        & feat_connect
-        & feat_kappa
-        & feat_burden1
-        & feat_burden2
-        & feat_basak
-        & feat_estate
-        & feats_moran
-        & feats_geary
-        & feats_molproperty
-        & feat_charge
-        & feat_moe
-        & feat_moreau_broto_auto
-    )
+    feats_dict = {
+        **feat_constitution,
+        **feat_topo,
+        **feat_connect,
+        **feat_kappa,
+        **feat_burden1,
+        **feat_burden2,
+        **feat_basak,
+        **feat_estate,
+        **feats_moran,
+        **feats_geary,
+        **feats_molproperty,
+        **feat_charge,
+        **feat_moe,
+        **feat_moreau_broto_auto
+    }
     
     feature_list, feats = [], []
     for k, v in feats_dict.items():

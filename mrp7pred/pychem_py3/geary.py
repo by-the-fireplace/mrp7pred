@@ -18,7 +18,7 @@ Email: oriental-cds@163.com
 """
 
 from rdkit import Chem
-from AtomProperty import GetRelativeAtomicProperty
+from mrp7pred.pychem_py3.AtomProperty import GetRelativeAtomicProperty
 
 import numpy
 
@@ -227,11 +227,11 @@ if __name__=='__main__':
     smis = ['CCCC','CCCCC','CCCCCC','CC(N)C(=O)O','CC(N)C(=O)[O-].[Na+]']
     for index, smi in enumerate(smi5):
         m = Chem.MolFromSmiles(smi)
-        print index+1
-        print smi      
+        print (index+1)
+        print (smi) 
 ##        print '\t',CalculateEstateFingerprint(m)
 ##        print '\t',CalculateEstateValue(m)
 ##        print '\t',CalculateMaxAtomTypeEState(m)
 ##        print '\t', CalculateMinAtomTypeEState(m)
         
-        print GetGearyAuto(m)
+        print (GetGearyAuto(m))

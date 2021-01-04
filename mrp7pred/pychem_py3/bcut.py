@@ -18,7 +18,7 @@ Email: oriental-cds@163.com
 """
 
 from rdkit import Chem
-from AtomProperty import GetRelativeAtomicProperty
+from mrp7pred.pychem_py3.AtomProperty import GetRelativeAtomicProperty
 
 import numpy
 import numpy.linalg
@@ -221,7 +221,7 @@ if __name__ =='__main__':
     smi5=['CCOCCC','CCC(C)CC','CC(C)CCC','CC(C)C(C)C','CCCCCN','c1ccccc1N','C']
     for index, smi in enumerate(smi5):
         m = Chem.MolFromSmiles(smi)
-        print index+1
-        print smi, '\n'   
-        print GetBurden(m)
-        print len(GetBurden(m))
+        print (index+1)
+        print (smi, '\n') 
+        print (GetBurden(m))
+        print (len(GetBurden(m)))

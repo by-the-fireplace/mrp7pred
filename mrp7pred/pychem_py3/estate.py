@@ -16,7 +16,7 @@ Created on Tue May 24 14:32:52 2011
 from rdkit.Chem.EState import Fingerprinter  as ESFP
 from rdkit import Chem
 
-import AtomTypes as ATEstate
+import mrp7pred.pychem_py3.AtomTypes as ATEstate
 import numpy
 
 Version=1.0
@@ -401,14 +401,14 @@ if __name__=='__main__':
     smis = ['CCCC','CCCCC','CCCCCC','CC(N)C(=O)O','CC(N)C(=O)[O-].[Na+]']
     for index, smi in enumerate(smis):
         m = Chem.MolFromSmiles(smi)
-        print index+1
-        print smi      
+        print (index+1)
+        print (smi)      
 ##        print '\t',CalculateEstateFingerprint(m)
 ##        print '\t',CalculateEstateValue(m)
 ##        print '\t',CalculateMaxAtomTypeEState(m)
 ##        print '\t', CalculateMinAtomTypeEState(m)
         
-        print GetEstate(m)
-        print len(GetEstate(m))
+        print (GetEstate(m))
+        print (len(GetEstate(m)))
 
     

@@ -152,11 +152,25 @@ def _CalculateBasakICn(mol,NumPath=1):
             IC[str(i)]=temp
         cds=[]
         for value in IC.values():
+            # fixing TypeError: '<' not supported between instances of 'list' and 'int'
+            # >>> print(value)
+            # [7, [6], [1], [1]]
+            tmp_l = []
+            for ele in value:
+                if isinstance(ele, list):
+                    tmp_l += ele
+                else:
+                    tmp_l.append(ele)
+            value = tmp_l
+            
             value.sort()
             cds.append(value)
         kkk=range(len(cds))
         aaa=copy.deepcopy(kkk)
         res=[]
+        # fixing AttributeError: 'range' object has no attribute 'remove'
+        # In python 3, range() returns a range object, not a list
+        kkk = list(kkk)
         for i in aaa:
             if i in kkk:
                 jishu=0
@@ -538,7 +552,7 @@ if __name__ =='__main__':
     smi5=['CCCCCC','CCC(C)CC','CC(C)CCC','CC(C)C(C)C','CCCCCN','c1ccccc1N']
     for index, smi in enumerate(smi5):
         m = Chem.MolFromSmiles(smi)
-        print index+1
-        print smi      
-        print '\t',Getbasak(m)
-        print len(Getbasak(m))
+        print (index+1)
+        print (smi)      
+        print ('\t',Getbasak(m))
+        print (len(Getbasak(m)))

@@ -19,7 +19,7 @@ Email: oriental-cds@163.com
 
 from rdkit import Chem
 from rdkit.Chem import rdchem
-from rdkit.Chem import pyPeriodicTable as PeriodicTable
+# from rdkit.Chem import pyPeriodicTable as PeriodicTable
 
 periodicTable = rdchem.GetPeriodicTable()
 
@@ -44,7 +44,7 @@ def CalculateKappa1(mol):
     #################################################################
     """
     P1=mol.GetNumBonds(onlyHeavy=1)
-    A=mol.GetNumAtoms(onlyHeavy=1)
+    A=mol.GetNumHeavyAtoms()
     denom=P1+0.0
     if denom:
         kappa=(A)*(A-1)**2/denom**2
@@ -70,7 +70,7 @@ def CalculateKappa2(mol):
     #################################################################
     """
     P2=len(Chem.FindAllPathsOfLengthN(mol,2))
-    A=mol.GetNumAtoms(onlyHeavy=1)
+    A=mol.GetNumHeavyAtoms()
 
     denom=P2+0.0
     if denom:
@@ -97,7 +97,7 @@ def CalculateKappa3(mol):
     #################################################################
     """
     P3=len(Chem.FindAllPathsOfLengthN(mol,3))
-    A=mol.GetNumAtoms(onlyHeavy=1)
+    A=mol.GetNumHeavyAtoms()
 
     denom=P3+0.0
     if denom:
@@ -118,12 +118,12 @@ def _HallKierAlpha(mol):
     #################################################################
     """
     alphaSum=0.0
-    rC=PeriodicTable.nameTable['C'][5]
+    rC=periodicTable.GetRb0(6)
     for atom in mol.GetAtoms():
         atNum=atom.GetAtomicNum()
         if not atNum: continue
         symb=atom.GetSymbol()
-        alphaV = PeriodicTable.hallKierAlphas.get(symb,None)
+        alphaV = Chem.GraphDescriptors.hallKierAlphas.get(symb, None)
         if alphaV is not None:
             hyb=atom.GetHybridization()-2
             if hyb<len(alphaV):
@@ -133,7 +133,7 @@ def _HallKierAlpha(mol):
             else:
                 alpha=alphaV[-1]
         else:
-            rA=PeriodicTable.nameTable[symb][5]
+            rA=periodicTable.GetRb0(atNum)
             alpha=rA/rC-1
         alphaSum += alpha
     return alphaSum
@@ -158,7 +158,7 @@ def CalculateKappaAlapha1(mol):
     #################################################################
     """
     P1=mol.GetNumBonds(onlyHeavy=1)
-    A=mol.GetNumAtoms(onlyHeavy=1)
+    A=mol.GetNumHeavyAtoms()
     alpha=_HallKierAlpha(mol)
     denom=P1+alpha
     if denom:
@@ -187,7 +187,7 @@ def CalculateKappaAlapha2(mol):
     #################################################################
     """
     P2=len(Chem.FindAllPathsOfLengthN(mol,2))
-    A=mol.GetNumAtoms(onlyHeavy=1)
+    A=mol.GetNumHeavyAtoms()
     alpha=_HallKierAlpha(mol)
     denom=P2+alpha
     if denom:
@@ -216,7 +216,7 @@ def CalculateKappaAlapha3(mol):
     #################################################################
     """
     P3=len(Chem.FindAllPathsOfLengthN(mol,3))
-    A=mol.GetNumAtoms(onlyHeavy=1)
+    A=mol.GetNumHeavyAtoms()
     alpha=_HallKierAlpha(mol)
     denom=P3+alpha
     if denom:
@@ -248,7 +248,7 @@ def CalculateFlexibility(mol):
     """
     kappa1=CalculateKappaAlapha1(mol)
     kappa2=CalculateKappaAlapha2(mol)
-    A=mol.GetNumAtoms(onlyHeavy=1)
+    A=mol.GetNumHeavyAtoms()
     phi=kappa1*kappa2/(A+0.0)
     
     return round(phi,3)
@@ -283,8 +283,7 @@ if __name__ =='__main__':
     smis = ['CCCC','CCCCC','CCCCCC','CC(N)C(=O)O','CC(N)C(=O)[O-].[Na+]']
     for index, smi in enumerate(smis):
         m = Chem.MolFromSmiles(smi)
-        print index+1
-        print smi      
-        print '\t',GetKappa(m)
-        print '\t',len(GetKappa(m))
-
+        print (index+1)
+        print (smi)
+        print ('\t',GetKappa(m))
+        print ('\t',len(GetKappa(m)))
