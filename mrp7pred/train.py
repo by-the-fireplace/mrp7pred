@@ -13,10 +13,16 @@ from sklearn.model_selection import GridSearchCV, StratifiedKFold
 from sklearn.pipeline import Pipeline
 from xgboost import XGBClassifier
 
-from mrp7pred.grid import grid
-from mrp7pred.preprocess import featurize_and_split, load_data
-from mrp7pred.utils import (DATA, OUTPUT, ensure_folder, get_current_time, get_scoring,
-                   plot_roc_auc)
+from grid import grid
+from preprocess import featurize_and_split, load_data
+from utils import (
+    DATA,
+    OUTPUT,
+    ensure_folder,
+    get_current_time,
+    plot_roc_auc
+)
+from src.scoring import get_scoring
 
 __author__ = "Jingquan Wang"
 __email__ = "jq.wang1214@gmail.com"

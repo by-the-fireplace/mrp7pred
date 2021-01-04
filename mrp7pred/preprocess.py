@@ -1,5 +1,5 @@
 """
-Data preprocessing for training a new model
+Automated data preprocessing for training a new model
 
 Input: A csv file with three columns:
         name, smiles, label
@@ -26,7 +26,7 @@ import pandas as pd
 from numpy import ndarray
 from pandas import DataFrame
 
-from mrp7pred.featurization import featurize
+from featurization import featurize
 
 
 def load_data(path: str) -> DataFrame:
