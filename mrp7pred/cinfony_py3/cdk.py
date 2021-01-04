@@ -33,6 +33,7 @@ if sys.platform[:4] == "java":
     cdk.graph.Cycles.or_ = getattr(cdk.graph.Cycles, "or")
 else:
     from jpype import *
+    from jpype import JException
 
     if not isJVMStarted():
         _jvm = os.environ['JPYPE_JVM']
@@ -48,9 +49,9 @@ else:
         raise ImportError("The CDK Jar file cannot be found.")
 
     #Exception wrappers for Jpype
-    InvalidSmilesException = JavaException
-    CDKException = JavaException
-    NullPointerException = JavaException
+    InvalidSmilesException = JException
+    CDKException = JException
+    NullPointerException = JException
 
 _chemobjbuilder = cdk.silent.SilentChemObjectBuilder.getInstance()
 _aromaticityperceptor = cdk.aromaticity.Aromaticity(cdk.aromaticity.ElectronDonation.daylight(), cdk.graph.Cycles.or_(cdk.graph.Cycles.all(), cdk.graph.Cycles.all(6)))
