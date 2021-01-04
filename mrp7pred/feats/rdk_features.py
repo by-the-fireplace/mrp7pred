@@ -44,154 +44,241 @@ from __future__ import (
     print_function,
     unicode_literals
 )
-
+from typing import List, Union
 from rdkit import Chem
 from rdkit.Chem import rdMolDescriptors as _rdMolDescriptors
 from mrp7pred.utils import standardize_smiles
 from mrp7pred.cinfony_py3 import rdk
 
+import warnings
+warnings.filterwarnings("ignore")
 
-feature_list = (
-    [
-        "atomic_mass_high",
-        "atomic_mass_low",
-        "gasteiger_charge_high",
-        "gasteiger_charge_low",
-        "crippen_logp_high",
-        "crippen_logp_low",
-        "crippen_mr_high",
-        "crippen_mr_low",
-        "chi0n",
-        "chi1n",
-        "chi2n",
-        "chi3n",
-        "chi4n",
-        "chi0v",
-        "chi1v",
-        "chi2v",
-        "chi3v",
-        "chi4v",
-        "MolLogP",
-        "MolMR",
-        "ExactMolWt",
-        "FractionCSP3",
-        "HallKierAlpha",
-        "Kappa1",
-        "Kappa2",
-        "Kappa3",
-        "LabuteASA",
-        "NumHeterocycles",
-        "NumAromaticHeterocycles",
-        "NumSaturatedHeterocycles",
-        "NumAliphaticHeterocycles",
-        "NumAromaticCarbocycles",
-        "NumSaturatedCarbocycles",
-        "NumAliphaticCarbocycles",
-        "NumRings",
-        "NumAromaticRings",
-        "NumSaturatedRings",
-        "NumAliphaticRings",
-        "NumAtomStereoCenters",
-        "NumBridgeheadAtoms",
-        "NumHBA",
-        "NumHBD",
-        "NumHeteroatoms",
-        "NumLipinskiHBA",
-        "NumLipinskiHBD",
-        "NumRotatableBonds",
-        "NumSpiroAtoms",
-        "TPSA",
-    ]
-    + [f"PEOE_VSA{i}" for i in range(1, 15)]
-    + [f"SMR_VSA{i}" for i in range(1, 11)]
-    + [f"SlogP_VSA{i}" for i in range(1, 13)]
-    + [f"MQN{i}" for i in range(1, 43)]
-)
+_feature_list = [
+    "FractionCSP3",
+    "HeavyAtomCount",
+    "HeavyAtomMolWt",
+    "NHOHCount",
+    "NOCount",
+    "RingCount",
+    "NumAliphaticCarbocycles",
+    "NumAliphaticHeterocycles",
+    "NumAliphaticRings",
+    "NumAromaticCarbocycles",
+    "NumAromaticHeterocycles",
+    "NumAromaticRings",
+    "NumHAcceptors",
+    "NumHDonors",
+    "NumHeteroatoms",
+    "NumRadicalElectrons",
+    "NumRotatableBonds",
+    "NumSaturatedCarbocycles",
+    "NumSaturatedHeterocycles",
+    "NumSaturatedRings",
+    "NumValenceElectrons",
+    "fr_Al_COO",
+    "fr_Al_OH",
+    "fr_Al_OH_noTert",
+    "fr_ArN",
+    "fr_Ar_COO",
+    "fr_Ar_N",
+    "fr_Ar_NH",
+    "fr_Ar_OH",
+    "fr_COO",
+    "fr_COO2",
+    "fr_C_O",
+    "fr_C_O_noCOO",
+    "fr_C_S",
+    "fr_HOCCN",
+    "fr_Imine",
+    "fr_NH0",
+    "fr_NH1",
+    "fr_NH2",
+    "fr_N_O",
+    "fr_Ndealkylation1",
+    "fr_Ndealkylation2",
+    "fr_Nhpyrrole",
+    "fr_SH",
+    "fr_aldehyde",
+    "fr_alkyl_carbamate",
+    "fr_alkyl_halide",
+    "fr_allylic_oxid",
+    "fr_amide",
+    "fr_amidine",
+    "fr_aniline",
+    "fr_aryl_methyl",
+    "fr_azide",
+    "fr_azo",
+    "fr_barbitur",
+    "fr_benzene",
+    "fr_benzodiazepine",
+    "fr_bicyclic",
+    "fr_diazo",
+    "fr_dihydropyridine",
+    "fr_epoxide",
+    "fr_ester",
+    "fr_ether",
+    "fr_furan",
+    "fr_guanido",
+    "fr_halogen",
+    "fr_hdrzine",
+    "fr_hdrzone",
+    "fr_imidazole",
+    "fr_imide",
+    "fr_isocyan",
+    "fr_isothiocyan",
+    "fr_ketone",
+    "fr_ketone_Topliss",
+    "fr_lactam",
+    "fr_lactone",
+    "fr_methoxy",
+    "fr_morpholine",
+    "fr_nitrile",
+    "fr_nitro",
+    "fr_nitro_arom",
+    "fr_nitro_arom_nonortho",
+    "fr_nitroso",
+    "fr_oxazole",
+    "fr_oxime",
+    "fr_para_hydroxylation",
+    "fr_phenol",
+    "fr_phenol_noOrthoHbond",
+    "fr_phos_acid",
+    "fr_phos_ester",
+    "fr_piperdine",
+    "fr_piperzine",
+    "fr_priamide",
+    "fr_prisulfonamd",
+    "fr_pyridine",
+    "fr_quatN",
+    "fr_sulfide",
+    "fr_sulfonamd",
+    "fr_sulfone",
+    "fr_term_acetylene",
+    "fr_tetrazole",
+    "fr_thiazole",
+    "fr_thiocyan",
+    "fr_thiophene",
+    "fr_unbrch_alkane",
+    "fr_urea",
+    "BalabanJ",
+    "BertzCT",
+    "Chi0",
+    "Chi1",
+    "Chi0v",
+    "Chi1v",
+    "Chi2v",
+    "Chi3v",
+    "Chi4v",
+    "Chi0n",
+    "Chi1n",
+    "Chi2n",
+    "Chi3n",
+    "Chi4n",
+    "EState_VSA1",
+    "EState_VSA2",
+    "EState_VSA3",
+    "EState_VSA4",
+    "EState_VSA5",
+    "EState_VSA6",
+    "EState_VSA7",
+    "EState_VSA8",
+    "EState_VSA9",
+    "EState_VSA10",
+    "EState_VSA11",
+    "ExactMolWt",
+    "HallKierAlpha",
+    "Ipc",
+    "Kappa1",
+    "Kappa2",
+    "Kappa3",
+    "LabuteASA",
+    "MolLogP",
+    "MolMR",
+    "MolWt",
+    "PEOE_VSA1",
+    "PEOE_VSA2",
+    "PEOE_VSA3",
+    "PEOE_VSA4",
+    "PEOE_VSA5",
+    "PEOE_VSA6",
+    "PEOE_VSA7",
+    "PEOE_VSA8",
+    "PEOE_VSA9",
+    "PEOE_VSA10",
+    "PEOE_VSA11",
+    "PEOE_VSA12",
+    "PEOE_VSA13",
+    "PEOE_VSA14",
+    "SMR_VSA1",
+    "SMR_VSA2",
+    "SMR_VSA3",
+    "SMR_VSA4",
+    "SMR_VSA5",
+    "SMR_VSA6",
+    "SMR_VSA7",
+    "SMR_VSA8",
+    "SMR_VSA9",
+    "SMR_VSA10",
+    "SlogP_VSA1",
+    "SlogP_VSA2",
+    "SlogP_VSA3",
+    "SlogP_VSA4",
+    "SlogP_VSA5",
+    "SlogP_VSA6",
+    "SlogP_VSA7",
+    "SlogP_VSA8",
+    "SlogP_VSA9",
+    "SlogP_VSA10",
+    "SlogP_VSA11",
+    "SlogP_VSA12",
+    "TPSA",
+    "VSA_EState1",
+    "VSA_EState2",
+    "VSA_EState3",
+    "VSA_EState4",
+    "VSA_EState5",
+    "VSA_EState6",
+    "VSA_EState7",
+    "VSA_EState8",
+    "VSA_EState9",
+    "VSA_EState10",
+    "MaxAbsEStateIndex",
+    "MaxAbsPartialCharge",
+    "MaxEStateIndex",
+    "MaxPartialCharge",
+    "MinAbsEStateIndex",
+    "MinAbsPartialCharge",
+    "MinEStateIndex",
+    "MinPartialCharge"
+]
+feature_list = [f"rdk_{feat}" for feat in _feature_list]
 
-
-def _rdk_features(smi: str) -> list:
+def _rdk_features(smi: str) -> List[Union[float, int]]:
     """
-    Featurization single smiles
+    Generate rdk features from smiles strings
+    
+    Parameters
+    --------
+    smi: str
+        Smiles string to be featurized. Should be standardized by 
+        mrp7pred.utils.standardize_smiles()
+    
+    Returns
+    --------
+    feats: List[Union[float, int]]
+        List of generated features
     """
-    mol = Chem.MolFromSmiles(smi)
-    bcut2d = _rdMolDescriptors.BCUT2D(mol)  # rdkit.rdBase._vectd, len=8
-    chiNn = [
-        _rdMolDescriptors.CalcChiNn(mol, i) for i in range(5)
-    ]  # list, len=5
-    chiNv = [
-        _rdMolDescriptors.CalcChiNv(mol, i) for i in range(5)
-    ]  # list, len=5
-    mollogp, molmr = _rdMolDescriptors.CalcCrippenDescriptors(mol)  # floats
-    molwt = _rdMolDescriptors.CalcExactMolWt(mol)  # float
-    csp3 = _rdMolDescriptors.CalcFractionCSP3(mol)  # float
-    hka = _rdMolDescriptors.CalcHallKierAlpha(mol)  # float
-    kappa = [
-        _rdMolDescriptors.CalcKappa1(mol),
-        _rdMolDescriptors.CalcKappa2(mol),
-        _rdMolDescriptors.CalcKappa3(mol),
-    ]  # list, len=3
-    labuteasa = _rdMolDescriptors.CalcLabuteASA(mol)  # float
-    num_hetero_cycles = [
-        _rdMolDescriptors.CalcNumHeterocycles(mol),
-        _rdMolDescriptors.CalcNumAromaticHeterocycles(mol),
-        _rdMolDescriptors.CalcNumSaturatedHeterocycles(mol),
-        _rdMolDescriptors.CalcNumAliphaticHeterocycles(mol),
-    ]  # list[int], [total, aromatic, saturated, aliphatic], len=4
-    num_carbo_cycles = [
-        _rdMolDescriptors.CalcNumAromaticCarbocycles(mol),
-        _rdMolDescriptors.CalcNumSaturatedCarbocycles(mol),
-        _rdMolDescriptors.CalcNumAliphaticCarbocycles(mol),
-    ]  # list[int], [total, aromatic, saturated, aliphatic], len=3
-    num_rings = [
-        _rdMolDescriptors.CalcNumRings(mol),
-        _rdMolDescriptors.CalcNumAromaticRings(mol),
-        _rdMolDescriptors.CalcNumSaturatedRings(mol),
-        _rdMolDescriptors.CalcNumAliphaticRings(mol),
-    ]  # list[int], [total, aromatic, saturated, aliphatic], len=4
-    num_stereo_centers = _rdMolDescriptors.CalcNumAtomStereoCenters(mol)  # int
-    num_bridgehead_atoms = _rdMolDescriptors.CalcNumBridgeheadAtoms(mol)  # int
-    num_hba = _rdMolDescriptors.CalcNumHBA(mol)  # int
-    num_hbd = _rdMolDescriptors.CalcNumHBD(mol)  # int
-    num_hetero_atom = _rdMolDescriptors.CalcNumHeteroatoms(mol)  # int
-    num_lipinski_hba = _rdMolDescriptors.CalcNumLipinskiHBA(mol)  # int
-    num_lipinski_hbd = _rdMolDescriptors.CalcNumLipinskiHBD(mol)  # int
-    num_rot_bonds = _rdMolDescriptors.CalcNumRotatableBonds(mol)  # int
-    num_spiro_atoms = _rdMolDescriptors.CalcNumSpiroAtoms(mol)  # int
-    tpsa = _rdMolDescriptors.CalcTPSA(mol)  # float
-    peoe_vsa = _rdMolDescriptors.PEOE_VSA_(mol)  # list, len=14
-    smr_vsa = _rdMolDescriptors.SMR_VSA_(mol)  # list, len=10
-    slogp_vsa = _rdMolDescriptors.SlogP_VSA_(mol)  # list, len=12
-    mqn = _rdMolDescriptors.MQNs_(mol)  # list, len=42
-
-    feats = (
-        [ele for ele in bcut2d]
-        + chiNn
-        + chiNv
-        + [mollogp, molmr, molwt, csp3, hka]
-        + kappa
-        + [labuteasa]
-        + num_hetero_cycles
-        + num_carbo_cycles
-        + num_rings
-        + [num_stereo_centers, num_bridgehead_atoms, num_hba, num_hbd]
-        + [num_hetero_atom, num_lipinski_hba, num_lipinski_hbd]
-        + [num_rot_bonds, num_spiro_atoms, tpsa]
-        + peoe_vsa
-        + smr_vsa
-        + slogp_vsa
-        + mqn
-    )
-
+    mol = rdk.readstring("smi", smi)
+    feats = []
+    for feat_name in feature_list:
+        feats.append(mol_cinfony.calcdesc([feat_name])[feat_name])
     return feats
 
 
 if __name__ == "__main__":
     test_smi = standardize_smiles("Nc1ccn(C2OC(CO)C(O)C2(F)F)c(=O)n1") # gemcitabine
-    mol = rdk.readstring("smi", test_smi)
-    test_rdk_feats = _rdk_features(test_smi)
-    print("Length RDK feats: ", len(test_rdk_feats))
-    print("Previous RDK feats: ", test_rdk_feats)
-    
+    mol_cinfony = rdk.readstring("smi", test_smi)
     print(f"Test SMILES (std): {test_smi}")
-    print("HeavyAtomCount: ", mol.calcdesc(['HeavyAtomCount'])['HeavyAtomCount'])
+    for feat_name in feature_list:
+        print(f"{feat_name}", mol_cinfony.calcdesc([feat_name])[feat_name])
     
