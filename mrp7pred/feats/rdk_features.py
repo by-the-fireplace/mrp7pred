@@ -48,7 +48,7 @@ from __future__ import (
 from rdkit import Chem
 from rdkit.Chem import rdMolDescriptors as _rdMolDescriptors
 from mrp7pred.utils import standardize_smiles
-from mrp7pred.cinfony import rdk
+from mrp7pred.cinfony_py3 import rdk
 
 
 feature_list = (
