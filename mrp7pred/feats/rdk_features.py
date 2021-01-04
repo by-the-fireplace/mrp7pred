@@ -2,27 +2,27 @@
 Generate RDK features from SMILE strings
 
 1D: 
-    Constitutional descriptors (106):
+    - Constitutional descriptors (106):
         
 2D:
-    Molecular property descriptors (5):
+    - Molecular property descriptors (5):
         ExactMolWt
         MolLogP
         MolMR
         MolWt
         TPSA        
-    Connectivity descriptors (12): 
+    - Connectivity descriptors (12): 
         Chi0, Chi1
         Chi0v - 4v
         chi0n - 4n
-    MOE-type descriptors (58):
+    - MOE-type descriptors (58):
         EState_VSA1 - 11
         LabuteASA
         PEOE_VSA1 - 14
         SMR_VSA1 - 10
         SlogP_VSA1 - 12
         VSA_EState1 - 10
-    Topological descriptors (15):
+    - Topological descriptors (15):
         BalabanJ
         BertzCT
         HallKierAlpha

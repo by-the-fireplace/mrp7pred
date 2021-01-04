@@ -3,7 +3,24 @@ Generate ChemoPy features from SMILE strings
 
 ChemoPy: https://github.com/salotz/chemopy
 
-Number of descriptors: 309
+1D:
+    - Constitutional descriptors (30)
+    
+2D:
+    - Connectivity descriptors (44)
+    - Basak descriptors (21)
+    - Topology descriptors (35)
+    - Kappa descriptors (7)
+    - Burden descriptors (64)
+    - E-state descriptors (245)
+    - Moran autocorrelation descriptors (32)
+    - Geary autocorrelation descriptors (32)
+    - Molecular property descriptors (6)
+    - Moreau-Broto autocorrelation descriptors (32)
+    - Charge descriptors (25)
+    - MOE-type descriptors (60)
+    
+Total number of descriptors: 632
 """
 
 from __future__ import (
@@ -28,6 +45,7 @@ from mrp7pred.pychem_py3 import (
     moe,
     moreaubroto
 )
+from typing import Tuple, Union, List
 
 from rdkit import Chem
 from mrp7pred.utils import standardize_smiles
@@ -35,7 +53,7 @@ from mrp7pred.utils import standardize_smiles
 import warnings
 warnings.filterwarnings("ignore")
 
-def _chemopy_features(smi: str):
+def _chemopy_features(smi: str) -> Tuple[List[str], List[Union[int, float]]]:
     """
     Generate chemopy features from smiles strings
     
@@ -55,10 +73,9 @@ def _chemopy_features(smi: str):
     feat_topo = topology.GetTopology(mol) # 35
     feat_connect = connectivity.GetConnectivity(mol) # 44
     feat_kappa = kappa.GetKappa(mol) # 7
-    feat_burden1 = bcut.CalculateBurdenVDW(mol) # 16
-    feat_burden2 = bcut.CalculateBurdenPolarizability(mol) # 16
+    feat_burden = bcut.GetBurden(mol) # 64
     feat_basak = basak.Getbasak(mol) # 21 
-    feat_estate = estate.GetEstate(mol) # 89
+    feat_estate = estate.GetEstate(mol) # 245
     feats_moran = moran.GetMoranAuto(mol) # 32
     feats_geary = geary.GetGearyAuto(mol) # 32
     feats_molproperty = molproperty.GetMolecularProperty(mol) # 6
@@ -71,8 +88,7 @@ def _chemopy_features(smi: str):
         **feat_topo,
         **feat_connect,
         **feat_kappa,
-        **feat_burden1,
-        **feat_burden2,
+        **feat_burden,
         **feat_basak,
         **feat_estate,
         **feats_moran,
@@ -88,13 +104,14 @@ def _chemopy_features(smi: str):
         feature_list.append(f"pychem_{k}")
         feats.append(v)
     
-    return feats
+    return feature_list, feats
     
     
 if __name__ == "__main__":
     smi = standardize_smiles("Nc1ccn(C2OC(CO)C(O)C2(F)F)c(=O)n1") # gemcitabine
     print(f"Test SMILES (std): {smi}")
     mol = Chem.MolFromSmiles(smi)
-    feats = _chemopy_features(smi)
-    print("all feats: ", feats)
+    feature_list, feats = _chemopy_features(smi)
+    print("all feats: ", feature_list)
+    print("values: ", feats)
     print("length: ", len(feats))
