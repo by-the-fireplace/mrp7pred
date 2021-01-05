@@ -17,6 +17,9 @@ from tqdm import tqdm
 tqdm.pandas()
 sns.set()
 
+import warnings
+warnings.filterwarnings("ignore")
+
 __author__ = "Jingquan Wang"
 __email__ = "jq.wang1214@gmail.com"
 

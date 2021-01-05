@@ -31,6 +31,7 @@ if sys.platform[:4] == "java":
     NullPointerException = java.lang.NullPointerException
     # The 'or' method is not allowed in Python and is renamed to or_ by JPype
     cdk.graph.Cycles.or_ = getattr(cdk.graph.Cycles, "or")
+    # print("java successfully loaded!")
 else:
     from jpype import *
     from jpype import JException
@@ -41,8 +42,10 @@ else:
             _jvm = _jvm[1:-1]
         _cp = os.environ['CLASSPATH']
         startJVM(_jvm, "-Djava.class.path=" + _cp)
+        # print("JVM successfully started")
 
     cdk = JPackage("org").openscience.cdk
+    # print("cdk package successfully loaded")
     try:
         _testmol = cdk.Atom()
     except TypeError:
@@ -55,6 +58,7 @@ else:
 
 _chemobjbuilder = cdk.silent.SilentChemObjectBuilder.getInstance()
 _aromaticityperceptor = cdk.aromaticity.Aromaticity(cdk.aromaticity.ElectronDonation.daylight(), cdk.graph.Cycles.or_(cdk.graph.Cycles.all(), cdk.graph.Cycles.all(6)))
+# print("_chemobjbuilder, _aromaticityperceptor successfully initialized")
 
 def _getdescdict():
     de = cdk.qsar.DescriptorEngine(cdk.qsar.IMolecularDescriptor, _chemobjbuilder)
@@ -62,7 +66,12 @@ def _getdescdict():
     for desc in de.getDescriptorInstances():
         spec = desc.getSpecification()
         descclass = de.getDictionaryClass(spec)
-        if "proteinDescriptor" not in descclass:
+        # Modified to fix TypeError: argument of type 'NoneType' is not iterable
+        # >>> print(descclass)
+        # None
+        # original:
+        # if "proteinDescriptor" not in descclass:
+        if descclass is None or "proteinDescriptor" not in descclass:
             # Using str() for unicode conversion
             name = str(spec.getSpecificationReference().split("#")[-1])
             descdict[name] = desc
@@ -93,7 +102,9 @@ informats = dict([(_x, _formats[_x]) for _x in ['smi', 'sdf', 'mol', 'inchi']])
 _outformats = {'mol': cdk.io.MDLV2000Writer,
                'mol2': cdk.io.Mol2Writer,
                'sdf': cdk.io.SDFWriter}
-outformats = dict([(_x, _formats[_x]) for _x in _outformats.keys() + ['can', 'smi', 'inchi', 'inchikey']])
+# To fix TypeError: unsupported operand type(s) for +: 'dict_keys' and 'list'
+# changed _outformats.keys() to list(_outformats.keys())
+outformats = dict([(_x, _formats[_x]) for _x in list(_outformats.keys()) + ['can', 'smi', 'inchi', 'inchikey']])
 """A dictionary of supported output formats"""
 forcefields = list(cdk.modeling.builder3d.ModelBuilder3D.getInstance(_chemobjbuilder).getFfTypes())
 """A list of supported forcefields"""
@@ -175,9 +186,11 @@ def readstring(format, string):
     >>> len(mymol.atoms)
     5
     """
+    # print("calling readstring")
     format = format.lower()
     if format=="smi":
         sp = cdk.smiles.SmilesParser(cdk.DefaultChemObjectBuilder.getInstance())
+        print("sp successfully initialized")
         try:
             ans = sp.parseSmiles(string)
         except InvalidSmilesException as ex:

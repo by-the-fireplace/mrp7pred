@@ -36,6 +36,8 @@ Generate RDK features from SMILE strings
         MinAbsPartialCharge
         MinEStateIndex
         MinPartialCharge
+        
+Total number of descriptors: 196
 """
 
 from __future__ import (
@@ -44,14 +46,16 @@ from __future__ import (
     print_function,
     unicode_literals
 )
+
+import warnings
+warnings.filterwarnings("ignore")
+
 from typing import List, Union
 from rdkit import Chem
 from rdkit.Chem import rdMolDescriptors as _rdMolDescriptors
 from mrp7pred.utils import standardize_smiles
 from mrp7pred.cinfony_py3 import rdk
 
-import warnings
-warnings.filterwarnings("ignore")
 
 _feature_list = [
     "FractionCSP3",
@@ -251,7 +255,7 @@ _feature_list = [
     "MinEStateIndex",
     "MinPartialCharge"
 ]
-feature_list = [f"rdk_{feat}" for feat in _feature_list]
+rdk_feature_list = [f"rdk_{feat}" for feat in _feature_list]
 
 def _rdk_features(smi: str) -> List[Union[float, int]]:
     """
@@ -268,17 +272,15 @@ def _rdk_features(smi: str) -> List[Union[float, int]]:
     feats: List[Union[float, int]]
         List of generated features
     """
-    mol = rdk.readstring("smi", smi)
+    mol_cinfony = rdk.readstring("smi", smi)
     feats = []
-    for feat_name in feature_list:
+    for feat_name in _feature_list:
         feats.append(mol_cinfony.calcdesc([feat_name])[feat_name])
     return feats
 
 
 if __name__ == "__main__":
     test_smi = standardize_smiles("Nc1ccn(C2OC(CO)C(O)C2(F)F)c(=O)n1") # gemcitabine
-    mol_cinfony = rdk.readstring("smi", test_smi)
     print(f"Test SMILES (std): {test_smi}")
-    for feat_name in feature_list:
-        print(f"{feat_name}", mol_cinfony.calcdesc([feat_name])[feat_name])
+    print(dict(zip(rdk_feature_list, _rdk_features(test_smi))))
     

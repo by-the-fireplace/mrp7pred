@@ -3,8 +3,6 @@ MRP7Pred class
 """
 
 import pickle
-import warnings
-
 import pandas as pd
 from pandas import DataFrame
 from numpy import ndarray
@@ -17,6 +15,7 @@ from train import DummyClassifier, DummyScaler, NoScaler, run
 from utils import DATA, MODEL_DIR, OUTPUT, get_current_time
 from grid import grid
 
+import warnings
 warnings.filterwarnings("ignore")
 
 
