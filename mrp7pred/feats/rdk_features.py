@@ -50,7 +50,7 @@ from __future__ import (
 import warnings
 warnings.filterwarnings("ignore")
 
-from typing import List, Union
+from typing import List, Union, Dict
 from rdkit import Chem
 from rdkit.Chem import rdMolDescriptors as _rdMolDescriptors
 from mrp7pred.utils import standardize_smiles
@@ -257,7 +257,7 @@ _feature_list = [
 ]
 rdk_feature_list = [f"rdk_{feat}" for feat in _feature_list]
 
-def _rdk_features(smi: str) -> List[Union[float, int]]:
+def _rdk_features(smi: str) -> Dict[str, Union[float, int]]:
     """
     Generate rdk features from smiles strings
     
@@ -269,14 +269,15 @@ def _rdk_features(smi: str) -> List[Union[float, int]]:
     
     Returns
     --------
-    feats: List[Union[float, int]]
-        List of generated features
+    feats: Dict[str, Union[float, int]]
+        Dict of generated features
+        Feature name as key
     """
     mol_cinfony = rdk.readstring("smi", smi)
     feats = []
     for feat_name in _feature_list:
         feats.append(mol_cinfony.calcdesc([feat_name])[feat_name])
-    return feats
+    return dict(zip(_feature_list, feats))
 
 
 if __name__ == "__main__":

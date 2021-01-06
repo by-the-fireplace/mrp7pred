@@ -45,7 +45,7 @@ from mrp7pred.pychem_py3 import (
     moe,
     moreaubroto
 )
-from typing import Tuple, Union, List
+from typing import Tuple, Union, List, Dict
 
 from rdkit import Chem
 from mrp7pred.utils import standardize_smiles
@@ -53,7 +53,7 @@ from mrp7pred.utils import standardize_smiles
 import warnings
 warnings.filterwarnings("ignore")
 
-def _chemopy_features(smi: str) -> Tuple[List[str], List[Union[int, float]]]:
+def _chemopy_features(smi: str) -> Dict[str, Union[int, float]]:
     """
     Generate chemopy features from smiles strings
     
@@ -99,19 +99,18 @@ def _chemopy_features(smi: str) -> Tuple[List[str], List[Union[int, float]]]:
         **feat_moreau_broto_auto
     }
     
-    feature_list, feats = [], []
-    for k, v in feats_dict.items():
-        feature_list.append(f"pychem_{k}")
-        feats.append(v)
+    # feature_list, feats = [], []
+    # for k, v in feats_dict.items():
+    #     feature_list.append(f"pychem_{k}")
+    #     feats.append(v)
     
-    return feature_list, feats
+    return feats_dict
     
     
 if __name__ == "__main__":
     smi = standardize_smiles("Nc1ccn(C2OC(CO)C(O)C2(F)F)c(=O)n1") # gemcitabine
     print(f"Test SMILES (std): {smi}")
     mol = Chem.MolFromSmiles(smi)
-    feature_list, feats = _chemopy_features(smi)
-    print("all feats: ", feature_list)
-    print("values: ", feats)
-    print("length: ", len(feats))
+    feats_dict = _chemopy_features(smi)
+    print("all feats: ", feats_dict)
+    print("length: ", len(feats_dict))
