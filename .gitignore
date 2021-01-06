@@ -7,3 +7,4 @@
 /notebook/pos_neg_ratio
 mrp7pred/feats/all_features_*
 cdk*
+mrp7pred/feats/*.pkl
