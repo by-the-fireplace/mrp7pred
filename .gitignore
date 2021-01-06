@@ -5,3 +5,5 @@
 /notebook/draft
 /notebook/output
 /notebook/pos_neg_ratio
+mrp7pred/feats/all_features_*
+cdk*
