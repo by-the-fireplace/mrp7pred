@@ -28,13 +28,9 @@ from sklearn.feature_selection import (
     RFECV,
     SelectFromModel,
     SequentialFeatureSelector,
-    )
-
-from sklearn.model_selection import (
-    GridSearchCV,
-    KFold,
-    StratifiedKFold
 )
+
+from sklearn.model_selection import GridSearchCV, KFold, StratifiedKFold
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import Lasso
 from sklearn.neural_network import MLPClassifier
@@ -49,5 +45,11 @@ import pandas as pd
 import numpy as np
 
 
-def _remove_similar_features(X: Union) -> ndarray:
-    
+def _remove_similar_features(X: DataFrame, threshold: float = 0.9) -> ndarray:
+    """
+    Remove features with high colinearity
+    Use a graph-based method
+    The goal is to remove actually identical features with different names
+    """
+
+

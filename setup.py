@@ -7,6 +7,13 @@ setup(
     author="Jing-Quan Wang",
     author_email="jq.wang1214@gmail.com",
     license="GPL",
-    packages=["mrp7pred"],
-    package_dir={'pychem':'src/mrp7pred'}    
+    packages=find_packages(),
+    # package_dir={'pychem':'mrp7pred'}
+    # TODO: finish install_requires
+    install_requires=[
+        "scikit-learn",
+        "seaborn",
+        "tqdm",
+        "xgboost",
+    ]
 )
