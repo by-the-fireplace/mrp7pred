@@ -1,5 +1,6 @@
 from setuptools import setup, find_packages
 
+
 setup(
     name="mrp7pred",
     version="1.0",
@@ -9,11 +10,14 @@ setup(
     license="GPL",
     packages=find_packages(),
     # package_dir={'pychem':'mrp7pred'}
-    # TODO: finish install_requires
     install_requires=[
         "scikit-learn",
         "seaborn",
         "tqdm",
         "xgboost",
-    ]
+        "pandas",
+        "numpy",
+        "PyFingerprint @ git+https://github.com/hcji/PyFingerprint@master",
+        "jpype1",
+    ],
 )
