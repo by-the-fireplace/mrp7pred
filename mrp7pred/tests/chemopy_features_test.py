@@ -3,7 +3,7 @@ import pandas as pd
 
 from mrp7pred.feats.chemopy_features import _chemopy_features
 from mrp7pred.utils import standardize_smiles
-from rdk import Chem
+from rdkit import Chem
 
 
 def test_chemopy_features():
@@ -15,7 +15,3 @@ def test_chemopy_features():
     # print("length: ", len(feats_dict))
     assert isinstance(feats_dict, dict)
     assert len(feats_dict) == 632
-
-
-if __name__ == "__main__":
-    test_chemopy_features()

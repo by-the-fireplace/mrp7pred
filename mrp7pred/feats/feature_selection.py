@@ -2,8 +2,8 @@
 Automated feature selection based on training data
 
 Steps:
-    1. Remove similar (highly-correlated) features
-    2. Remove features with low variance
+    1. Remove features with low variance
+    2. Remove similar (highly-correlated) features
     3. Feature selection pipeline:
         - sklearn.feature_selection.GenericUnivariateSelect()
             chi2
@@ -18,17 +18,17 @@ Steps:
 Need to automate the process
 """
 
-# from sklearn.feature_selection import (
-#     VarianceThreshold,
-#     GenericUnivariateSelect,
-#     chi2,
-#     f_classif,
-#     mutual_info_regression,
-#     SelectPercentile,
-#     RFECV,
-#     SelectFromModel,
-#     SequentialFeatureSelector,
-# )
+from sklearn.feature_selection import (
+    VarianceThreshold,
+    GenericUnivariateSelect,
+    chi2,
+    f_classif,
+    mutual_info_regression,
+    SelectPercentile,
+    RFECV,
+    SelectFromModel,
+    SequentialFeatureSelector,
+)
 
 from sklearn.model_selection import GridSearchCV, KFold, StratifiedKFold
 from sklearn.ensemble import RandomForestClassifier
@@ -45,6 +45,14 @@ import pandas as pd
 import numpy as np
 
 from mrp7pred.feats._correlation_graph import CorrelationGraph
+
+
+def _remove_low_variance_features(X: DataFrame, threshold=0.0) -> DataFrame:
+    """
+    Remove all low-variance features
+    """
+    selector = VarianceThreshold()
+    return selector.fit_transform(X)
 
 
 def _remove_similar_features(X: DataFrame, threshold: float = 0.9) -> List[int]:

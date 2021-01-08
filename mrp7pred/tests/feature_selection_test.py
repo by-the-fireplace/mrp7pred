@@ -1,7 +1,10 @@
 import numpy as np
 import pandas as pd
 
-from mrp7pred.feats.feature_selection import _remove_similar_features
+from mrp7pred.feats.feature_selection import (
+    _remove_similar_features,
+    _remove_low_variance_features,
+)
 
 
 def test_remove_similar_features() -> None:
@@ -29,5 +32,7 @@ def test_remove_similar_features() -> None:
     assert to_drop == [1] or [2]
 
 
-if __name__ == "__main__":
-    test_remove_similar_features()
+def test_remove_low_variance_features():
+    X = [[0, 2, 0, 3], [0, 1, 4, 3], [0, 1, 1, 3]]
+    X_reduced = _remove_low_variance_features(X)
+    assert X_reduced.shape == (3, 2)
