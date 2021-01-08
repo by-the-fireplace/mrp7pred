@@ -16,6 +16,7 @@ cancer cells.
 
 ```bash
 git clone https://github.com/jingquan-wang/mrp7pred.git
+cd mrp7pred
 conda env create -f environment.yml
 conda activate mrp7pred
 pip install -e .
