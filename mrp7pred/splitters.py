@@ -1,3 +1,0 @@
-"""
-Splitters for cross-validation
-"""
