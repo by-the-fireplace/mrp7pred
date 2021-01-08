@@ -4,4 +4,4 @@ from mrp7pred.utils import standardize_smiles
 
 def _cdk_features(smiles):
     mol = cdk.readstring("smi", smiles)
-    return round(mol.molwt, 10)
+    return int(mol.molwt)

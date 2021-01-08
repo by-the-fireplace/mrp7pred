@@ -20,4 +20,6 @@ setup(
         "PyFingerprint @ git+https://github.com/hcji/PyFingerprint@master",
         "jpype1",
     ],
+    python_requires=">=3.7",
+
 )

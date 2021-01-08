@@ -1,5 +1,5 @@
 name: mrp7pred
 dependencies:
-  - python=3.7
-  - conda-forge::rdkit=2020.09.1
+  - python==3.7.8
+  - conda-forge::rdkit==2020.09.1
   - conda-forge::openbabel
