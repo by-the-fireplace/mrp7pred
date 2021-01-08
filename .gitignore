@@ -1,0 +1,13 @@
+data
+benchmark
+figs
+output
+notebook
+mrp7pred/feats/all_features_*
+mrp7pred/feats/*.pkl
+mrp7pred/__pycache__
+.mypy_cache
+.ipynb_checkpoints
+mrp7pred.egg-info
+.vscode
+__pycache__
