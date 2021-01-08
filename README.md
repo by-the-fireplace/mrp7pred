@@ -4,7 +4,7 @@ A machine learning pipeline to predict putative MRP7 ligands
 
 ## Overview
 
-![](./mrp7_supersmall.gif)
+![](./mrp7_small.gif)
 
 _A dancing MRP7 protein. (MRP7 homology model built in our group)_
 
