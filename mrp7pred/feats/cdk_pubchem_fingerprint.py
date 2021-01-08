@@ -7,6 +7,10 @@ import numpy as np
 
 from PyFingerprint.All_Fingerprint import get_fingerprint
 
+import warnings
+
+warnings.filterwarnings("ignore")
+
 
 def _pubchem_fingerprint(smi: str) -> ndarray:
     """
@@ -16,11 +20,3 @@ def _pubchem_fingerprint(smi: str) -> ndarray:
     idx_ones = get_fingerprint(smi, fp_type="pubchem")
     pubchem_fp[idx_ones] = 1
     return pubchem_fp
-    
-    
-if __name__ == "__main__":
-    pubchem_fp = _pubchem_fingerprint('CCCCN')
-    print(pubchem_fp.shape)
-    print(pubchem_fp)
-    
-

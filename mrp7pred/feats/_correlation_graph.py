@@ -1,6 +1,8 @@
 """
 Correlation graph to remove highly colinearly features
 """
+# to avoid errors in typing the enclosing clas
+from __future__ import annotations
 
 import pandas as pd
 import numpy as np
@@ -41,10 +43,18 @@ class Node(object):
         del node.edge[self]  # remove self from node's neighbor
         del self.edge[node]  # remove node from self's neighbor
 
+    def _is_alone(self) -> bool:
+        """
+        Return true if current node has no neighbor
+        """
+        return len(self.edge) == 0
+
     def has_leaf_child(self) -> bool:
         """
         Check if current node has leaf child
         """
+        if self._is_alone():
+            return False
         for neighbor in self.edge.keys():
             if len(neighbor.edge) == 1:
                 return True
@@ -136,34 +146,52 @@ class CorrelationGraph(object):
         if corr_matrix.shape[0] != corr_matrix.shape[1]:
             raise ValueError("Input dataframe is not (n, n).")
 
-        print("Creating correlation matrix ... ", end="", flush=True)
         self.nodes: List[Node] = []
         self.to_drop: List[int] = []
         self.num_edges: int = 0
-        # self.edges = []
         for row in range(corr_matrix.shape[0]):
             node = Node(row)
             if node not in self.nodes:
                 self.nodes.append(node)
-            for col in range(row + 1, corr_matrix.shape[0]):
+            for col in range(row + 1, corr_matrix.shape[1]):
+                if col >= corr_matrix.shape[1]:
+                    continue
                 corr = corr_matrix.iloc[row, col]
                 if corr >= threshold:
                     node_new = Node(col)
                     node.link(node_new, corr)
+                    node_new.link(node, corr)
                     self.num_edges += 1
                     if node_new not in self.nodes:
                         self.nodes.append(node_new)
-        print("Done!")
+
+    def _print_graph(self) -> None:
+        """
+        Print graph like:
+        v1 -(0.97)- v2
+        v1 -(0.99)- v3
+        v2 -(0.94)- v1
+        """
+        for node in self.nodes:
+            for neighbor in node.edge.keys():
+                print(f"{node.value} -({node.edge[neighbor]})- {neighbor.value}")
 
     def _remove_node(self, node: Node) -> None:
         """
         Remove a node from graph
         """
         if node not in self.nodes:
-            raise ValueError("Node does not exist")
-        self.nodes.remove(node)
-        for neighbor in node.edge.keys():
+            raise ValueError(f"Node '{node.value}' is not the graph")
+        if node._is_alone():
+            # only remove from graph, not drop this feature
+            self.nodes.remove(node)
+            return
+        for neighbor in node.edge.copy().keys():
             neighbor.unlink(node)
+            self.num_edges -= 1
+        self.nodes.remove(node)
+        if node.value not in self.to_drop:
+            self.to_drop.append(node.value)
 
     def _remove_nodes_with_leaf_child(self) -> None:
         """
@@ -171,35 +199,28 @@ class CorrelationGraph(object):
         """
         # R1
         for node in self.nodes:
-            if len(node.edge) == 0:
-                self.nodes.remove(node)
-                continue
-            if node.has_leaf_child():
-                self.to_drop.append(node.value)
-                # remove node from all neighbors
-                for neighbor in node.edge.keys():
-                    neighbor.unlink(node)
-                    self.num_edges -= 1
-                self.nodes.remove(node)
+            if node._is_alone() or node.has_leaf_child():
+                self._remove_node(node)
 
     def _remove_nodes_in_cycles(self) -> None:
         """
-        Remove nodes in cycles and pairs
+        Remove the node with maximum sum of PCC in cycles or pairs
         """
         # R2
         max_weight = 0.0
         max_weight_node = Node(-1)  # place holder
         for node in self.nodes:
-            if len(node.edge) == 0:
-                self.nodes.remove(node)
-                continue
+            if node._is_alone():
+                self._remove_node(node)
+            # if the node has no neighbor then remove from graph
             sum_weight = sum(node.edge.values())
-            if sum(node.edge.values()) > max_weight:
+            if sum_weight > max_weight:
                 max_weight_node = node
                 max_weight = sum_weight
-        self.to_drop.append(max_weight_node.value)
+        if max_weight_node.value != -1:
+            self._remove_node(max_weight_node)
 
-    def prune(self):
+    def prune(self) -> List[int]:
         """
         Repeat R1 and R2 on current graph
         Cannot use traversing algorithms like BFS, since the graph is
@@ -209,6 +230,7 @@ class CorrelationGraph(object):
         while self.num_edges != 0:
             self._remove_nodes_with_leaf_child()
             self._remove_nodes_in_cycles()
+        return self.to_drop
 
 
 if __name__ == "__main__":
@@ -216,6 +238,7 @@ if __name__ == "__main__":
     X = iris.data
     y = iris.target
     df = pd.DataFrame(X)
+    df = df.rename(columns={0: "A", 1: "B", 2: "C", 3: "D"})
     print("df.head() ... ")
     print(df.head())
 
@@ -224,8 +247,8 @@ if __name__ == "__main__":
     correlation_matrix = df.corr().abs()
     print(correlation_matrix)
 
-    cg = CorrelationGraph(correlation_matrix)
-    cg.prune()
-    to_drop = cg.to_drop
+    cg = CorrelationGraph(correlation_matrix, threshold=0.6)
+    cg._print_graph()
+    to_drop = cg.prune()
     print("To drop ... ")
     print(to_drop)
