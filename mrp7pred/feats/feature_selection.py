@@ -3,7 +3,7 @@ Automated feature selection based on training data
 
 Steps:
     1. Remove features with low variance
-    2. Remove similar (highly-correlated) features
+    2. Remove similar (highly-linearly-correlated) features
     3. Feature selection pipeline:
         - sklearn.feature_selection.GenericUnivariateSelect()
             chi2
@@ -21,6 +21,7 @@ Need to automate the process
 from sklearn.feature_selection import (
     VarianceThreshold,
     GenericUnivariateSelect,
+    SelectorMinin,
     chi2,
     f_classif,
     mutual_info_regression,
@@ -81,3 +82,15 @@ def _remove_similar_features(X: DataFrame, threshold: float = 0.9) -> List[int]:
     print("Done!")
     to_drop = cg.prune()
     return to_drop
+
+
+class FeatureSelector:
+    """
+    A class for feature selection
+
+    The API should do something like:
+    fs = FeatureSelector(X, y)
+    fs.fit(grid, log=True)
+    fs.get_support() # return indices of dropped features
+    X_selected = fs.transform() # get transformed features
+    """

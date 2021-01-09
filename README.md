@@ -12,7 +12,7 @@ MRP7, also named ATP-binding cassette transporter C10 (ABCC10), was first
 discovered in 2003 and has been proved to mediate multidrug resistance in
 cancer cells.
 
-## Install Java and JDK for CDK
+## Install Java and JDK for cdk fingerprints and descriptors
 --------
 - [Install Java](https://www.java.com/en/download/help/mac_install.html)
 

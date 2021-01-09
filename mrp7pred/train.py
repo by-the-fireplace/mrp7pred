@@ -11,17 +11,11 @@ from numpy import ndarray
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.model_selection import GridSearchCV, StratifiedKFold
 from sklearn.pipeline import Pipeline
-from xgboost import XGBClassifier
+from sklearn.ensemble import RandomForestClassifier
 
 from grid import grid
 from preprocess import featurize_and_split, load_data
-from utils import (
-    DATA,
-    OUTPUT,
-    ensure_folder,
-    get_current_time,
-    plot_roc_auc
-)
+from utils import DATA, OUTPUT, ensure_folder, get_current_time, plot_roc_auc
 from src.scoring import get_scoring
 
 __author__ = "Jingquan Wang"
@@ -29,7 +23,7 @@ __email__ = "jq.wang1214@gmail.com"
 
 
 class DummyClassifier(BaseEstimator):
-    def __init__(self, estimator=XGBClassifier()):
+    def __init__(self, estimator=RandomForestClassifier()):
         self.estimator = estimator
 
     def fit(self, X: ndarray, y: ndarray, **kwargs) -> object:
@@ -76,7 +70,7 @@ def _train(
     verbose: int = 10,
     log_dir: str = OUTPUT,
     model_dir: str = f"{OUTPUT}/model",
-    ) -> Pipeline:
+) -> Pipeline:
 
     ensure_folder(log_dir)
     ensure_folder(model_dir)
@@ -102,8 +96,7 @@ def _train(
     mscv.fit(X_train, y_train)
 
     def logging(
-        model, path=f"{log_dir}/scores_{get_current_time()}.csv",
-        print_log=print_log
+        model, path=f"{log_dir}/scores_{get_current_time()}.csv", print_log=print_log
     ) -> None:
         score_df = pd.DataFrame(model.cv_results_).T
         if print_log:
@@ -120,14 +113,14 @@ def _train(
     return clf_best
 
 
-def run(df: DataFrame, ratio: float=0.8) -> Any:
+def run(df: DataFrame, ratio: float = 0.8) -> Any:
     """
     Start training with output info.
     """
     name_train, name_test, X_train, y_train, X_test, y_test = featurize_and_split(
         df, ratio=ratio
     )
-    
+
     print("Start training ...", end="", flush=True)
     clf_best = _train(X_train, y_train)
     print("Done!")
@@ -147,8 +140,9 @@ def run(df: DataFrame, ratio: float=0.8) -> Any:
     print("Plotting ROC for test data ... ", end="", flush=True)
     plot_roc_auc(y_test, y_score, title=f"ROC Curve, train/test={ratio}")
     print("Done!")
-    
+
     return clf_best
+
 
 def main() -> None:
     df = load_data(f"{DATA}/merged.csv")
