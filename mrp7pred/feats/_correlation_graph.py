@@ -247,7 +247,7 @@ if __name__ == "__main__":
     correlation_matrix = df.corr().abs()
     print(correlation_matrix)
 
-    cg = CorrelationGraph(correlation_matrix, threshold=0.6)
+    cg = CorrelationGraph(correlation_matrix, threshold=0.95)
     cg._print_graph()
     to_drop = cg.prune()
     print("To drop ... ")

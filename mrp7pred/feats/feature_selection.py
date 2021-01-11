@@ -21,16 +21,17 @@ Need to automate the process
 from sklearn.feature_selection import (
     VarianceThreshold,
     GenericUnivariateSelect,
-    SelectorMinin,
+    SelectorMixin,
     chi2,
     f_classif,
     mutual_info_regression,
-    SelectPercentile,
+    SelectKBest,
     RFECV,
     SelectFromModel,
     SequentialFeatureSelector,
 )
 
+from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.model_selection import GridSearchCV, KFold, StratifiedKFold
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import Lasso
@@ -38,7 +39,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC
 
-from typing import Union, Dict, List, Tuple
+from typing import Union, Dict, List, Tuple, Callable
 from pandas import DataFrame
 from numpy import ndarray
 
@@ -47,8 +48,13 @@ import numpy as np
 
 from mrp7pred.feats._correlation_graph import CorrelationGraph
 
+# from mrp7pred.feats.params import FEATURE_SELECTION_PARAMS
+from mrp7pred.utils import DummyClassifier
 
-def _remove_low_variance_features(X: DataFrame, threshold=0.0) -> DataFrame:
+
+def _remove_low_variance_features(
+    X: Union[ndarray, DataFrame], threshold=0.0
+) -> DataFrame:
     """
     Remove all low-variance features
     """
@@ -56,7 +62,9 @@ def _remove_low_variance_features(X: DataFrame, threshold=0.0) -> DataFrame:
     return selector.fit_transform(X)
 
 
-def _remove_similar_features(X: DataFrame, threshold: float = 0.9) -> List[int]:
+def _remove_similar_features(
+    X: Union[ndarray, DataFrame], threshold: float = 0.9
+) -> List[int]:
     """
     Remove features with high colinearity
     Use a graph-based method
@@ -84,13 +92,96 @@ def _remove_similar_features(X: DataFrame, threshold: float = 0.9) -> List[int]:
     return to_drop
 
 
-class FeatureSelector:
+class FeatureSelector(TransformerMixin):
     """
-    A class for feature selection
+    A dummy feature selector for feature selection
+
 
     The API should do something like:
     fs = FeatureSelector(X, y)
-    fs.fit(grid, log=True)
+    fs.fit(pipeline, params)
     fs.get_support() # return indices of dropped features
     X_selected = fs.transform() # get transformed features
     """
+
+    pass
+
+
+def _univariate(
+    X: Union[ndarray, DataFrame],
+    y: ndarray,
+    n_features: int = 5,
+    score_function: Callable[[Union[DataFrame, ndarray]], ndarray] = chi2,
+) -> ndarray:
+    """
+    Feature selection (filtering) based on univariate selection
+
+    Parameters
+    --------
+    X: Union[ndarray, DataFrame]
+        Featurized training data
+    y: ndarray
+        Data labels
+    n_features: int
+        Number of features to select
+    score_function: Callable[Union[DataFrame, ndarray], ndarray]
+        Feature selection function
+
+    Returns
+    --------
+    idx_features: ndarray
+        Indices of remaining features
+    """
+    transformer = GenericUnivariateSelect(
+        score_function, mode="k_best", param=n_features
+    )
+    transformer.fit(X, y)
+    return transformer.get_support(indices=True)
+
+
+def _from_model(
+    X: Union[ndarray, DataFrame],
+    y: ndarray,
+    estimator: Union[BaseEstimator, Pipeline],
+    max_features: int = 5,
+) -> ndarray:
+    """
+    Feature selection using sklearn SelectFromModel()
+
+    Parameters
+    --------
+    X: Union[ndarray, DataFrame]
+        Featurized training data
+    y: ndarray
+        Data labels
+    estimator: BaseEstimator
+        Classifier used for select features
+    max_features: int
+        Number of features to select
+
+    Returns
+    --------
+    idx_features: ndarray
+        Indices of remaining features
+    """
+    selector = SelectFromModel(estimator=estimator, max_features=max_features)
+    selector.fit(X, y)
+    return selector.get_support(indices=True)
+
+
+def _rfecv(
+    X: Union[ndarray, DataFrame],
+    y: ndarray,
+    estimator: Union[BaseEstimator, Pipeline],
+    step: Union[int, float] = 0.05,
+    min_features_to_select: int = 1,
+    cv=StratifiedKFold(n_splits=5, shuffle=False),
+    verbose: int = 5,
+    n_jobs=-1,
+) -> ndarray:
+    """
+    Feature selection using RFECV
+    """
+    selector = RFECV(estimator, step=step, cv=cv, verbose=verbose, n_jobs=n_jobs)
+    selector.fit(X, y)
+    return selector.get_support(indices=Trues)

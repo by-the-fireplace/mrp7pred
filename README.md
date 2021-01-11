@@ -6,7 +6,7 @@ A machine learning pipeline to predict putative MRP7 ligands
 --------
 ![](./mrp7_small.gif)
 
-_A dancing MRP7 protein (MRP7 homology model built in our group)._
+_A dancing MRP7 protein (Homology model)._
 
 MRP7, also named ATP-binding cassette transporter C10 (ABCC10), was first
 discovered in 2003 and has been proved to mediate multidrug resistance in

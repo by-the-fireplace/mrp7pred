@@ -8,66 +8,34 @@ from typing import Union, Any
 import pandas as pd
 from pandas import DataFrame
 from numpy import ndarray
-from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.model_selection import GridSearchCV, StratifiedKFold
 from sklearn.pipeline import Pipeline
 from sklearn.ensemble import RandomForestClassifier
+from xgboost import XGBClassifier
 
-from grid import grid
-from preprocess import featurize_and_split, load_data
-from utils import DATA, OUTPUT, ensure_folder, get_current_time, plot_roc_auc
-from src.scoring import get_scoring
+from mrp7pred.grid import grid
+from mrp7pred.preprocess import featurize_and_split, load_data
+from mrp7pred.utils import (
+    DATA,
+    OUTPUT,
+    ensure_folder,
+    get_current_time,
+    plot_roc_auc,
+    DummyClassifier,
+    NoScaler,
+    DummyScaler,
+)
+from mrp7pred.scoring import get_scoring
 
 __author__ = "Jingquan Wang"
 __email__ = "jq.wang1214@gmail.com"
-
-
-class DummyClassifier(BaseEstimator):
-    def __init__(self, estimator=RandomForestClassifier()):
-        self.estimator = estimator
-
-    def fit(self, X: ndarray, y: ndarray, **kwargs) -> object:
-        self.estimator.fit(X, y, **kwargs)
-        return self
-
-    def predict(self, X: ndarray, y=None) -> ndarray:
-        return self.estimator.predict(X)
-
-    def predict_proba(self, X: ndarray, y=None) -> ndarray:
-        return self.estimator.predict_proba(X)
-
-    def score(self, X: ndarray, y: ndarray) -> float:
-        """
-        Return the mean accuracy on the given test data and labels
-        """
-        return self.estimator.score(X, y)
-
-
-class NoScaler(BaseEstimator, TransformerMixin):
-    # A Dummy scaler that does nothing
-    def fit(self, X: ndarray, y: ndarray, **kwargs) -> object:
-        return self
-
-    def transform(self, X: ndarray) -> ndarray:
-        return X
-
-
-class DummyScaler(BaseEstimator, TransformerMixin):
-    def __init__(self, scaler=NoScaler()):
-        self.scaler = scaler
-
-    def fit(self, X: ndarray, y: ndarray, **kwargs) -> object:
-        return self.scaler.fit(X, y, **kwargs)
-
-    def transform(self, X: ndarray, **kwargs) -> Union[None, ndarray]:
-        return self.scaler.transform(X, **kwargs)
 
 
 def _train(
     X_train: ndarray,
     y_train: ndarray,
     print_log: bool = False,
-    verbose: int = 10,
+    verbose: int = 5,
     log_dir: str = OUTPUT,
     model_dir: str = f"{OUTPUT}/model",
 ) -> Pipeline:
@@ -82,7 +50,6 @@ def _train(
         ]
     )
 
-    # TODO: KFold vs StratifiedKfold
     mscv = GridSearchCV(
         pipeline,
         grid,

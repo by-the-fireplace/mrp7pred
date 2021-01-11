@@ -1,17 +1,17 @@
 """
 Generate RDK features from SMILE strings
 
-1D: 
+1D:
     - Constitutional descriptors (106):
-        
+
 2D:
     - Molecular property descriptors (5):
         ExactMolWt
         MolLogP
         MolMR
         MolWt
-        TPSA        
-    - Connectivity descriptors (12): 
+        TPSA
+    - Connectivity descriptors (12):
         Chi0, Chi1
         Chi0v - 4v
         chi0n - 4n
@@ -36,18 +36,14 @@ Generate RDK features from SMILE strings
         MinAbsPartialCharge
         MinEStateIndex
         MinPartialCharge
-        
+
 Total number of descriptors: 196
 """
 
-from __future__ import (
-    absolute_import,
-    division,
-    print_function,
-    unicode_literals
-)
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 import warnings
+
 warnings.filterwarnings("ignore")
 
 from typing import List, Union, Dict
@@ -57,7 +53,7 @@ from mrp7pred.utils import standardize_smiles
 from mrp7pred.cinfony_py3 import rdk
 
 
-_feature_list = [
+rdk_feature_list = [
     "FractionCSP3",
     "HeavyAtomCount",
     "HeavyAtomMolWt",
@@ -253,20 +249,21 @@ _feature_list = [
     "MinAbsEStateIndex",
     "MinAbsPartialCharge",
     "MinEStateIndex",
-    "MinPartialCharge"
+    "MinPartialCharge",
 ]
 rdk_feature_list = [f"rdk_{feat}" for feat in _feature_list]
+
 
 def _rdk_features(smi: str) -> Dict[str, Union[float, int]]:
     """
     Generate rdk features from smiles strings
-    
+
     Parameters
     --------
     smi: str
-        Smiles string to be featurized. Should be standardized by 
+        Smiles string to be featurized. Should be standardized by
         mrp7pred.utils.standardize_smiles()
-    
+
     Returns
     --------
     feats: Dict[str, Union[float, int]]
@@ -275,13 +272,12 @@ def _rdk_features(smi: str) -> Dict[str, Union[float, int]]:
     """
     mol_cinfony = rdk.readstring("smi", smi)
     feats = []
-    for feat_name in _feature_list:
+    for feat_name in rdk_feature_list:
         feats.append(mol_cinfony.calcdesc([feat_name])[feat_name])
-    return dict(zip(_feature_list, feats))
+    return dict(zip(rdk_feature_list, feats))
 
 
 if __name__ == "__main__":
-    test_smi = standardize_smiles("Nc1ccn(C2OC(CO)C(O)C2(F)F)c(=O)n1") # gemcitabine
+    test_smi = standardize_smiles("Nc1ccn(C2OC(CO)C(O)C2(F)F)c(=O)n1")  # gemcitabine
     print(f"Test SMILES (std): {test_smi}")
     print(dict(zip(rdk_feature_list, _rdk_features(test_smi))))
-    

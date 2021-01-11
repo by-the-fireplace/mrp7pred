@@ -12,43 +12,27 @@ from sklearn.metrics import (
     recall_score,
     roc_auc_score,
     roc_curve,
-    matthews_corrcoef
+    matthews_corrcoef,
 )
 from numpy import ndarray
 import numpy as np
 from typing import Union, Dict
-               
-               
+
+
 def tp(y_true: ndarray, y_pred: ndarray) -> float:
-    try:
-        rval = float(confusion_matrix(y_true, y_pred)[1, 1])
-    except IndexError:
-        print("No TP found")
-    return rval
+    return float(confusion_matrix(y_true, y_pred)[1, 1])
 
 
 def fp(y_true: ndarray, y_pred: ndarray) -> float:
-    try:
-        rval = float(confusion_matrix(y_true, y_pred)[0, 1])
-    except IndexError:
-        print("No TP found")
-    return rval
+    return float(confusion_matrix(y_true, y_pred)[0, 1])
 
 
 def tn(y_true: ndarray, y_pred: ndarray) -> float:
-    try:
-        rval = float(confusion_matrix(y_true, y_pred)[0, 0])
-    except IndexError:
-        print("No TP found")
-    return rval
+    return float(confusion_matrix(y_true, y_pred)[0, 0])
 
 
 def fn(y_true: ndarray, y_pred: ndarray) -> float:
-    try:
-        rval = float(confusion_matrix(y_true, y_pred)[1, 0])
-    except IndexError:
-        print("No TP found")
-    return rval
+    return float(confusion_matrix(y_true, y_pred)[1, 0])
 
 
 def specificity(y_true: ndarray, y_pred: ndarray) -> float:
@@ -65,9 +49,11 @@ def recall(y_true: ndarray, y_pred: ndarray) -> float:
 
 def precision(y_true: ndarray, y_pred: ndarray) -> float:
     return precision_score(y_true, y_pred, average="binary")
-    
+
+
 def mcc(y_true: ndarray, y_pred: ndarra) -> float:
     return matthews_corrcoef(y_true, y_pred)
+
 
 def f1(y_true: ndarray, y_pred: ndarray) -> float:
     return f1_score(y_true, y_pred, average="binary")
@@ -81,7 +67,7 @@ def log_loss(y_true: ndarray, y_pred: ndarray) -> float:
     try:
         rval = log_loss(y_true, y_pred)
     except ValueError:
-        print("Error: Monoclass. Check test data.")
+        print("Error: Cannot calculate log loss because Pr(y = 1) = 0")
     return rval
 
 
@@ -109,6 +95,6 @@ def get_scoring(
             "precision": precision(y_true, y_pred),
             "recall": recall(y_true, y_pred),
             "specificity": specificity(y_true, y_pred),
-            "mcc": mcc(y_true, y_pred)
+            "mcc": mcc(y_true, y_pred),
         },
     }
