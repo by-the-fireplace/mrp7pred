@@ -53,7 +53,7 @@ from mrp7pred.utils import standardize_smiles
 from mrp7pred.cinfony_py3 import rdk
 
 
-rdk_feature_list = [
+_feature_list = [
     "FractionCSP3",
     "HeavyAtomCount",
     "HeavyAtomMolWt",
@@ -251,7 +251,7 @@ rdk_feature_list = [
     "MinEStateIndex",
     "MinPartialCharge",
 ]
-rdk_feature_list = [f"rdk_{feat}" for feat in _feature_list]
+# rdk_feature_list = [f"rdk_{feat}" for feat in _feature_list]
 
 
 def _rdk_features(smi: str) -> Dict[str, Union[float, int]]:
@@ -272,12 +272,12 @@ def _rdk_features(smi: str) -> Dict[str, Union[float, int]]:
     """
     mol_cinfony = rdk.readstring("smi", smi)
     feats = []
-    for feat_name in rdk_feature_list:
+    for feat_name in _feature_list:
         feats.append(mol_cinfony.calcdesc([feat_name])[feat_name])
-    return dict(zip(rdk_feature_list, feats))
+    return dict(zip(_feature_list, feats))
 
 
 if __name__ == "__main__":
     test_smi = standardize_smiles("Nc1ccn(C2OC(CO)C(O)C2(F)F)c(=O)n1")  # gemcitabine
     print(f"Test SMILES (std): {test_smi}")
-    print(dict(zip(rdk_feature_list, _rdk_features(test_smi))))
+    print(dict(zip(_feature_list, _rdk_features(test_smi))))

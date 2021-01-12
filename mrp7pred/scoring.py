@@ -51,7 +51,7 @@ def precision(y_true: ndarray, y_pred: ndarray) -> float:
     return precision_score(y_true, y_pred, average="binary")
 
 
-def mcc(y_true: ndarray, y_pred: ndarra) -> float:
+def mcc(y_true: ndarray, y_pred: ndarray) -> float:
     return matthews_corrcoef(y_true, y_pred)
 
 

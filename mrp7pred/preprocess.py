@@ -25,8 +25,8 @@ import numpy as np
 import pandas as pd
 from numpy import ndarray
 from pandas import DataFrame
-
-from featurization import featurize
+from sklearn.model_selection import train_test_split
+from mrp7pred.featurization import featurize
 
 
 def load_data(path: str) -> DataFrame:
@@ -59,10 +59,7 @@ def load_data(path: str) -> DataFrame:
     return df
 
 
-def _split_train_test(
-        df: DataFrame,
-        ratio: float = 0.7
-        ) -> Tuple[DataFrame, DataFrame]:
+def _split_train_test(df: DataFrame, ratio: float = 0.7) -> Tuple[DataFrame, DataFrame]:
     """
     Split processed data into training and test data
 
@@ -77,20 +74,14 @@ def _split_train_test(
     --------
     (df_train, df_test) : DataFrame
     """
-    # sample training data
-    chosen_idx = np.random.choice(
-        len(df),
-        replace=False,
-        size=int(ratio * (len(df)))
-        )
-    df_train = df.iloc[chosen_idx, :]
-    mask = ~df.index.isin(df_train.index)
-    df_test = df.loc[mask]
-    return df_train, df_test
+    y = df["label"]
+    X = df.loc[:, df.columns != "label"]
+    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=ratio)
+    return X_train, X_test, y_train, y_test
 
 
-def featurize_and_split(
-    df: DataFrame, ratio: float = 0.7
+def split_data(
+    df: DataFrame, ratio: float = 0.7, featurized: bool = True
 ) -> Tuple[Union[DataFrame, ndarray]]:
     """
     Feturize and split
@@ -105,22 +96,18 @@ def featurize_and_split(
     df : DataFrame
             Featurized data
     """
-
-    print("Featurzing data ... ", end="", flush=True)
-    df = featurize(df)
-    print("Done!")
+    if not featurized:
+        print("Featurzing data ... ", end="", flush=True)
+        df = featurize(df)
+        print("Done!")
 
     print("Spliting training and test data ... ", end="", flush=True)
-    df_train, df_test = _split_train_test(df, ratio=ratio)
+    X_train, X_test, y_train, y_test = _split_train_test(df, ratio=ratio)
+    name_train, name_test = X_train["name"], X_test["name"]
+    X_train = X_train.drop(["name", "smiles"], axis=1)
+    X_test = X_test.drop(["name", "smiles"], axis=1)
+    print(
+        f"Done!\ntrain_1: {np.sum(y_train)}; train_0: {len(y_train)-np.sum(y_train)}; test_1: {np.sum(y_test)}; test_0: {len(y_test)-np.sum(y_test)}"
+    )
 
-    # col0: "name", col1: "smiles", col2: "label", col3-130: features
-    idx_name = df.columns.get_loc("name")
-    idx_smiles = df.columns.get_loc("smiles")
-    idx_label = df.columns.get_loc("label")
-    idx_max = max(idx_name, idx_smiles, idx_label)
-    name_train, name_test = df_train["name"], df_test["name"]
-    X_train, y_train = df_train.iloc[:, idx_max+1:], df_train["label"]
-    X_test, y_test = df_test.iloc[:, idx_max+1:], df_test["label"]
-    print("Done!")
-    
     return name_train, name_test, X_train, y_train, X_test, y_test

@@ -3,7 +3,7 @@ Main training script
 """
 
 import pickle
-from typing import Union, Any
+from typing import Union, Any, Dict, List
 
 import pandas as pd
 from pandas import DataFrame
@@ -11,10 +11,12 @@ from numpy import ndarray
 from sklearn.model_selection import GridSearchCV, StratifiedKFold
 from sklearn.pipeline import Pipeline
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.base import BaseEstimator
 from xgboost import XGBClassifier
+from sklearn.utils import class_weight
 
 from mrp7pred.grid import grid
-from mrp7pred.preprocess import featurize_and_split, load_data
+from mrp7pred.preprocess import _split_train_test, split_data, load_data
 from mrp7pred.utils import (
     DATA,
     OUTPUT,
@@ -34,8 +36,8 @@ __email__ = "jq.wang1214@gmail.com"
 def _train(
     X_train: ndarray,
     y_train: ndarray,
-    print_log: bool = False,
-    verbose: int = 5,
+    grid: Dict[str, Union[List[Any], ndarray]],
+    print_log: bool = True,
     log_dir: str = OUTPUT,
     model_dir: str = f"{OUTPUT}/model",
 ) -> Pipeline:
@@ -52,11 +54,11 @@ def _train(
 
     mscv = GridSearchCV(
         pipeline,
-        grid,
+        param_grid=grid,
         cv=StratifiedKFold(n_splits=5, shuffle=False),
         return_train_score=True,
         n_jobs=-1,
-        verbose=verbose,
+        verbose=10,
         refit="f1",
     )
 
@@ -71,8 +73,11 @@ def _train(
         score_df.to_csv(path)
 
     clf_best = mscv.best_estimator_
-    with open(f"{model_dir}/best_model_{get_current_time()}.pkl", "wb") as mo:
+
+    pkl_name = f"{model_dir}/best_model_{get_current_time()}.pkl"
+    with open(pkl_name, "wb") as mo:
         pickle.dump(clf_best, mo)
+    print(f"Best model saved to: {pkl_name}")
 
     clf_best_score = mscv.best_score_
     print(f"Best score: {clf_best_score}")
@@ -80,16 +85,21 @@ def _train(
     return clf_best
 
 
-def run(df: DataFrame, ratio: float = 0.8) -> Any:
+def run(
+    df: DataFrame,
+    grid: Dict[str, Union[List[Any], ndarray]],
+    ratio: float = 0.8,
+    featurized: bool = False,
+) -> BaseEstimator:
     """
     Start training with output info.
     """
-    name_train, name_test, X_train, y_train, X_test, y_test = featurize_and_split(
-        df, ratio=ratio
+    name_train, name_test, X_train, y_train, X_test, y_test = split_data(
+        df, ratio=ratio, featurized=featurized
     )
 
-    print("Start training ...", end="", flush=True)
-    clf_best = _train(X_train, y_train)
+    print("Start training ... ", end="", flush=True)
+    clf_best = _train(X_train, y_train, grid=grid)
     print("Done!")
 
     print(f"Best model:\n{clf_best}")
@@ -102,7 +112,11 @@ def run(df: DataFrame, ratio: float = 0.8) -> Any:
 
     print("Getting full score set ... ", end="", flush=True)
     test_scores = get_scoring(y_test, y_score, y_pred)
-    print(f"Done! Full scores: {test_scores}")
+    print("Done!")
+    for item, d in test_scores.items():
+        print(item)
+        for title, val in d.items():
+            print(f"{title}: {val}")
 
     print("Plotting ROC for test data ... ", end="", flush=True)
     plot_roc_auc(y_test, y_score, title=f"ROC Curve, train/test={ratio}")
