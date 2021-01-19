@@ -93,10 +93,10 @@ def ensure_folder(path: str) -> None:
         os.mkdir(path)
 
 
-def plot_roc_auc(
+def plot_precision_recall(
     y_test: ndarray,
     y_score: ndarray,
-    title: str = "ROC Curve",
+    title: str = "P-R Curve",
     out_dir: str = f"{OUTPUT}/fig",
 ) -> None:
 
@@ -104,8 +104,10 @@ def plot_roc_auc(
     fig = plt.figure(figsize=(8, 8))
 
     average_precision = average_precision_score(y_test, y_score)
+    pr_curve = precision_recall_curve(y_test, y_score)
     plt.plot(
-        precision_recall_curve(y_test, y_score),
+        pr_curve[0],
+        pr_curve[1],
         label="AUC={:.3f}".format(average_precision),
     )
 

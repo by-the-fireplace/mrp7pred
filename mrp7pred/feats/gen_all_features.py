@@ -63,6 +63,7 @@ def featurize(
     time_limit: int = 10,
     smiles_col_name: Optional[str] = None,
     df: Optional[DataFrame] = None,
+    prefix: Optional[str] = None,
 ) -> DataFrame:
     """
     Batch feature generation from a series of smiles
@@ -79,6 +80,8 @@ def featurize(
         Input could be a dataframe, the function will find the column named "smiles" as input
     smiles_col_name: Optional[str]
         The column name of the one with smiles, if df is not None
+    prefix: Optional[str]
+        The featurized data will be saved to "{out_folder}/{prefix}_full_features_828_{ts}.csv"
 
     Returns
     ------
@@ -112,13 +115,14 @@ def featurize(
         # skip featurization if already done
         # TODO: Check this part, not working properly
         #       Because now df_feats does not store smiles
+        df = df.reset_index(drop=True)
         name = df.loc[index, "name"]
         if df_feats.isin([smi]).any().any():
             print(f"(Loaded) {index}. {name}\n")
             continue
 
         # smile     smile_string
-        smi_series = pd.Series([smi], index=["smiles"])
+        smi_series = pd.Series([smi], index=[smiles_col_name])
 
         time_start = datetime.datetime.now()
 
@@ -135,7 +139,7 @@ def featurize(
             continue
         except TimeoutException:
             print(
-                f"Featurization failed\nSmiles: {smi}\nError: Time out ({time_limit}s)"
+                f"{name} Featurization failed\nSmiles: {smi}\nError: Time out ({time_limit}s)"
             )
             # df_feats = pd.concat([df_feats, smi_series.to_frame().T])
             continue
@@ -153,21 +157,27 @@ def featurize(
             name = df["name"].values[index]
         print(f"{index}. {name}\nSMILES: {smi}\n")
 
-    with open("./df_feats.pkl", "wb") as fo:
+    # Add "name" and "smiles" back to df_feats
+    if (
+        df is not None
+        and "name" not in df_feats.columns
+        and smiles_col_name not in df_feats.columns
+    ):
+        df_feats[["name", smiles_col_name]] = df[["name", smiles_col_name]]
+        df_feats = df_feats[["name", smiles_col_name] + df_feats.columns.tolist()[:-2]]
+
+    with open(f"./{prefix}_df_feats.pkl", "wb") as fo:
         # now df_feats should have column "smiles"
         pickle.dump(df_feats, fo)
 
-    # Add "name" and "smiles" back to df_feats
-    if df is not None:
-        df_feats[["name", "smiles"]] = df[["name", "smiles"]]
-        df_feats = df_feats[["name", "smiles"] + df_feats.columns.tolist()[:-2]]
-
     ts = get_current_time()
-    out_dir = f"{out_folder}/full_features_828_{ts}.csv"
+    out_dir = f"{out_folder}/{prefix}_full_features_828_{ts}.csv"
     df_feats.to_csv(out_dir)
     print(f"Featurized data saved to {out_dir}. df_feats.shape: {df_feats.shape}")
+    print("df_feats.columns:")
     print(df_feats.columns)
-    return df_feats
+    # return df_feats without columns "name" and "smiles"
+    return df_feats.drop(columns=["name", smiles_col_name])
 
 
 if __name__ == "__main__":
@@ -180,6 +190,7 @@ if __name__ == "__main__":
         df=df_test,
         smiles_col_name="std_smiles",
         out_folder="./all_features_test",
+        prefix="test",
     )
 
     df_man = df.loc[:116, :]
@@ -188,13 +199,15 @@ if __name__ == "__main__":
         df=df_man,
         smiles_col_name="std_smiles",
         out_folder="./all_features_man",
+        prefix="man",
     )
 
     df_cc = df.loc[116:, :]
     df_cc_feats = featurize(
         X=df_cc["std_smiles"].values.tolist(),
-        time_limit=60,
+        time_limit=10,
         df=df_cc,
         smiles_col_name="std_smiles",
         out_folder="./all_features_cc",
+        prefix="cc",
     )

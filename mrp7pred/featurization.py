@@ -1,5 +1,5 @@
 """
-Generate features
+Generate selected features
 
 Input: cleaned dataframe with columns:
     name

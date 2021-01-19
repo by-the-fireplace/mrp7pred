@@ -54,17 +54,18 @@ from mrp7pred.utils import DummyClassifier
 
 def _remove_low_variance_features(
     X: Union[ndarray, DataFrame], threshold=0.0
-) -> DataFrame:
+) -> Tuple[ndarray, DataFrame]:
     """
     Remove all low-variance features
     """
     selector = VarianceThreshold()
-    return selector.fit_transform(X)
+    selector.fit(X)
+    return selector.get_support(indices=True), selector.fit_transform(X)
 
 
 def _remove_similar_features(
     X: Union[ndarray, DataFrame], threshold: float = 0.9
-) -> List[int]:
+) -> Tuple[ndarray, DataFrame]:
     """
     Remove features with high colinearity
     Use a graph-based method
@@ -79,17 +80,20 @@ def _remove_similar_features(
 
     Returns
     --------
-    to_drop: List[int]
-        List of column indices to be dropped
+    support: List[int]
+        List of column indices remained
     """
-    print("Creating correlation matrix ... ", end="", flush=True)
+    print("Calculating correlation matrix ... ", end="", flush=True)
+    if isinstance(X, ndarray):
+        X = pd.DataFrame(X)
     correlation_matrix = X.corr().abs()
     print("Done!")
     print("Creating correlation graph ... ", end="", flush=True)
-    cg = CorrelationGraph(X, threshold=threshold)
+    cg = CorrelationGraph(correlation_matrix, threshold=threshold)
     print("Done!")
     to_drop = cg.prune()
-    return to_drop
+    support = list(set(range(X.shape[1])) - set(to_drop))
+    return np.array(support), X.drop(to_drop, axis=1)
 
 
 class FeatureSelector(TransformerMixin):
@@ -143,7 +147,7 @@ def _from_model(
     X: Union[ndarray, DataFrame],
     y: ndarray,
     estimator: Union[BaseEstimator, Pipeline],
-    max_features: int = 5,
+    max_features: int = 200,
 ) -> ndarray:
     """
     Feature selection using sklearn SelectFromModel()
@@ -182,6 +186,13 @@ def _rfecv(
     """
     Feature selection using RFECV
     """
-    selector = RFECV(estimator, step=step, cv=cv, verbose=verbose, n_jobs=n_jobs)
+    selector = RFECV(
+        estimator,
+        step=step,
+        cv=cv,
+        verbose=verbose,
+        n_jobs=n_jobs,
+        min_features_to_select=min_features_to_select,
+    )
     selector.fit(X, y)
-    return selector.get_support(indices=Trues)
+    return selector.get_support(indices=True)

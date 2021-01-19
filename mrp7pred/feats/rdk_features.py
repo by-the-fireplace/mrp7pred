@@ -251,7 +251,7 @@ _feature_list = [
     "MinEStateIndex",
     "MinPartialCharge",
 ]
-# rdk_feature_list = [f"rdk_{feat}" for feat in _feature_list]
+rdk_feature_list = [f"rdk_{feat}" for feat in _feature_list]
 
 
 def _rdk_features(smi: str) -> Dict[str, Union[float, int]]:
@@ -274,7 +274,7 @@ def _rdk_features(smi: str) -> Dict[str, Union[float, int]]:
     feats = []
     for feat_name in _feature_list:
         feats.append(mol_cinfony.calcdesc([feat_name])[feat_name])
-    return dict(zip(_feature_list, feats))
+    return dict(zip(rdk_feature_list, feats))
 
 
 if __name__ == "__main__":

@@ -144,7 +144,9 @@ class CorrelationGraph(object):
             threshold to remove features
         """
         if corr_matrix.shape[0] != corr_matrix.shape[1]:
-            raise ValueError("Input dataframe is not (n, n).")
+            raise ValueError(
+                f"Input dataframe should be (n, n), got {corr_matrix.shape}"
+            )
 
         self.nodes: List[Node] = []
         self.to_drop: List[int] = []

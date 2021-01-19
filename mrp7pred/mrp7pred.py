@@ -48,11 +48,14 @@ class MRP7Pred(object):
                 self.clf = pickle.load(ci)
             print("Done!")
 
-    def run_train(
+    def auto_train_test(
         self,
         df: DataFrame,
         grid: Dict[str, Union[List[Any], ndarray]],
+        verbose: int = 10,
+        n_jobs: int = -1,
         train_test_ratio: float = 0.8,
+        scoring: Union[str, callable] = "accuracy",
         featurized: bool = False,
     ):
         """
@@ -85,10 +88,15 @@ class MRP7Pred(object):
             grid=grid,
             ratio=train_test_ratio,
             featurized=featurized,
+            verbose=verbose,
+            n_jobs=n_jobs,
         )
 
     def predict(
-        self, compound_csv_dir: Optional[str] = None, df_all: Optional[DataFrame] = None
+        self,
+        compound_csv_dir: Optional[str] = None,
+        df_all: Optional[DataFrame] = None,
+        prefix: Optional[str] = None,
     ) -> DataFrame:
         """
         Featurize data and make predictions
@@ -122,14 +130,16 @@ class MRP7Pred(object):
         df = df_all[["name", "smiles"]]
 
         print("Generating features ... ")
-        df_feat = featurize(df["smiles"], df=df, smiles_col_name="smiles")
+        # df_feats should be purely numeric
+        df_feat = featurize(
+            df["smiles"], df=df, smiles_col_name="smiles", prefix=prefix
+        )
         print("Done!")
 
         print("Start predicting ...", end="", flush=True)
         df_feat = df_feat.dropna()
-        feats = df_feat.drop(columns=["name", "smiles"])
-        preds = self.clf.predict(feats)
-        scores = [score[1] for score in self.clf.predict_proba(feats)]
+        preds = self.clf.predict(df_feat)
+        scores = [score[1] for score in self.clf.predict_proba(df_feat)]
         print("Done!")
 
         print("Writing output ...", end="", flush=True)

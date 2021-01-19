@@ -14,6 +14,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.base import BaseEstimator
 from xgboost import XGBClassifier
 from sklearn.utils import class_weight
+from sklearn.metrics import recall_score
 
 from mrp7pred.grid import grid
 from mrp7pred.preprocess import _split_train_test, split_data, load_data
@@ -37,6 +38,9 @@ def _train(
     X_train: ndarray,
     y_train: ndarray,
     grid: Dict[str, Union[List[Any], ndarray]],
+    scoring: Union[str, callable] = "accuracy",
+    verbose: int = 10,
+    n_jobs: int = -1,
     print_log: bool = True,
     log_dir: str = OUTPUT,
     model_dir: str = f"{OUTPUT}/model",
@@ -55,10 +59,11 @@ def _train(
     mscv = GridSearchCV(
         pipeline,
         param_grid=grid,
-        cv=StratifiedKFold(n_splits=5, shuffle=False),
+        cv=StratifiedKFold(n_splits=10, shuffle=False),
         return_train_score=True,
-        n_jobs=-1,
-        verbose=10,
+        n_jobs=n_jobs,
+        verbose=verbose,
+        scoring=scoring,
         refit="f1",
     )
 
@@ -73,6 +78,8 @@ def _train(
         score_df.to_csv(path)
 
     clf_best = mscv.best_estimator_
+
+    logging(mscv)
 
     pkl_name = f"{model_dir}/best_model_{get_current_time()}.pkl"
     with open(pkl_name, "wb") as mo:
@@ -89,6 +96,9 @@ def run(
     df: DataFrame,
     grid: Dict[str, Union[List[Any], ndarray]],
     ratio: float = 0.8,
+    verbose: int = 10,
+    n_jobs: int = -1,
+    scoring: Union[str, callable] = "accuracy",
     featurized: bool = False,
 ) -> BaseEstimator:
     """
@@ -99,7 +109,9 @@ def run(
     )
 
     print("Start training ... ", end="", flush=True)
-    clf_best = _train(X_train, y_train, grid=grid)
+    clf_best = _train(
+        X_train, y_train, grid=grid, verbose=verbose, n_jobs=n_jobs, scoring=scoring
+    )
     print("Done!")
 
     print(f"Best model:\n{clf_best}")
