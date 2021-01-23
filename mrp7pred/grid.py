@@ -10,6 +10,8 @@ from sklearn.preprocessing import MinMaxScaler, Normalizer, StandardScaler
 from sklearn.svm import SVC
 from xgboost import XGBClassifier
 
+from mrp7pred.utils import NoScaler
+
 grid_light = [
     {
         "clf": [RandomForestClassifier()],
