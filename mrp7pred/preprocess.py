@@ -19,7 +19,7 @@ Columns:
 __author__ = "Jingquan Wang"
 __email__ = "jq.wang1214@gmail.com"
 
-from typing import Tuple, Union
+from typing import Tuple, Union, Optional
 
 import numpy as np
 import pandas as pd
@@ -59,7 +59,9 @@ def load_data(path: str) -> DataFrame:
     return df
 
 
-def _split_train_test(df: DataFrame, ratio: float = 0.7) -> Tuple[DataFrame, DataFrame]:
+def _split_train_test(
+    df: DataFrame, ratio: float = 0.7, random_state: Optional[int] = None
+) -> Tuple[DataFrame, DataFrame]:
     """
     Split processed data into training and test data
 
@@ -76,12 +78,17 @@ def _split_train_test(df: DataFrame, ratio: float = 0.7) -> Tuple[DataFrame, Dat
     """
     y = df["label"]
     X = df.loc[:, df.columns != "label"]
-    X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=ratio)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, train_size=ratio, random_state=random_state
+    )
     return X_train, X_test, y_train, y_test
 
 
 def split_data(
-    df: DataFrame, ratio: float = 0.7, featurized: bool = True
+    df: DataFrame,
+    ratio: float = 0.7,
+    featurized: bool = True,
+    random_state: Optional[int] = None,
 ) -> Tuple[Union[DataFrame, ndarray]]:
     """
     Feturize and split
@@ -102,7 +109,9 @@ def split_data(
         print("Done!")
 
     print("Spliting training and test data ... ", end="", flush=True)
-    X_train, X_test, y_train, y_test = _split_train_test(df, ratio=ratio)
+    X_train, X_test, y_train, y_test = _split_train_test(
+        df, ratio=ratio, random_state=random_state
+    )
     name_train, name_test = X_train["name"], X_test["name"]
     X_train = X_train.drop(["name", "smiles"], axis=1)
     X_test = X_test.drop(["name", "smiles"], axis=1)

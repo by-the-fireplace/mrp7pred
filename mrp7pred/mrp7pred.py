@@ -95,7 +95,7 @@ class MRP7Pred(object):
     def predict(
         self,
         compound_csv_dir: Optional[str] = None,
-        df_all: Optional[DataFrame] = None,
+        featurized_df: Optional[DataFrame] = None,
         prefix: Optional[str] = None,
     ) -> DataFrame:
         """
@@ -106,36 +106,38 @@ class MRP7Pred(object):
         compound_csv_dir: Optional[str]
             The directory of unknown compound data
             with columns "name" and "smiles"
-        df_all: Optional[DataFrame]
+        featurized_df: Optional[DataFrame]
             Featurized data in dataframe
+        prefix: Optional[str]
+            Prediction results output filename prefix
 
         Returns
         --------
         pred: ndarray
         """
-        if compound_csv_dir is None and df_all is None:
+        if compound_csv_dir is None and featurized_df is None:
             raise ValueError(
                 "'Must provide the path to csv file containing compound smiles 'compound_csv_dir' or a pandas dataframe 'df_all' which stores all compound smiles with compound names."
             )
 
-        if df_all is None:
+        if featurized_df is None:
             df_all = pd.read_csv(compound_csv_dir)
 
-        if "name" not in df_all.columns or "smiles" not in df_all.columns:
+        if "name" not in featurized_df.columns or "smiles" not in featurized_df.columns:
             raise ValueError(
                 'The input csv should have these two columns: ["name", "smiles"]'
             )
 
         # only extract name and smiles
-        df = df_all[["name", "smiles"]]
-
-        print("Generating features ... ")
-        # df_feats should be purely numeric
-        df_feat = featurize(
-            df["smiles"], df=df, smiles_col_name="smiles", prefix=prefix
-        )
-        print("Done!")
-
+        df = featurized_df[["name", "smiles"]]
+        df_feat = featurized_df.drop(["name", "smiles"], axis=1)
+        if featurized_df is None:
+            print("Generating features ... ")
+            # df_feats should be purely numeric
+            df_feat = featurize(
+                df["smiles"], df=df, smiles_col_name="smiles", prefix=prefix
+            )
+            print("Done!")
         print("Start predicting ...", end="", flush=True)
         df_feat = df_feat.dropna()
         preds = self.clf.predict(df_feat)
@@ -148,8 +150,10 @@ class MRP7Pred(object):
         df_out["smiles"] = df["smiles"]
         df_out["pred"] = preds
         df_out["score"] = scores
-        df_out.to_csv(f"{OUTPUT}/predicted_{get_current_time()}.csv")
-        print(f"Done! Results saved to: {OUTPUT}/predicted_{get_current_time()}.csv")
+        df_out.to_csv(f"{OUTPUT}/{prefix}predicted_{get_current_time()}.csv")
+        print(
+            f"Done! Results saved to: {OUTPUT}/{prefix}predicted_{get_current_time()}.csv"
+        )
         return df_out
 
 
