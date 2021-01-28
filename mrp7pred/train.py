@@ -38,6 +38,7 @@ def _train(
     X_train: ndarray,
     y_train: ndarray,
     grid: Dict[str, Union[List[Any], ndarray]],
+    cv_n_splits: int,
     scoring: Union[str, callable] = "accuracy",
     verbose: int = 10,
     n_jobs: int = -1,
@@ -59,7 +60,7 @@ def _train(
     mscv = GridSearchCV(
         pipeline,
         param_grid=grid,
-        cv=StratifiedKFold(n_splits=10, shuffle=False),
+        cv=StratifiedKFold(n_splits=cv_n_splits, shuffle=False),
         return_train_score=True,
         n_jobs=n_jobs,
         verbose=verbose,
@@ -95,6 +96,7 @@ def _train(
 def run(
     df: DataFrame,
     grid: Dict[str, Union[List[Any], ndarray]],
+    cv_n_splits: int,
     ratio: float = 0.8,
     verbose: int = 10,
     n_jobs: int = -1,
@@ -110,7 +112,13 @@ def run(
 
     print("Start training ... ", end="", flush=True)
     clf_best = _train(
-        X_train, y_train, grid=grid, verbose=verbose, n_jobs=n_jobs, scoring=scoring
+        X_train,
+        y_train,
+        grid=grid,
+        cv_n_splits=cv_n_splits,
+        verbose=verbose,
+        n_jobs=n_jobs,
+        scoring=scoring,
     )
     print("Done!")
 

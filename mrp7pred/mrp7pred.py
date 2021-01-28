@@ -52,6 +52,7 @@ class MRP7Pred(object):
         self,
         df: DataFrame,
         grid: Dict[str, Union[List[Any], ndarray]],
+        cv_n_splits: int = 5,
         verbose: int = 10,
         n_jobs: int = -1,
         train_test_ratio: float = 0.8,
@@ -86,6 +87,7 @@ class MRP7Pred(object):
         self.clf_best = run(
             df,
             grid=grid,
+            cv_n_splits=cv_n_splits,
             ratio=train_test_ratio,
             featurized=featurized,
             verbose=verbose,
