@@ -12,14 +12,14 @@ strong {
 }
 
 a {
-  color: #f35b3f;
-  border-bottom: 1px dashed #f35b3f;
+  color: #4e5057;
+  border-bottom: 1px dashed #4e5057;
   text-decoration: none;
   transition: all 0.3s;
 }
 a:hover,
 a:focus {
-  color: #f35b3f;
+  color: #4e5057;
   border: 0;
   text-decoration: none;
 }
@@ -55,12 +55,12 @@ img {
 }
 
 ::-moz-selection {
-  background: #f35b3f;
+  background: #4e5057;
   color: #fff;
   text-shadow: none;
 }
 ::selection {
-  background: #f35b3f;
+  background: #4e5057;
   color: #fff;
   text-shadow: none;
 }
@@ -572,9 +572,9 @@ a.btn-customized-4.btn-customized-light.btn.btn-primary:not(:disabled):not(.disa
   width: 80px;
   height: 80px;
   margin: 0 auto;
-  border: 1px solid #f35b3f;
+  border: 1px solid #4e5057;
   font-size: 40px;
-  color: #f35b3f;
+  color: #4e5057;
   line-height: 78px;
   text-align: center;
   border-radius: 50%;
@@ -613,7 +613,7 @@ a.btn-customized-4.btn-customized-light.btn.btn-primary:not(:disabled):not(.disa
   width: 60px;
   height: 60px;
   margin: 0 auto;
-  background: #f35b3f;
+  background: #4e5057;
   font-size: 28px;
   color: #fff;
   line-height: 60px;
@@ -653,7 +653,7 @@ a.btn-customized-4.btn-customized-light.btn.btn-primary:not(:disabled):not(.disa
 }
 .section-5-box h3 a:hover,
 .section-5-box h3 a:focus {
-  color: #f35b3f;
+  color: #4e5057;
 }
 
 .section-5-box h3 i {
