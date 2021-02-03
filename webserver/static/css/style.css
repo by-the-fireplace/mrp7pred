@@ -363,7 +363,7 @@ a.btn-customized.btn.btn-primary:not(:disabled):not(.disabled):active,
 a.btn-customized.btn.btn-primary:not(:disabled):not(.disabled):active:focus {
   outline: 0;
   background: #009614;
-  background: rgba(243, 91, 63, 0.7);
+  background: rgba(110, 204, 123, 0.8);
   border: 0;
   color: #fff;
   box-shadow: none;
