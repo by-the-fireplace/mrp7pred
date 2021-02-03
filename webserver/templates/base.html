@@ -94,12 +94,12 @@
           </li>
           <li>
             <a class="scroll-link" href="#section-1"
-              ><i class="fas fa-cog"></i> ABC Transporters and MDR in Cancer</a
+              ><i class="fas fa-cog"></i> About MRP7</a
             >
           </li>
           <li>
             <a class="scroll-link" href="#section-2"
-              ><i class="fas fa-user"></i> About MRP7</a
+              ><i class="fas fa-user"></i> Instructions</a
             >
           </li>
           <li>
@@ -180,8 +180,8 @@
                 <div class="description wow fadeInLeft">
                   <p>
                     Mrp7Pred is an online server aiming at helping researchers
-                    discovering novel MRP7 modulators. To lean more details,
-                    please check our
+                    discovering novel MRP7 modulators. For more details, please
+                    check our
                     <a href="https://mrp7pred.com"
                       ><strong>PUBLICATION</strong></a
                     >.
@@ -193,14 +193,14 @@
                     href="#section-4"
                     role="button"
                   >
-                    <i class="fas fa-book-open"></i> Prediction
+                    <i class="fas fa-book-open"></i> Start
                   </a>
                   <a
                     class="btn btn-primary btn-customized-2 scroll-link"
-                    href="#section-5"
+                    href="#section-2"
                     role="button"
                   >
-                    <i class="fas fa-pencil-alt"></i> Cite Us
+                    <i class="fas fa-pencil-alt"></i> Help
                   </a>
                 </div>
               </div>
@@ -219,13 +219,21 @@
             </div>
             <div class="row">
               <div class="col-8 section-1-box wow fadeInLeft">
-                <h3>ABC Transporters and MDR in Cancer</h3>
-                <p class="medium-paragraph">Insert a brief introduction here</p>
-                <p>Insert a list of review papers here</p>
+                <h3>What is MRP7</h3>
+                <p class="medium-paragraph">
+                  MRP7, or ABCC10, is the 10th member of ABCC subfamily,
+                  responsible for the transportation of various endo- and
+                  xeno-biotics across the cytoplasm membrane.
+                </p>
+                <p>
+                  MRP7 substrates include Leukotriene C<sub>4</sub>,
+                  E<sub>2</sub>17&#946;G, paclitaxel, <i>Vinca</i> alkaloids,
+                  gemcitabine, docetaxel, epothilone B
+                </p>
               </div>
               <div class="col-4 section-1-box wow fadeInUp">
                 <img
-                  src="{{url_for('static', filename='img/about-us.jpg')}}"
+                  src="{{url_for('static', filename='img/mrp7.jpg')}}"
                   alt="about-us"
                 />
               </div>
@@ -238,7 +246,7 @@
           <div class="container">
             <div class="row">
               <div class="col section-2 section-description wow fadeIn">
-                <h2>About MRP7</h2>
+                <h2>Instructions</h2>
                 <div class="divider-1 wow fadeInUp"><span></span></div>
               </div>
             </div>
@@ -251,13 +259,12 @@
                     </div>
                   </div>
                   <div class="col-md-8">
-                    <h3>ABC Transporters</h3>
+                    <h3>Data Preparation</h3>
                     <p>
-                      ATP-binding cassette (ABC) transporters is a superfamily
-                      of membrane proteins which utilize the energy of ATP
-                      hydrolysis to translacate substrates across membranes,
-                      either uptaking or exporting. ABC transporter superfamily
-                      is composed of 7 subfamilies namely ABCA-ABCG.
+                      Mrp7Pred takes SMILES as inputs. The users should prepare
+                      their list of compounds in a csv format which has two
+                      columns "name" and "smiles". For sample data see
+                      <a class="scroll-link" href="#section-5">examples</a>.
                     </p>
                   </div>
                 </div>
@@ -270,11 +277,11 @@
                     </div>
                   </div>
                   <div class="col-md-8">
-                    <h3>What is MRP7</h3>
+                    <h3>Making Predictions</h3>
                     <p>
-                      MRP7, or ABCC10, is the 10th member of ABCC subfamily,
-                      responsible for the transportation of various endo- and
-                      xeno-biotics across the cytoplasm membrane.
+                      Upload the prepared csv file and leave your email address.
+                      When task finishes an email with a link to results will be
+                      sent automatically.
                     </p>
                   </div>
                 </div>
@@ -287,15 +294,11 @@
                     </div>
                   </div>
                   <div class="col-md-8">
-                    <h3>Typical MRP7 Substrates</h3>
+                    <h3>Getting Results</h3>
                     <p>
-                      Endobiotics: Leukotriene C<sub>4</sub>,
-                      E<sub>2</sub>17&#946;G
-                    </p>
-                    <p>
-                      Xenobiotics (chemotherapeutic drugs): paclitaxel,
-                      <i>Vinca</i> alkaloids, gemcitabine, docetaxel, epothilone
-                      B
+                      Results in table format will be generated automatically
+                      with chemical structures, modulator scores and substrate
+                      scores
                     </p>
                   </div>
                 </div>
@@ -323,11 +326,10 @@
                     </div>
                   </div>
                   <div class="col-md-9">
-                    <h3>Ut wisi enim ad minim</h3>
+                    <h3>Known non-modulators</h3>
                     <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et. Ut wisi
-                      enim ad minim veniam, quis nostrud.
+                      <a href="mrp7pred.com">Download</a> the list of known MRP7
+                      non-modulators.
                     </p>
                   </div>
                 </div>
@@ -340,18 +342,17 @@
                     </div>
                   </div>
                   <div class="col-md-9">
-                    <h3>Sed do eiusmod tempor</h3>
+                    <h3>Known modulators</h3>
                     <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et. Ut wisi
-                      enim ad minim veniam, quis nostrud.
+                      <a href="mrp7pred.com">Download</a> the list of konwn MRP7
+                      modulators.
                     </p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div class="row">
+            <!-- <div class="row">
               <div class="col-md-6 section-3-box wow fadeInLeft">
                 <div class="row">
                   <div class="col-md-3">
@@ -386,7 +387,7 @@
                   </div>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
 
@@ -398,11 +399,11 @@
           <div class="container">
             <div class="row">
               <div class="col section-4 section-description wow fadeInLeftBig">
-                <h2>We Think That...</h2>
+                <h2>Start Prediction</h2>
                 <p>
-                  Ut wisi enim ad minim veniam, quis nostrud exerci tation
-                  ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo
-                  consequat. Ut wisi enim ad minim veniam, quis nostrud.
+                  Please follow the
+                  <a class="scroll-link" href="#section-2">instructions</a> for
+                  data preparation.
                 </p>
               </div>
             </div>
@@ -410,10 +411,17 @@
               <div class="col section-bottom-button wow fadeInUp">
                 <a
                   class="btn btn-primary btn-customized-2 scroll-link"
-                  href="#section-6"
+                  href="#section-2"
                   role="button"
                 >
-                  <i class="fas fa-envelope"></i> Contact Us
+                  <i class="fas fa-envelope"></i> Upload
+                </a>
+                <a
+                  class="btn btn-primary btn-customized-2 scroll-link"
+                  href="#section-2"
+                  role="button"
+                >
+                  <i class="fas fa-envelope"></i> Submit
                 </a>
               </div>
             </div>
@@ -425,11 +433,10 @@
           <div class="container">
             <div class="row">
               <div class="col section-5 section-description wow fadeIn">
-                <h2>Portfolio</h2>
+                <h2>Cite us</h2>
                 <div class="divider-1 wow fadeInUp"><span></span></div>
                 <p>
-                  We have completed 486 projects since we started back in 2013.
-                  Check them out!
+                  Mrp7Pred: An online server for discovering MRP7 modulators.
                 </p>
               </div>
             </div>
@@ -515,12 +522,6 @@
             <div class="row">
               <div class="col section-6 section-description wow fadeIn">
                 <h2>Contact Us</h2>
-                <div class="divider-1 wow fadeInUp"><span></span></div>
-                <p>
-                  Send us an email using the form below or follow us on our
-                  social media channels.
-                </p>
-              </div>
             </div>
             <div class="row">
               <div class="col-md-6 section-6-box wow fadeInUp">
@@ -573,7 +574,7 @@
                   </form>
                 </div>
               </div>
-              <div class="col-md-5 offset-md-1 section-6-box wow fadeInDown">
+              <!-- <div class="col-md-5 offset-md-1 section-6-box wow fadeInDown">
                 <h3>Follow us</h3>
                 <div class="section-6-social">
                   <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -582,7 +583,7 @@
                   <a href="#"><i class="fab fa-instagram"></i></a>
                   <a href="#"><i class="fab fa-pinterest"></i></a>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -592,8 +593,8 @@
           <div class="container">
             <div class="row">
               <div class="col">
-                &copy; Bootstrap 4 Template with Sidebar Menu. Download it for
-                free on <a href="https://azmind.com">AZMIND</a>.
+                &copy; 2021, Department of Pharmacology, College of Pharmacy and
+                Health Sciences, St. John's University </a>.
               </div>
             </div>
           </div>

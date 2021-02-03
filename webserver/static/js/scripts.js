@@ -89,9 +89,13 @@ jQuery(document).ready(function () {
   /*
         Background slideshow
     */
-  $(".top-content").backstretch("static/img/backgrounds/1.jpg");
-  $(".section-4-container").backstretch("static/img/backgrounds/2.jpg");
-  $(".section-6-container").backstretch("static/img/backgrounds/1.jpg");
+  $(".top-content").backstretch("static/img/backgrounds/_110710017_aidrug.gif");
+  $(".section-4-container").backstretch(
+    "static/img/backgrounds/1_R0GN3jTj6_70MQIjDxC5ng.png"
+  );
+  $(".section-6-container").backstretch(
+    "static/img/backgrounds/f606d5e435011f1ac3cdeea10cd91a7f.png"
+  );
 
   /*
 	    Wow
