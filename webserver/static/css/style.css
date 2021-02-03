@@ -12,14 +12,14 @@ strong {
 }
 
 a {
-  color: #009614;
-  border-bottom: 1px dashed #009614;
+  color: #9ce1e8;
+  border-bottom: 1px dashed #9ce1e8;
   text-decoration: none;
   transition: all 0.3s;
 }
 a:hover,
 a:focus {
-  color: #009614;
+  color: #9ce1e8;
   border: 0;
   text-decoration: none;
 }
@@ -55,12 +55,12 @@ img {
 }
 
 ::-moz-selection {
-  background: #009614;
+  background: #9ce1e8;
   color: #fff;
   text-shadow: none;
 }
 ::selection {
-  background: #009614;
+  background: #9ce1e8;
   color: #fff;
   text-shadow: none;
 }
@@ -345,7 +345,7 @@ a.btn-customized {
   margin-left: 5px;
   margin-right: 5px;
   padding: 0.75rem 1.5rem;
-  background: #009614;
+  background: #9ce1e8;
   border: 0;
   border-radius: 4px;
   font-size: 16px;
@@ -362,8 +362,8 @@ a.btn-customized.active:focus,
 a.btn-customized.btn.btn-primary:not(:disabled):not(.disabled):active,
 a.btn-customized.btn.btn-primary:not(:disabled):not(.disabled):active:focus {
   outline: 0;
-  background: #009614;
-  background: rgba(110, 204, 123, 0.8);
+  background: #9ce1e8;
+  background: rgba(208, 234, 232, 255);
   border: 0;
   color: #fff;
   box-shadow: none;
@@ -572,9 +572,9 @@ a.btn-customized-4.btn-customized-light.btn.btn-primary:not(:disabled):not(.disa
   width: 80px;
   height: 80px;
   margin: 0 auto;
-  border: 1px solid #009614;
+  border: 1px solid #9ce1e8;
   font-size: 40px;
-  color: #009614;
+  color: #9ce1e8;
   line-height: 78px;
   text-align: center;
   border-radius: 50%;
@@ -613,7 +613,7 @@ a.btn-customized-4.btn-customized-light.btn.btn-primary:not(:disabled):not(.disa
   width: 60px;
   height: 60px;
   margin: 0 auto;
-  background: #009614;
+  background: #9ce1e8;
   font-size: 28px;
   color: #fff;
   line-height: 60px;
@@ -653,7 +653,7 @@ a.btn-customized-4.btn-customized-light.btn.btn-primary:not(:disabled):not(.disa
 }
 .section-5-box h3 a:hover,
 .section-5-box h3 a:focus {
-  color: #009614;
+  color: #9ce1e8;
 }
 
 .section-5-box h3 i {
