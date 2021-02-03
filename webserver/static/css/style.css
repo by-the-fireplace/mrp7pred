@@ -112,7 +112,7 @@ img {
 }
 
 .sidebar .logo {
-  padding: 20px 20px;
+  padding: 10px 10px;
   border-bottom: 1px solid #444;
   transition: all 0.3s;
 }
@@ -120,7 +120,7 @@ img {
 .sidebar .logo a {
   display: inline-block;
   width: 172px;
-  height: 34px;
+  height: 169px;
   background: url(../img/logo-m7p-nobg.png) left top no-repeat;
   border: 0;
   text-indent: -999999px;
