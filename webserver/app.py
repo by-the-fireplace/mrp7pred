@@ -9,4 +9,4 @@ bootstrap = Bootstrap(app)
 # @app.route("/home", methods=["GET", "POST"])
 @app.route("/", methods=["GET", "POST"])
 def home():
-    return render_template("home.html")
+    return render_template("base.html")
