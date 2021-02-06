@@ -4,7 +4,7 @@ Generate full features from given compound (smiles) list
 
 from mrp7pred.feats.rdk_features import _rdk_features
 from mrp7pred.feats.chemopy_features import _chemopy_features
-from mrp7pred.utils import get_current_time, ensure_folder
+from mrp7pred.utils import get_current_time, ensure_folder, standardize_smiles
 
 import pandas as pd
 import numpy as np
@@ -58,11 +58,10 @@ def _load_feats(pickle_file: str = "./df_feats.pkl") -> DataFrame:
 
 
 def featurize(
-    X: Union[List[str], ndarray],
+    X: DataFrame,
     out_folder: str = ".",
     time_limit: int = 10,
     smiles_col_name: Optional[str] = None,
-    df: Optional[DataFrame] = None,
     prefix: Optional[str] = None,
 ) -> DataFrame:
     """
@@ -70,8 +69,8 @@ def featurize(
 
     Parameters
     --------
-    X: ndarray or List[str]
-        Smiles stored in ndarray or list
+    X: DataFrame
+        Dataframe with two columns: "name" and "smiles"
     out_folder: str
         Directory to store featurized data, default "./"
     time_limit: int
@@ -90,39 +89,21 @@ def featurize(
     """
     ensure_folder(out_folder)
 
-    # load featurized data
-    df_feats = _load_feats()
+    df_feats = DataFrame()
 
-    # remove duplicates
-    if df is None:
-        ori_len = len(X)
-        X = list(set(X))
-        if ori_len > len(X):
-            print(f"Removed {ori_len - len(X)} duplicates")
-    else:
-        if list(X) != df[smiles_col_name].values.tolist():
-            raise ValueError("Smiles in df does not match input smiles list")
-        if smiles_col_name is None:
-            raise ValueError("smiles_col_name is not defined")
-        ori_len = len(df)
-        df = df.drop_duplicates(subset=[smiles_col_name])
-        if ori_len > len(df):
-            print(f"Removed {ori_len - len(df)} duplicates")
-        X = df[smiles_col_name].values.tolist()
+    if smiles_col_name is not None and smiles_col_name not in X.columns:
+        raise ValueError(f"column {smiles_col_name} is not in input data")
+    # drop duplicates
+    X = X.drop_duplicates(
+        subset=["smiles" if smiles_col_name is None else smiles_col_name]
+    )
 
-    for index, smi in enumerate(X):
+    for index, row in enumerate(X.itertuples()):
 
-        # skip featurization if already done
-        # TODO: Check this part, not working properly
-        #       Because now df_feats does not store smiles
-        df = df.reset_index(drop=True)
-        name = df.loc[index, "name"]
-        if df_feats.isin([smi]).any().any():
-            print(f"(Loaded) {index}. {name}\n")
-            continue
+        smi = getattr(row, "smiles")
+        name = getattr(row, "name")
 
-        # smile     smile_string
-        smi_series = pd.Series([smi], index=[smiles_col_name])
+        smi = standardize_smiles(smi)
 
         time_start = datetime.datetime.now()
 
@@ -141,73 +122,55 @@ def featurize(
             print(
                 f"{name} Featurization failed\nSmiles: {smi}\nError: Time out ({time_limit}s)"
             )
-            # df_feats = pd.concat([df_feats, smi_series.to_frame().T])
             continue
 
+        smi_feats_d["name"] = name
+        smi_feats_d["smiles"] = smi
         # new_row: smiles   features
         smi_feats = pd.Series(smi_feats_d)
-        new_row = smi_series.append(smi_feats)
+        # new_row = smi_series.append(smi_feats)
 
         # Append generated features to df_feats
         df_feats = pd.concat([df_feats, smi_feats.to_frame().T], ignore_index=True)
 
-        # monitor output
-        name = ""
-        if df is not None:
-            name = df["name"].values[index]
         print(f"{index}. {name}\nSMILES: {smi}\n")
-
-    # Add "name" and "smiles" back to df_feats
-    if (
-        df is not None
-        and "name" not in df_feats.columns
-        and smiles_col_name not in df_feats.columns
-    ):
-        df_feats[["name", smiles_col_name]] = df[["name", smiles_col_name]]
-        df_feats = df_feats[["name", smiles_col_name] + df_feats.columns.tolist()[:-2]]
-
-    with open(f"./{prefix}_df_feats.pkl", "wb") as fo:
-        # now df_feats should have column "smiles"
-        pickle.dump(df_feats, fo)
 
     ts = get_current_time()
     out_dir = f"{out_folder}/{prefix}_full_features_828_{ts}.csv"
     df_feats.to_csv(out_dir)
     print(f"Featurized data saved to {out_dir}. df_feats.shape: {df_feats.shape}")
-    print("df_feats.columns:")
-    print(df_feats.columns)
-    # return df_feats without columns "name" and "smiles"
-    return df_feats.drop(columns=["name", smiles_col_name])
+
+    return df_feats
 
 
-if __name__ == "__main__":
-    DATA_DIR = "../../data/all_compounds_with_std_smiles.csv"
-    df = pd.read_csv(DATA_DIR, index_col=0).reset_index(drop=True)
+# if __name__ == "__main__":
+#     DATA_DIR = "../../data/all_compounds_with_std_smiles.csv"
+#     df = pd.read_csv(DATA_DIR, index_col=0).reset_index(drop=True)
 
-    df_test = df.loc[155:167, :]
-    df_test_feats = featurize(
-        X=df_test["std_smiles"].values.tolist(),
-        df=df_test,
-        smiles_col_name="std_smiles",
-        out_folder="./all_features_test",
-        prefix="test",
-    )
+#     df_test = df.loc[155:167, :]
+#     df_test_feats = featurize(
+#         X=df_test["std_smiles"].values.tolist(),
+#         df=df_test,
+#         smiles_col_name="std_smiles",
+#         out_folder="./all_features_test",
+#         prefix="test",
+#     )
 
-    df_man = df.loc[:116, :]
-    df_man_feats = featurize(
-        X=df_man["std_smiles"].values.tolist(),
-        df=df_man,
-        smiles_col_name="std_smiles",
-        out_folder="./all_features_man",
-        prefix="man",
-    )
+#     df_man = df.loc[:116, :]
+#     df_man_feats = featurize(
+#         X=df_man["std_smiles"].values.tolist(),
+#         df=df_man,
+#         smiles_col_name="std_smiles",
+#         out_folder="./all_features_man",
+#         prefix="man",
+#     )
 
-    df_cc = df.loc[116:, :]
-    df_cc_feats = featurize(
-        X=df_cc["std_smiles"].values.tolist(),
-        time_limit=10,
-        df=df_cc,
-        smiles_col_name="std_smiles",
-        out_folder="./all_features_cc",
-        prefix="cc",
-    )
+#     df_cc = df.loc[116:, :]
+#     df_cc_feats = featurize(
+#         X=df_cc["std_smiles"].values.tolist(),
+#         time_limit=10,
+#         df=df_cc,
+#         smiles_col_name="std_smiles",
+#         out_folder="./all_features_cc",
+#         prefix="cc",
+#     )

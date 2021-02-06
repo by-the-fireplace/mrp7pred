@@ -96,21 +96,6 @@ def _remove_similar_features(
     return np.array(support), X.drop(X.columns[to_drop], axis=1)
 
 
-class FeatureSelector(TransformerMixin):
-    """
-    A dummy feature selector for feature selection
-
-
-    The API should do something like:
-    fs = FeatureSelector(X, y)
-    fs.fit(pipeline, params)
-    fs.get_support() # return indices of dropped features
-    X_selected = fs.transform() # get transformed features
-    """
-
-    pass
-
-
 def _univariate(
     X: Union[ndarray, DataFrame],
     y: ndarray,
