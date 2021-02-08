@@ -7,7 +7,7 @@ Input: cleaned dataframe with columns:
     label
 Output: featurized dataframe
 
-Number of features: 127
+Number of features: 828
 
 feature selection details see notebook/feature_engineering.ipynb
 """
@@ -19,6 +19,7 @@ from pandas import DataFrame
 import numpy as np
 from tqdm import tqdm
 from mrp7pred.feats.gen_all_features import featurize
+from mrp7pred.utils import DATA
 
 
 # def featurize(df: DataFrame) -> DataFrame:
@@ -46,3 +47,12 @@ from mrp7pred.feats.gen_all_features import featurize
 #     if input_len != output_len:
 #         print(f"Dropped {input_len-output_len} unfeaturizable compounds.")
 #     return df
+
+
+def featurize_unknown():
+    df_unknown = pd.read_csv(f"{DATA}/unknown.csv")[["nane", "smiles"]]
+    df_feats = featurize(df_unknown, prefix="featurized_unknown_")
+
+
+if __name__ == "__main__":
+    featurize_unknown()
