@@ -423,9 +423,31 @@
                 <p>Then click <strong>Submit</strong> to start prediction.</p>
               </div>
             </div>
+
             <div class="row">
               <div class="col section-bottom-button wow fadeInUp">
-                <a
+                <form id="package_form" action="" method="POST">
+                  <div>
+                    <p>Upload Packages:</p>
+                    <p>
+                      <input
+                        id="upload_button"
+                        type="file"
+                        class="btn btn-default btn-xs"
+                        name="file"
+                      />
+                    </p>
+                    <p>
+                      <input
+                        id="submit_button"
+                        type="submit"
+                        class="btn btn-success"
+                        value="Upload"
+                      />
+                    </p>
+                  </div>
+                </form>
+                <!-- <a
                   class="btn btn-primary btn-customized-2 scroll-link"
                   href="#section-2"
                   role="button"
@@ -438,7 +460,7 @@
                   role="button"
                 >
                   <i class="fas fa-upload"></i> Submit
-                </a>
+                </a> -->
               </div>
             </div>
           </div>
