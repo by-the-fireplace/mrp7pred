@@ -1,6 +1,6 @@
 from flask_bootstrap import Bootstrap
 from flask import Flask, render_template, Response, request, url_for, redirect
-from werkzeug import secure_filename
+from werkzeug.utils import secure_filename
 import os
 
 app = Flask(__name__)
