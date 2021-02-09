@@ -49,6 +49,13 @@ img {
   max-width: 100%;
 }
 
+form {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  color: white;
+}
+
 .medium-paragraph {
   font-size: 18px;
   line-height: 34px;
@@ -627,12 +634,6 @@ a.btn-customized-4.btn-customized-light.btn.btn-primary:not(:disabled):not(.disa
 }
 
 /***** Section 4 *****/
-.section-4-form {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  /* color: white; */
-}
 
 /***** Section 5 *****/
 
