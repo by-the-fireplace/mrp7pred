@@ -631,7 +631,7 @@ a.btn-customized-4.btn-customized-light.btn.btn-primary:not(:disabled):not(.disa
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
-  color: white;
+  /* color: white; */
 }
 
 /***** Section 5 *****/
