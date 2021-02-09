@@ -337,7 +337,11 @@
                   <div class="col-md-9">
                     <h3>Modulators</h3>
                     <p>
-                      <a href="/data/positive.csv" download>Download</a>
+                      <a
+                        href="{{url_for('data', filename='positive.csv')}}"
+                        download
+                        >Download</a
+                      >
                       the list of konwn MRP7 modulators.
                     </p>
                   </div>
@@ -353,7 +357,11 @@
                   <div class="col-md-9">
                     <h3>Non-Modulators</h3>
                     <p>
-                      <a href="/data/negative.csv" download>Download</a>
+                      <a
+                        href="{{url_for('data', filename='negative.csv')}}"
+                        download
+                        >Download</a
+                      >
                       the list of known MRP7 non-modulators.
                     </p>
                   </div>
