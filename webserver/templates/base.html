@@ -73,7 +73,8 @@
         width: 100%;
         padding: 12px 20px;
         margin: 8px 0;
-        background-color: rgb(255, 255, 255);
+        color: white;
+
       }
     </style>
   </head>
@@ -425,10 +426,10 @@
                   data preparation.
                 </p>
                 <p>
-                  Click <strong>Browse</strong> to select your prepared data and
-                  upload to the server.
+                  Click <strong>Choose File</strong> to select your prepared data and
+                  click <strong>upload</strong> to upload.
                 </p>
-                <p>Then click <strong>Submit</strong> to start prediction.</p>
+                <p>Then click <strong>Run</strong> to start prediction.</p>
               </div>
             </div>
 
@@ -447,18 +448,25 @@
                   </div>
                 </form>
                 <p>
-                  <input
+                  <!-- <input
                     id="submit_button"
                     type="submit"
                     class="btn btn-success"
                     value="Upload"
-                  />
+                  /> -->
+                  <a
+                    class="btn btn-primary btn-customized-2"
+                    id="submit_button"
+                    type="submit"
+                    role="button"
+                  >
+                    <i class="fas fa-upload"></i> Upload
                   <a
                     class="btn btn-primary btn-customized-2 scroll-link"
                     href="#section-2"
                     role="button"
                   >
-                    <i class="fas fa-upload"></i> Submit
+                    <i class="fas fa-running"></i> Run
                   </a>
                 </p>
               </div>

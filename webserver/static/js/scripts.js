@@ -95,9 +95,9 @@ jQuery(document).ready(function () {
   $(".section-4-container").backstretch(
     "static/img/backgrounds/1_R0GN3jTj6_70MQIjDxC5ng.png"
   );
-  $(".section-6-container").backstretch(
-    "static/img/backgrounds/f606d5e435011f1ac3cdeea10cd91a7f.png"
-  );
+  // $(".section-6-container").backstretch(
+  //   "static/img/backgrounds/f606d5e435011f1ac3cdeea10cd91a7f.png"
+  // );
 
   /*
 	    Wow
