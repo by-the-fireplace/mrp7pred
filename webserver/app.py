@@ -24,7 +24,7 @@ def positive():
 
 
 @app.route("/negative", methods=["GET", "POST"])
-def positive():
+def negative():
     with open("./data/negative.csv") as f:
         csv = f.read()
     return Response(
