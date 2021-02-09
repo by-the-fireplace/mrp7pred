@@ -8,7 +8,7 @@ app = Flask(__name__)
 bootstrap = Bootstrap(app)
 
 ## uploading specs ##
-UPLOAD_FOLDER = "/tmp/"
+UPLOAD_FOLDER = "/"
 ALLOWED_EXTENSIONS = set(["csv"])
 
 
