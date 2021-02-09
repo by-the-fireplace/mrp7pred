@@ -626,6 +626,14 @@ a.btn-customized-4.btn-customized-light.btn.btn-primary:not(:disabled):not(.disa
   padding: 0 0 10px 0;
 }
 
+/***** Section 4 *****/
+.section-4-form {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  color: white;
+}
+
 /***** Section 5 *****/
 
 .section-5-box {
