@@ -6,6 +6,7 @@ import subprocess
 import time
 import sys
 from utils import UPLOAD_FOLDER, ensure_folder, get_current_time, random_string
+import pandas as pd
 
 
 app = Flask(__name__)
