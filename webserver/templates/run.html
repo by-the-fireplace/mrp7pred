@@ -1,0 +1,95 @@
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, shrink-to-fit=no"
+  />
+
+  <title>Mrp7Pred: An online server for discovering MRP7 modulators</title>
+
+  <!-- CSS -->
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500&display=swap"
+  />
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+    crossorigin="anonymous"
+  />
+  <link
+    rel="stylesheet"
+    href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+    integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+    crossorigin="anonymous"
+  />
+  <link
+    rel="stylesheet"
+    href="{{url_for('static', filename='css/jquery.mCustomScrollbar.min.css')}}"
+  />
+  <link
+    rel="stylesheet"
+    href="{{url_for('static', filename='css/animate.css')}}"
+  />
+  <link
+    rel="stylesheet"
+    href="{{url_for('static', filename='css/style.css')}}"
+  />
+  <link
+    rel="stylesheet"
+    href="{{url_for('static', filename='css/media-queries.css')}}"
+  />
+
+  <!-- Favicon and touch icons -->
+  <link
+    rel="shortcut icon"
+    href="{{url_for('static', filename='ico/logo-m7p-nobg-icon.png')}}"
+  />
+  <link
+    rel="logo-m7p-nobg"
+    sizes="144x144"
+    href="{{url_for('static', filename='ico/logo-m7p-nobg-144.png')}}"
+  />
+  <link
+    rel="logo-m7p-nobg"
+    sizes="114x114"
+    href="{{url_for('static', filename='ico/logo-m7p-nobg-114.png')}}"
+  />
+  <link
+    rel="logo-m7p-nobg"
+    sizes="72x72"
+    href="{{url_for('static', filename='ico/logo-m7p-nobg-72.png')}}"
+  />
+  <link
+    rel="logo-m7p-nobg"
+    href="{{url_for('static', filename='ico/logo-m7p-nobg-57.png')}}"
+  />
+  <style></style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
+<body>
+  <div class="logo">
+    <img src="{{url_for('static', filename='img/logo-m7p-nobg.png')}}" />
+  </div>
+  <p>
+  <p></p>
+  <p></p>
+    Task <strong>{{ data }}</strong> submitted! An email will be sent to you
+    once the prediction is finished.
+    <p></p>
+    <p></p>
+  </p>
+</body>
+<footer class="footer-container">
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        &copy; 2021, Department of Pharmacology, College of Pharmacy and Health
+        Sciences, St. John's University. All rights reserved. For non-commercial
+        use only.
+      </div>
+    </div>
+  </div>
+</footer>

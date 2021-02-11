@@ -24,6 +24,19 @@ a:focus {
   text-decoration: none;
 }
 
+button {
+  color: #00c8dffa;
+  border-bottom: 1px dashed #00c8dffa;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+button:hover,
+button:focus {
+  color: #00c8dffa;
+  border: 0;
+  text-decoration: none;
+}
+
 h1,
 h2 {
   margin-top: 10px;
@@ -482,6 +495,148 @@ a.btn-customized-4.btn-customized-light:active:focus,
 a.btn-customized-4.btn-customized-light.active:focus,
 a.btn-customized-4.btn-customized-light.btn.btn-primary:not(:disabled):not(.disabled):active,
 a.btn-customized-4.btn-customized-light.btn.btn-primary:not(:disabled):not(.disabled):active:focus {
+  outline: 0;
+  background: #555;
+  border: 0;
+  color: #fff;
+  box-shadow: none;
+}
+
+/***** Button Button *****/
+button.btn-customized {
+  margin-left: 5px;
+  margin-right: 5px;
+  padding: 0.75rem 1.5rem;
+  background: #00c8dffa;
+  border: 0;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 300;
+  color: #fff;
+  box-shadow: none;
+}
+
+button.btn-customized:hover,
+button.btn-customized:active,
+button.btn-customized:focus,
+button.btn-customized:active:focus,
+button.btn-customized.active:focus,
+button.btn-customized.btn.btn-primary:not(:disabled):not(.disabled):active,
+button.btn-customized.btn.btn-primary:not(:disabled):not(.disabled):active:focus {
+  outline: 0;
+  background: #00c8dffa;
+  background: rgba(208, 234, 232, 255);
+  border: 0;
+  color: #fff;
+  box-shadow: none;
+}
+
+button.btn-customized-2 {
+  margin-left: 5px;
+  margin-right: 5px;
+  padding: 0.75rem 1.5rem;
+  background: #fff;
+  border: 0;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 300;
+  color: #555;
+  box-shadow: none;
+}
+
+button.btn-customized-2:hover,
+button.btn-customized-2:active,
+button.btn-customized-2:focus,
+button.btn-customized-2:active:focus,
+button.btn-customized-2.active:focus,
+button.btn-customized-2.btn.btn-primary:not(:disabled):not(.disabled):active,
+button.btn-customized-2.btn.btn-primary:not(:disabled):not(.disabled):active:focus {
+  outline: 0;
+  background: #ccc;
+  background: rgba(255, 255, 255, 0.5);
+  border: 0;
+  color: #555;
+  box-shadow: none;
+}
+
+button.btn-customized-3 {
+  display: inline-block;
+  width: 100%;
+  margin: 0;
+  padding: 0.75rem 1.5rem;
+  background: #444;
+  border: 0;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 300;
+  color: #fff;
+  box-shadow: none;
+}
+
+button.btn-customized-3:hover,
+button.btn-customized-3:active,
+button.btn-customized-3:focus,
+button.btn-customized-3:active:focus,
+button.btn-customized-3.active:focus,
+button.btn-customized-3.btn.btn-primary:not(:disabled):not(.disabled):active,
+button.btn-customized-3.btn.btn-primary:not(:disabled):not(.disabled):active:focus {
+  outline: 0;
+  background: #555;
+  border: 0;
+  color: #fff;
+  box-shadow: none;
+}
+
+button.btn-customized i,
+button.btn-customized-2 i,
+button.btn-customized-3 i {
+  margin-right: 5px;
+}
+
+button.btn-customized-4 {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  margin: 0 3px;
+  padding: 0;
+  background: #444;
+  border: 0;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: 300;
+  color: #fff;
+  box-shadow: none;
+  text-indent: -999999px;
+}
+
+button.btn-customized-4.btn-customized-dark {
+  background: #222;
+}
+button.btn-customized-4.btn-customized-light {
+  background: #fff;
+}
+
+button.btn-customized-4.btn-customized-dark:hover,
+button.btn-customized-4.btn-customized-dark:active,
+button.btn-customized-4.btn-customized-dark:focus,
+button.btn-customized-4.btn-customized-dark:active:focus,
+button.btn-customized-4.btn-customized-dark.active:focus,
+button.btn-customized-4.btn-customized-dark.btn.btn-primary:not(:disabled):not(.disabled):active,
+button.btn-customized-4.btn-customized-dark.btn.btn-primary:not(:disabled):not(.disabled):active:focus {
+  outline: 0;
+  background: #555;
+  border: 0;
+  color: #fff;
+  box-shadow: none;
+}
+
+button.btn-customized-4.btn-customized-light:hover,
+button.btn-customized-4.btn-customized-light:active,
+button.btn-customized-4.btn-customized-light:focus,
+button.btn-customized-4.btn-customized-light:active:focus,
+button.btn-customized-4.btn-customized-light.active:focus,
+button.btn-customized-4.btn-customized-light.btn.btn-primary:not(:disabled):not(.disabled):active,
+button.btn-customized-4.btn-customized-light.btn.btn-primary:not(:disabled):not(.disabled):active:focus {
   outline: 0;
   background: #555;
   border: 0;

@@ -68,8 +68,8 @@
       rel="logo-m7p-nobg"
       href="{{url_for('static', filename='ico/logo-m7p-nobg-57.png')}}"
     />
-    <style>
-    </style>
+    <style></style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   </head>
 
   <body>
@@ -364,43 +364,6 @@
                 </div>
               </div>
             </div>
-
-            <!-- <div class="row">
-              <div class="col-md-6 section-3-box wow fadeInLeft">
-                <div class="row">
-                  <div class="col-md-3">
-                    <div class="section-3-box-icon">
-                      <i class="fas fa-cloud"></i>
-                    </div>
-                  </div>
-                  <div class="col-md-9">
-                    <h3>Quis nostrud exerci tat</h3>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et. Ut wisi
-                      enim ad minim veniam, quis nostrud.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6 section-3-box wow fadeInLeft">
-                <div class="row">
-                  <div class="col-md-3">
-                    <div class="section-3-box-icon">
-                      <i class="fab fa-google"></i>
-                    </div>
-                  </div>
-                  <div class="col-md-9">
-                    <h3>Minim veniam quis nostrud</h3>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                      sed do eiusmod tempor incididunt ut labore et. Ut wisi
-                      enim ad minim veniam, quis nostrud.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div> -->
           </div>
         </div>
 
@@ -419,46 +382,38 @@
                   data preparation.
                 </p>
                 <p>
-                  Click <strong>Choose File</strong> to select your prepared data and
-                  click <strong>Upload</strong>.
+                  Click <strong>Choose File</strong> to select your prepared
+                  data and click <strong>Upload</strong>.
                 </p>
                 <p>Then click <strong>Run</strong> to start prediction.</p>
               </div>
             </div>
             <div class="row">
               <div class="col section-bottom-button wow fadeInUp">
-                <form id="upload_csv" action="" method="POST" style="background-color: #fff; width: 30%; margin-left:
-                35%; border-radius: 6px">
-                  <div class="section-4-form">
-                    <p>
-                      <input
-                        id="upload_button"
-                        type="file"
-                        class="btn btn-default btn-xs"
-                        name="file"
-                      />
-                    </p>
-                  </div>
+                <form
+                  id="csv_form"
+                  action="/run"
+                  method="POST"
+                  style="width: 30%; margin-left: 35%; border-radius: 6px"
+                  enctype="multipart/form-data"
+                >
+                  <p>
+                    <input
+                      id="csv_file"
+                      type="file"
+                      name="csv_file"
+                      accept=".csv"
+                      required
+                    />
+                  </p>
                 </form>
-                <!-- <input
-                  id="submit_button"
-                  type="submit"
-                  class="btn btn-success"
-                  value="Upload"
-                /> -->
-                <a
+                <button
                   class="btn btn-primary btn-customized"
                   type="submit"
-                  role="button"
+                  form="csv_form"
+                  id="upload_csv_file"
                 >
-                  <i class="fas fa-upload"></i> Upload
-                <a
-                  class="btn btn-primary btn-customized-2 scroll-link"
-                  href="#section-2"
-                  role="button"
-                >
-                  <i class="fas fa-running"></i> Run
-                </a>
+                  <i class="fas fa-running"></i> &nbsp;&nbsp;&nbsp;Run&nbsp;&nbsp;&nbsp;
               </div>
             </div>
           </div>
@@ -478,78 +433,6 @@
             </div>
           </div>
         </div>
-        <!-- <div class="row">
-              <div class="col-md-4 section-5-box wow fadeInUp">
-                <div class="section-5-box-image">
-                  <img
-                    src="{{url_for('static', filename='img/portfolio/1.jpg')}}"
-                    alt="portfolio-1"
-                  />
-                </div>
-                <h3>
-                  <a href="#">Acme branding</a>
-                  <i class="fas fa-angle-right"></i>
-                </h3>
-                <div class="section-5-box-date">
-                  <i class="far fa-calendar"></i> June 2019
-                </div>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                  do eiusmod tempor incididunt ut labore et.
-                </p>
-              </div>
-              <div class="col-md-4 section-5-box wow fadeInDown">
-                <div class="section-5-box-image">
-                  <img
-                    src="{{url_for('static', filename='img/portfolio/2.jpg')}}"
-                    alt="portfolio-2"
-                  />
-                </div>
-                <h3>
-                  <a href="#">Created 150 flyers</a>
-                  <i class="fas fa-angle-right"></i>
-                </h3>
-                <div class="section-5-box-date">
-                  <i class="far fa-calendar"></i> February 2019
-                </div>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                  do eiusmod tempor incididunt ut labore et.
-                </p>
-              </div>
-              <div class="col-md-4 section-5-box wow fadeInUp">
-                <div class="section-5-box-image">
-                  <img
-                    src="{{url_for('static', filename='img/portfolio/3.jpg')}}"
-                    alt="portfolio-3"
-                  />
-                </div>
-                <h3>
-                  <a href="#">WordPress design</a>
-                  <i class="fas fa-angle-right"></i>
-                </h3>
-                <div class="section-5-box-date">
-                  <i class="far fa-calendar"></i> November 2018
-                </div>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed
-                  do eiusmod tempor incididunt ut labore et.
-                </p>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col section-bottom-button wow fadeInUp">
-                <a
-                  class="btn btn-primary btn-customized"
-                  href="#"
-                  role="button"
-                >
-                  <i class="fas fa-sync"></i> View All
-                </a>
-              </div>
-            </div>
-          </div>
-        </div> -->
 
         <!-- Section 6 -->
         <div class="section-6-container section-container" id="section-6">
@@ -562,79 +445,8 @@
                   <i class="fas fa-envelope"></i> Email:
                   <a href="mailto:info@mrp7pred.com">info@mrp7pred.com</a>
                 </p>
-                <!-- <p><i class="fas fa-globe"></i> Websites:</p>
-                <p>
-                  <a
-                    href="https://www.stjohns.edu/academics/schools/college-pharmacy-and-health-sciences"
-                    >College of Pharmacy and Health Sciences</a
-                  >
-                </p>
-                <p>
-                  <a href="https://www.stjohns.edu">St. John's University</a>
-                </p> -->
               </div>
             </div>
-            <!-- <div class="row">
-              <div class="col-md-6 section-6-box wow fadeInUp">
-                <h3>By eMail</h3>
-                <div class="section-6-form">
-                  <form
-                    role="form"
-                    action="{{url_for('static', filename='contact.php')}}"
-                    method="post"
-                  >
-                    <div class="form-group">
-                      <label class="sr-only" for="contact-email">Email</label>
-                      <input
-                        type="text"
-                        name="email"
-                        placeholder="Email..."
-                        class="contact-email form-control"
-                        id="contact-email"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label class="sr-only" for="contact-subject"
-                        >Subject</label
-                      >
-                      <input
-                        type="text"
-                        name="subject"
-                        placeholder="Subject..."
-                        class="contact-subject form-control"
-                        id="contact-subject"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label class="sr-only" for="contact-message"
-                        >Message</label
-                      >
-                      <textarea
-                        name="message"
-                        placeholder="Message..."
-                        class="contact-message form-control"
-                        id="contact-message"
-                      ></textarea>
-                    </div>
-                    <button
-                      type="submit"
-                      class="btn btn-primary btn-customized"
-                    >
-                      <i class="fas fa-paper-plane"></i> Send Message
-                    </button>
-                  </form>
-                </div>
-              </div> -->
-            <!-- <div class="col-md-5 offset-md-1 section-6-box wow fadeInDown">
-                <h3>Follow us</h3>
-                <div class="section-6-social">
-                  <a href="#"><i class="fab fa-facebook-f"></i></a>
-                  <a href="#"><i class="fab fa-dribbble"></i></a>
-                  <a href="#"><i class="fab fa-twitter"></i></a>
-                  <a href="#"><i class="fab fa-instagram"></i></a>
-                  <a href="#"><i class="fab fa-pinterest"></i></a>
-                </div>
-              </div> -->
           </div>
         </div>
 
@@ -673,5 +485,23 @@
     <script src="{{url_for('static', filename='js/jquery.waypoints.min.js')}}"></script>
     <script src="{{url_for('static', filename='js/jquery.mCustomScrollbar.concat.min.js')}}"></script>
     <script src="{{url_for('static', filename='js/scripts.js')}}"></script>
+    <script>
+      $(document).ready(function () {
+        $("#upload_csv_file").click(function () {
+          var csv_file = $("#csv_file").val();
+          $.ajax({
+            url: "/",
+            type: "get",
+            data: { csv_file: csv_file },
+            success: function (response) {
+              $("#output").html(response.html);
+            },
+            error: function (xhr) {
+              //Do Something to handle error
+            },
+          });
+        });
+      });
+    </script>
   </body>
 </html>
