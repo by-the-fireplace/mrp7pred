@@ -59,8 +59,8 @@ def _load_feats(pickle_file: str = "./df_feats.pkl") -> DataFrame:
 
 def featurize(
     X: DataFrame,
-    out_folder: str = ".",
     time_limit: int = 10,
+    out_folder: Optional[str] = None,
     smiles_col_name: Optional[str] = None,
     prefix: Optional[str] = None,
 ) -> DataFrame:
@@ -87,7 +87,6 @@ def featurize(
     df: DataFrame
         Featurized data
     """
-    ensure_folder(out_folder)
 
     df_feats = DataFrame()
 
@@ -97,7 +96,9 @@ def featurize(
     X = X.drop_duplicates(
         subset=["smiles" if smiles_col_name is None else smiles_col_name]
     )
-
+    total_time = 0.0
+    denom = 1
+    failed = []
     for index, row in enumerate(X.itertuples()):
 
         smi = getattr(row, "smiles")
@@ -115,14 +116,20 @@ def featurize(
             smi_feats_d = _gen_all_features(smi)
         except KeyError as e:  # elements not supported by featurizers
             # smi_feats = np.nan
-            print(f"{name} featurization failed\nSmiles: {smi}\nError: {e}")
+            print(f"{name} featurization failed\nSmiles: {smi}\nError: {e}\n")
+            failed.append(name)
             # df_feats = pd.concat([df_feats, smi_series.to_frame().T])
             continue
         except TimeoutException:
             print(
-                f"{name} Featurization failed\nSmiles: {smi}\nError: Time out ({time_limit}s)"
+                f"{name} Featurization failed\nSmiles: {smi}\nError: Time out ({time_limit}s\n)"
             )
+            failed.append(name)
             continue
+
+        elapsed = (datetime.datetime.now() - time_start).total_seconds()
+        denom += 1
+        total_time += elapsed
 
         smi_feats_d["name"] = name
         smi_feats_d["smiles"] = smi
@@ -133,12 +140,19 @@ def featurize(
         # Append generated features to df_feats
         df_feats = pd.concat([df_feats, smi_feats.to_frame().T], ignore_index=True)
 
-        print(f"{index}. {name}\nSMILES: {smi}\n")
-
-    ts = get_current_time()
-    out_dir = f"{out_folder}/{prefix}_full_features_828_{ts}.csv"
-    df_feats.to_csv(out_dir)
-    print(f"Featurized data saved to {out_dir}. df_feats.shape: {df_feats.shape}")
+        print(
+            f"Featurized {index}. {name}\nSMILES: {smi}\nTime cost: {round(elapsed, 3)}s\n"
+        )
+    if out_folder:
+        ensure_folder(out_folder)
+        ts = get_current_time()
+        out_dir = f"{out_folder}/{prefix}_full_features_828_{ts}.csv"
+        df_feats.to_csv(out_dir)
+        print(f"Featurized data saved to {out_dir}. df_feats.shape: {df_feats.shape}")
+    else:
+        print(
+            f"Featurization finished! Average time: {round(total_time/(denom-1), 3)}s"
+        )
 
     return df_feats
 

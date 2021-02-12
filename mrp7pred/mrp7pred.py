@@ -21,6 +21,7 @@ from mrp7pred.utils import (
     DummyClassifier,
     DummyScaler,
     NoScaler,
+    ensure_folder,
 )
 
 # import warnings
@@ -96,8 +97,9 @@ class MRP7Pred(object):
 
     def predict(
         self,
-        selected_features: Optional[ndarray] = None,
+        selected_features_arr: Optional[ndarray] = None,
         compound_csv_dir: Optional[str] = None,
+        compound_df: Optional[DataFrame] = None,
         featurized_df: Optional[DataFrame] = None,
         prefix: Optional[str] = None,
     ) -> DataFrame:
@@ -120,45 +122,54 @@ class MRP7Pred(object):
         --------
         pred: ndarray
         """
-        if compound_csv_dir is None and featurized_df is None:
+        if compound_csv_dir is None and compound_df is None:
             raise ValueError(
-                "'Must provide the path to csv file containing compound smiles 'compound_csv_dir' or a pandas dataframe 'df_all' which stores all compound smiles with compound names."
+                "Must pass either the path to csv file containing compound smiles to 'compound_csv_dir' or a dataframe with columns 'name' and 'smiles' to 'compound_df"
             )
 
         if featurized_df is None:
-            df_all = pd.read_csv(compound_csv_dir)
+            if compound_csv_dir:
+                df = pd.read_csv(compound_csv_dir)
+            elif compound_df is not None:
+                df = compound_df
 
-        if "name" not in featurized_df.columns or "smiles" not in featurized_df.columns:
-            raise ValueError(
-                'The input csv should have these two columns: ["name", "smiles"]'
-            )
+        else:
+            if (
+                "name" not in featurized_df.columns
+                or "smiles" not in featurized_df.columns
+            ):
+                raise ValueError(
+                    'The input csv should have these two columns: ["name", "smiles"]'
+                )
 
-        # only extract name and smiles
-        df = featurized_df[["name", "smiles"]]
-        df_feat = featurized_df.drop(["name", "smiles"], axis=1)
+            # only extract name and smiles
+            df = featurized_df[["name", "smiles"]]
+            df_feat = featurized_df.drop(["name", "smiles"], axis=1)
+
         if featurized_df is None:
             print("Generating features ... ")
             # df_feats should be purely numeric
-            df_feat = featurize(
-                df["smiles"], df=df, smiles_col_name="smiles", prefix=prefix
-            )
-            print("Done!")
-        print("Start predicting ...", end="", flush=True)
-        df_feat = df_feat.dropna()
+            df = featurize(df, prefix=prefix)
+            df_feat = df.drop(["name", "smiles"], axis=1)
+            # print("Done!")
+        print("Start predicting ... ", end="", flush=True)
+        if selected_features_arr:
+            df_feat = df_feat.dropna().iloc[:, selected_features_arr]
         preds = self.clf.predict(df_feat)
         scores = [score[1] for score in self.clf.predict_proba(df_feat)]
         print("Done!")
 
-        print("Writing output ...", end="", flush=True)
+        # print("Writing output ... ", end="", flush=True)
         df_out = pd.DataFrame(columns=["name", "smiles", "pred", "score"])
         df_out["name"] = df["name"]
         df_out["smiles"] = df["smiles"]
         df_out["pred"] = preds
         df_out["score"] = scores
-        df_out.to_csv(f"{OUTPUT}/{prefix}predicted_{get_current_time()}.csv")
-        print(
-            f"Done! Results saved to: {OUTPUT}/{prefix}predicted_{get_current_time()}.csv"
-        )
+        # ensure_folder(OUTPUT)
+        # df_out.to_csv(f"{OUTPUT}/{prefix}predicted_{get_current_time()}.csv")
+        # print(
+        #     f"Done! Results saved to: {OUTPUT}/{prefix}predicted_{get_current_time()}.csv"
+        # )
         return df_out
 
 

@@ -45,6 +45,8 @@ def run():
         df = pd.read_csv(file)
         out = get_predictions(
             df,
+            clf_dir="./best_model_20210211-031248.pkl",
+            selected_features="./featureid_best_model_20210211-031248.npy",
         )
 
     return render_template("run.html", data=rs)
@@ -73,4 +75,4 @@ def negative():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, use_reloader=False)

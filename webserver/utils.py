@@ -5,6 +5,8 @@ import os
 import pandas as pd
 from pandas import DataFrame
 from mrp7pred.mrp7pred import MRP7Pred
+from typing import Optional
+import numpy as np
 
 ## uploading specs ##
 UPLOAD_FOLDER = "./data/"
@@ -27,8 +29,15 @@ def random_string(N: int) -> str:
     )
 
 
-def get_predictions(df: DataFrame, clf_dir: str):
+def get_predictions(
+    df: DataFrame, clf_dir: str, selected_features: Optional[str] = None
+):
     m7p = MRP7Pred(clf_dir=clf_dir)
-    out = m7p.predict(prefix=f"{get_current_time()}")
+    selected_features_arr = np.load(selected_features)
+    out = m7p.predict(
+        compound_df=df,
+        selected_features_arr=selected_features_arr,
+        prefix=f"{get_current_time()}",
+    )
     out = out.sort_values(by=["score"], ascending=False)
     return out
