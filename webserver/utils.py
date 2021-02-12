@@ -4,6 +4,7 @@ import random
 import os
 import pandas as pd
 from pandas import DataFrame
+from mrp7pred.mrp7pred import MRP7Pred
 
 ## uploading specs ##
 UPLOAD_FOLDER = "./data/"
@@ -26,5 +27,8 @@ def random_string(N: int) -> str:
     )
 
 
-def predict(df: DataFrame):
-    return
+def get_predictions(df: DataFrame, clf_dir: str):
+    m7p = MRP7Pred(clf_dir=clf_dir)
+    out = m7p.predict(prefix=f"{get_current_time()}")
+    out = out.sort_values(by=["score"], ascending=False)
+    return out

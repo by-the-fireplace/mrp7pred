@@ -5,7 +5,13 @@ import os
 import subprocess
 import time
 import sys
-from utils import UPLOAD_FOLDER, ensure_folder, get_current_time, random_string
+from utils import (
+    UPLOAD_FOLDER,
+    ensure_folder,
+    get_current_time,
+    random_string,
+    get_predictions,
+)
 import pandas as pd
 
 
@@ -37,6 +43,9 @@ def run():
         # current_data = os.path.join(app.config["UPLOAD_FOLDER"], filename)
         # print(current_data)
         df = pd.read_csv(file)
+        out = get_predictions(
+            df,
+        )
 
     return render_template("run.html", data=rs)
 
