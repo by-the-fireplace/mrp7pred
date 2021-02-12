@@ -21,14 +21,11 @@ Need to automate the process
 from sklearn.feature_selection import (
     VarianceThreshold,
     GenericUnivariateSelect,
-    SelectorMixin,
     chi2,
     f_classif,
     mutual_info_regression,
-    SelectKBest,
     RFECV,
     SelectFromModel,
-    SequentialFeatureSelector,
 )
 
 from sklearn.base import BaseEstimator, TransformerMixin
