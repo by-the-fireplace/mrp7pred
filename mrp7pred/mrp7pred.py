@@ -96,6 +96,7 @@ class MRP7Pred(object):
 
     def predict(
         self,
+        selected_features: Optional[ndarray] = None,
         compound_csv_dir: Optional[str] = None,
         featurized_df: Optional[DataFrame] = None,
         prefix: Optional[str] = None,
@@ -108,6 +109,8 @@ class MRP7Pred(object):
         compound_csv_dir: Optional[str]
             The directory of unknown compound data
             with columns "name" and "smiles"
+        selected_features: Optional[ndarray]
+            index of selected features
         featurized_df: Optional[DataFrame]
             Featurized data in dataframe
         prefix: Optional[str]
