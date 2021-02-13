@@ -135,4 +135,4 @@ class Molecule(object):
 
 if __name__ == "__main__":  # pragma: no cover
     mol = readstring("iupac", "propane")
-    print mol.write("inchi")
+    print(mol.write("inchi"))

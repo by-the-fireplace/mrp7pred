@@ -357,7 +357,7 @@ class Molecule(object):
                     "display. See installation instructions for "
                     "more information."
                 )
-                raise ImportError, errormessage
+                raise ImportError(errormessage)
             root = tk.Tk()
             root.title(self.smiles)
             frame = tk.Frame(root, colormap="new", visual="truecolor").pack()

@@ -42,7 +42,7 @@ if sys.platform[:4] == "java" or sys.platform[:3] == "cli":
     MolExportException = chemaxon.marvin.io.MolExportException
     MolFormatException = chemaxon.formats.MolFormatException
 else:
-    from jpype import *
+    from jpype import isJVMStarted, JavaException, JPackage, startJVM
 
     if not isJVMStarted():
         _jvm = os.environ["JPYPE_JVM"]

@@ -7,7 +7,7 @@ import pandas as pd
 from pandas import DataFrame
 from numpy import ndarray
 from sklearn.pipeline import Pipeline
-from typing import Optional, Union, Dict, Any, List
+from typing import Optional, Union, Dict, Any, List, Callable
 
 # from mrp7pred.featurization import featurize
 from mrp7pred.feats.gen_all_features import featurize

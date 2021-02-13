@@ -184,6 +184,7 @@ def CalculateTopoElectronic(ChargeCoordinates):
     """
     pass
 
+
 def CalculateGravitational3D1(mol, ChargeCoordinates):
 
     """
@@ -220,6 +221,7 @@ def CalculateGravitational3D2(mol, ChargeCoordinates):
     #################################################################
     """
     pass
+
 
 def CalculateRadiusofGyration(mol, ChargeCoordinates):
 
@@ -296,6 +298,7 @@ def GetInertiaMatrix(mol, ChargeCoordinates):
 
     return InertiaMatrix
 
+
 def CalculatePrincipalMomentofInertia(mol, ChargeCoordinates):
     """
     #################################################################
@@ -334,7 +337,6 @@ def CalculateRatioPMI(mol, ChargeCoordinates):
     return res
 
 
-
 def CalculateHarary3D(ChargeCoordinates):
     """
     #################################################################
@@ -358,7 +360,6 @@ def CalculateHarary3D(ChargeCoordinates):
                 cds = 1.0 / DistanceMatrix[i, j]
             res = res + cds
     return round(res, 3)
-
 
 
 def CalculateAverageGeometricalDistanceDegree(ChargeCoordinates):
@@ -470,7 +471,6 @@ def CalculateMolecularEccentricity(mol, ChargeCoordinates):
     return round(res, 3)
 
 
-
 #############################################################################
 
 
@@ -523,5 +523,5 @@ if __name__ == "__main__":
     inputmol = pybel.readstring("smi", mol)
     GetARCFile(inputmol)
     result = GetGeometric(inputmol)
-    print result
-    print len(result)
+    print(result)
+    print(len(result))

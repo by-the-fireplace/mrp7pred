@@ -103,7 +103,7 @@ def _makeserver(serverurl):
         while not result[0]:
             sleep(0.5)
         if result[1]:
-            raise IOError, "Problem accessing web server\n%s" % result[1]
+            raise IOError("Problem accessing web server\n%s" % result[1])
         return result[2]
 
     return server
