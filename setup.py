@@ -13,7 +13,7 @@ setup(
     install_requires=[
         "scikit-learn",
         "seaborn",
-        "tqdm",
+        # "tqdm",
         # "xgboost",
         "pandas",
         "numpy",

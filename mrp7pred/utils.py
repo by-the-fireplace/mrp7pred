@@ -20,9 +20,9 @@ from sklearn.metrics import (
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.ensemble import RandomForestClassifier
 
-from tqdm import tqdm
+# from tqdm import tqdm
 
-tqdm.pandas()
+# tqdm.pandas()
 sns.set()
 
 # import warnings

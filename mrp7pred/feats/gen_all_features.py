@@ -11,7 +11,7 @@ import numpy as np
 from pandas import DataFrame, Series
 from numpy import ndarray
 from typing import List, Dict, Tuple, Union, Optional
-from tqdm import tqdm
+# from tqdm import tqdm
 import time
 import datetime
 import signal

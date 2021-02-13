@@ -17,7 +17,8 @@ __email__ = "jq.wang1214@gmail.com"
 
 from pandas import DataFrame
 import numpy as np
-from tqdm import tqdm
+
+# from tqdm import tqdm
 from mrp7pred.feats.gen_all_features import featurize
 from mrp7pred.utils import DATA
 

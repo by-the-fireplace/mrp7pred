@@ -29,7 +29,7 @@ pandas==1.2.0
     #   seaborn
 pillow==8.1.0
     # via matplotlib
-git+https://github.com/hcji/PyFingerprint@master
+# git+https://github.com/hcji/PyFingerprint@master
     # via mrp7pred (setup.py)
 pyparsing==2.4.7
     # via matplotlib
@@ -52,11 +52,11 @@ six==1.15.0
     # via python-dateutil
 threadpoolctl==2.1.0
     # via scikit-learn
-tqdm==4.55.1
+# tqdm==4.55.1
     # via mrp7pred (setup.py)
 typing-extensions==3.7.4.3
     # via jpype1
-xgboost==1.3.1
+# xgboost==1.3.1
     # via mrp7pred (setup.py)
 openbabel
 # webserver
