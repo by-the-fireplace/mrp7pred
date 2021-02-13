@@ -5,3 +5,4 @@ scikit-learn
 flask_bootstrap
 seaborn
 jpype1
+git+https://github.com/jingquan-wang/mrp7pred@main
