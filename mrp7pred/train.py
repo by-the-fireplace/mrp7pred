@@ -12,7 +12,8 @@ from sklearn.model_selection import GridSearchCV, StratifiedKFold
 from sklearn.pipeline import Pipeline
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.base import BaseEstimator
-from xgboost import XGBClassifier
+
+# from xgboost import XGBClassifier
 from sklearn.utils import class_weight
 from sklearn.metrics import recall_score
 

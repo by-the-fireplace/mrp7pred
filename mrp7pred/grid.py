@@ -8,7 +8,8 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import MinMaxScaler, Normalizer, StandardScaler
 from sklearn.svm import SVC
-from xgboost import XGBClassifier
+
+# from xgboost import XGBClassifier
 
 from mrp7pred.utils import NoScaler
 
@@ -19,11 +20,11 @@ grid_light = [
         "clf__class_weight": [{0: 0.1, 1: 0.9}, {0: 0.01, 1: 0.99}],
         "sclr": [Normalizer()],
     },
-    {
-        "clf": [XGBClassifier()],
-        "clf__n_estimators": [100, 1000],
-        "clf__scale_pos_weight": [10, 100, 1000],
-    },
+    # {
+    #     "clf": [XGBClassifier()],
+    #     "clf__n_estimators": [100, 1000],
+    #     "clf__scale_pos_weight": [10, 100, 1000],
+    # },
     {
         "clf": [SVC(probability=True)],
         "clf__kernel": ["rbf", "linear"],
@@ -47,11 +48,11 @@ grid_light_balance = [
         # "clf__class_weight": [{0: 0.1, 1: 0.9}, {0: 0.01, 1: 0.99}],
         "sclr": [StandardScaler()],
     },
-    {
-        "clf": [XGBClassifier()],
-        "clf__n_estimators": [100, 1000],
-        # "clf__scale_pos_weight": [1, 10, 100, 1000],
-    },
+    # {
+    #     "clf": [XGBClassifier()],
+    #     "clf__n_estimators": [100, 1000],
+    #     "clf__scale_pos_weight": [1, 10, 100, 1000],
+    # },
     {
         "clf": [SVC(probability=True)],
         "clf__kernel": ["rbf", "linear"],
@@ -78,17 +79,17 @@ grid = [
         "clf__max_features": [0.1, 0.2, 0.4, 0.8, 1.0, "sqrt", "log2"],
         "sclr__scaler": [StandardScaler(), MinMaxScaler(), Normalizer()],
     },
-    {
-        "clf": [XGBClassifier()],
-        "clf__min_child_weight": [1, 5],
-        "clf__gamma": [0, 1, 5],
-        "clf__subsample": [0.6, 0.8, 1.0],
-        "clf__colsample_bytree": [0.4, 0.7, 1.0],
-        "clf__learning_rate": [0.001, 0.01, 0.1, 0.3, 0.5],
-        "clf__max_depth": [4, 5, 7],
-        "clf__n_estimators": [100, 300, 500, 700, 1000],
-        "clf__scale_pos_weight": [10, 100, 1000],
-    },
+    # {
+    #     "clf": [XGBClassifier()],
+    #     "clf__min_child_weight": [1, 5],
+    #     "clf__gamma": [0, 1, 5],
+    #     "clf__subsample": [0.6, 0.8, 1.0],
+    #     "clf__colsample_bytree": [0.4, 0.7, 1.0],
+    #     "clf__learning_rate": [0.001, 0.01, 0.1, 0.3, 0.5],
+    #     "clf__max_depth": [4, 5, 7],
+    #     "clf__n_estimators": [100, 300, 500, 700, 1000],
+    #     "clf__scale_pos_weight": [10, 100, 1000],
+    # },
     {
         "clf": [SVC(probability=True)],
         "clf__kernel": ["rbf"],
@@ -122,18 +123,18 @@ grid_noscaler = [
         "clf__max_features": [0.1, 0.2, 0.4, 0.8, 1.0, "sqrt", "log2"],
         "sclr__scaler": [NoScaler()],
     },
-    {
-        "clf": [XGBClassifier()],
-        "clf__min_child_weight": [1, 5],
-        "clf__gamma": [0, 1, 5],
-        "clf__subsample": [0.6, 0.8, 1.0],
-        "clf__colsample_bytree": [0.4, 0.7, 1.0],
-        "clf__learning_rate": [0.001, 0.01, 0.1, 0.3, 0.5],
-        "clf__max_depth": [4, 5, 7],
-        "clf__n_estimators": [100, 300, 500, 700, 1000],
-        "clf__scale_pos_weight": [10, 100, 1000],
-        "sclr__scaler": [NoScaler()],
-    },
+    # {
+    #     "clf": [XGBClassifier()],
+    #     "clf__min_child_weight": [1, 5],
+    #     "clf__gamma": [0, 1, 5],
+    #     "clf__subsample": [0.6, 0.8, 1.0],
+    #     "clf__colsample_bytree": [0.4, 0.7, 1.0],
+    #     "clf__learning_rate": [0.001, 0.01, 0.1, 0.3, 0.5],
+    #     "clf__max_depth": [4, 5, 7],
+    #     "clf__n_estimators": [100, 300, 500, 700, 1000],
+    #     "clf__scale_pos_weight": [10, 100, 1000],
+    #     "sclr__scaler": [NoScaler()],
+    # },
     {
         "clf": [SVC(probability=True)],
         "clf__kernel": ["rbf"],

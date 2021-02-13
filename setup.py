@@ -14,7 +14,7 @@ setup(
         "scikit-learn",
         "seaborn",
         "tqdm",
-        "xgboost",
+        # "xgboost",
         "pandas",
         "numpy",
         # "PyFingerprint @ git+https://github.com/hcji/PyFingerprint@master",
