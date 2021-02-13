@@ -1,4 +1,4 @@
-#-*. coding: utf-8 -*-
+# -*. coding: utf-8 -*-
 ## Copyright (c) 2012, Adrià Cereto-Massagué, Noel O'Boyle
 ## All rights reserved.
 ##
@@ -23,28 +23,32 @@ from glob import glob
 
 if sys.platform[:4] == "java":
     classpath = []
-    if 'JCHEMDIR' in os.environ:
-        assert os.path.isdir(os.path.join(os.environ['JCHEMDIR'], 'lib'))
-        for jar in glob(os.path.join(os.path.join(os.environ['JCHEMDIR'],'lib'), '*.jar')):
+    if "JCHEMDIR" in os.environ:
+        assert os.path.isdir(os.path.join(os.environ["JCHEMDIR"], "lib"))
+        for jar in glob(
+            os.path.join(os.path.join(os.environ["JCHEMDIR"], "lib"), "*.jar")
+        ):
             classpath.append(jar)
 
 if sys.platform[:4] == "java" or sys.platform[:3] == "cli":
     import sys
+
     sys.path = classpath + sys.path
     import java, javax
     import chemaxon
     from chemaxon.util import MolHandler
-    #Exceptions are handled differently in jpype and jython. We need to wrap them:
+
+    # Exceptions are handled differently in jpype and jython. We need to wrap them:
     MolExportException = chemaxon.marvin.io.MolExportException
     MolFormatException = chemaxon.formats.MolFormatException
 else:
     from jpype import *
 
     if not isJVMStarted():
-        _jvm = os.environ['JPYPE_JVM']
-        if _jvm[0] == '"': # Remove trailing quotes
+        _jvm = os.environ["JPYPE_JVM"]
+        if _jvm[0] == '"':  # Remove trailing quotes
             _jvm = _jvm[1:-1]
-        _cp = os.pathsep.join(os.environ.get('CLASSPATH', '').split(os.pathsep))
+        _cp = os.pathsep.join(os.environ.get("CLASSPATH", "").split(os.pathsep))
         startJVM(_jvm, "-Djava.class.path=" + _cp)
 
     chemaxon = JPackage("chemaxon")
@@ -52,63 +56,68 @@ else:
     try:
         _testmol = MolHandler()
     except TypeError:
-        raise ImportError, "jchem.jar file cannot be found."
+        raise ImportError("jchem.jar file cannot be found.")
 
     # Exception wrappers for JPype
     MolExportException = JavaException
     MolFormatException = JavaException
 
-_descset = set(['HAcc', 'HDon', 'Heavy', 'LogD', 'LogP', 'Mass', 'TPSA'])
+_descset = set(["HAcc", "HDon", "Heavy", "LogD", "LogP", "Mass", "TPSA"])
 _descset.update(dir(chemaxon.descriptors.scalars))
-descs = [cls for cls in _descset if hasattr(getattr(chemaxon.descriptors.scalars, cls),'generate') and cls != 'LogD'] + ['RotatableBondsCount']
+descs = [
+    cls
+    for cls in _descset
+    if hasattr(getattr(chemaxon.descriptors.scalars, cls), "generate") and cls != "LogD"
+] + ["RotatableBondsCount"]
 """A list of supported descriptors"""
-fps = ['ecfp']
+fps = ["ecfp"]
 """A list of supported fingerprint types"""
 forcefields = ["mmff94"]
 """A list of supported forcefields"""
 
 informats = {
-    'smi': "SMILES"
-    ,'cxsmi': "ChemAxon exntended SMILES"
-    ,'mol': "MDL MOL"
-    ,'sdf': "MDL SDF"
-    ,'inchi': "InChI"
-    ,'cml': "Chemical Markup Language"
-    , 'mrv':'Marvin Documents'
-    , 'skc':'ISIS/Draw sketch file'
-    , 'cdx':'ChemDraw sketch file'
-    , 'cdxml':'ChemDraw sketch file'
-    , "name":"Common name"
-    , "peptide":"Aminoacid sequence"
-    , "sybyl":"Tripos SYBYL"
-    , "pdb":"PDB"
-    , "xyz":"XYZ"
-    , 'cube':'Gaussian cube'
-    , 'gout':'Gaussian output format'
-    }
+    "smi": "SMILES",
+    "cxsmi": "ChemAxon exntended SMILES",
+    "mol": "MDL MOL",
+    "sdf": "MDL SDF",
+    "inchi": "InChI",
+    "cml": "Chemical Markup Language",
+    "mrv": "Marvin Documents",
+    "skc": "ISIS/Draw sketch file",
+    "cdx": "ChemDraw sketch file",
+    "cdxml": "ChemDraw sketch file",
+    "name": "Common name",
+    "peptide": "Aminoacid sequence",
+    "sybyl": "Tripos SYBYL",
+    "pdb": "PDB",
+    "xyz": "XYZ",
+    "cube": "Gaussian cube",
+    "gout": "Gaussian output format",
+}
 """A dictionary of supported input formats"""
 
 outformats = {
-    'smi': "SMILES"
-    ,'cxsmi': "ChemAxon exntended SMILES"
-    ,'mol': "MDL MOL"
-    ,'sdf': "MDL SDF"
-    ,'inchi': "InChI"
-    ,'inchikey': "InChIKey"
-    ,'cml': "CML"
-    , 'mrv':'Marvin Documents'
-    , 'skc':'ISIS/Draw sketch file'
-    , 'cdx':'ChemDraw sketch file'
-    , 'cdxml':'ChemDraw sketch file'
-    , "name":"Common name"
-    , "peptide":"Aminoacid sequence"
-    , "sybyl":"Tripos SYBYL"
-    , "pdb":"PDB"
-    , "xyz":"XYZ"
-    , 'cube':'Gaussian cube'
-    , 'gjf':'Gaussian input format'
-    }
+    "smi": "SMILES",
+    "cxsmi": "ChemAxon exntended SMILES",
+    "mol": "MDL MOL",
+    "sdf": "MDL SDF",
+    "inchi": "InChI",
+    "inchikey": "InChIKey",
+    "cml": "CML",
+    "mrv": "Marvin Documents",
+    "skc": "ISIS/Draw sketch file",
+    "cdx": "ChemDraw sketch file",
+    "cdxml": "ChemDraw sketch file",
+    "name": "Common name",
+    "peptide": "Aminoacid sequence",
+    "sybyl": "Tripos SYBYL",
+    "pdb": "PDB",
+    "xyz": "XYZ",
+    "cube": "Gaussian cube",
+    "gjf": "Gaussian input format",
+}
 """A dictionary of supported output formats"""
+
 
 def readfile(format, filename):
     """Iterate over the molecules in a file.
@@ -135,7 +144,7 @@ def readfile(format, filename):
     43
     """
     if not os.path.isfile(filename):
-        raise IOError, "No such file: '%s'" % filename
+        raise IOError("No such file: '%s'" % filename)
     if not format in outformats:
         raise ValueError("%s is not a recognised JChem format" % format)
     try:
@@ -147,6 +156,7 @@ def readfile(format, filename):
             mol = mi.read()
     except chemaxon.formats.MolFormatException:
         raise ValueError("%s is not a recognised JChem format" % format)
+
 
 def readstring(format, string):
     """Read in a molecule from a string.
@@ -168,13 +178,14 @@ def readstring(format, string):
     try:
         mh = MolHandler(string)
         return Molecule(mh.molecule)
-    except MolFormatException, ex:
+    except MolFormatException as ex:
         if sys.platform[:4] != "java":
-            #Jpype exception
+            # Jpype exception
             ex = ex.message()
-            raise IOError, ex
+            raise IOError(ex)
         else:
             raise IOError("Problem reading the supplied string")
+
 
 class Outputfile(object):
     """Represent a file to which *output* is to be sent.
@@ -192,26 +203,32 @@ class Outputfile(object):
        write(molecule)
        close()
     """
+
     def __init__(self, format, filename, overwrite=False):
-        if ':' in format:
-            format,  options = format.split(':')
+        if ":" in format:
+            format, options = format.split(":")
             if options:
-                options = ':' + options
+                options = ":" + options
         else:
-            options = ''
+            options = ""
         self.format = format.lower()
         self.filename = filename
         if not overwrite and os.path.isfile(self.filename):
-            raise IOError, "%s already exists. Use 'overwrite=True' to overwrite it." % self.filename
-        if format in ("smi", 'cxsmi'):
+            raise IOError(
+                "%s already exists. Use 'overwrite=True' to overwrite it."
+                % self.filename
+            )
+        if format in ("smi", "cxsmi"):
             if not options:
-                options = ':a-H'
-            out = chemaxon.formats.MolExporter.exportToFormat(self.Molecule,format +'les:a-H')
+                options = ":a-H"
+            out = chemaxon.formats.MolExporter.exportToFormat(
+                self.Molecule, format + "les:a-H"
+            )
         try:
             self._writer = chemaxon.formats.MolExporter(filename, format + options)
-        except MolExportException,  e:
+        except MolExportException as e:
             raise ValueError(e)
-        self.total = 0 # The total number of molecules written to the file
+        self.total = 0  # The total number of molecules written to the file
 
     def write(self, molecule):
         """Write a molecule to the output file.
@@ -220,7 +237,7 @@ class Outputfile(object):
            molecule
         """
         if not self.filename:
-            raise IOError, "Outputfile instance is closed."
+            raise IOError("Outputfile instance is closed.")
         self._writer.write(molecule.Molecule)
         self.total += 1
 
@@ -228,6 +245,7 @@ class Outputfile(object):
         """Close the Outputfile to further writing."""
         self.filename = None
         self._writer.close()
+
 
 class Molecule(object):
     """Represent a JChem Molecule.
@@ -246,6 +264,7 @@ class Molecule(object):
     The associated JChem MolHandler can be accessed using the attribute:
        MolHandler
     """
+
     _cinfony = True
 
     def __init__(self, Molecule):
@@ -263,20 +282,33 @@ class Molecule(object):
         self.MolHandler.aromatize()
 
     @property
-    def atoms(self): return [Atom(atom) for atom in self.Molecule.atomArray]
+    def atoms(self):
+        return [Atom(atom) for atom in self.Molecule.atomArray]
+
     @property
-    def data(self): return MoleculeData(self)
+    def data(self):
+        return MoleculeData(self)
+
     @property
-    def formula(self): return self.MolHandler.calcMolFormula()
+    def formula(self):
+        return self.MolHandler.calcMolFormula()
+
     @property
     def exactmass(self):
         return self.MolHandler.calcMolWeightInDouble()
+
     @property
     def molwt(self):
         return self.MolHandler.calcMolWeight()
-    def _gettitle(self): return self.Molecule.getName()
-    def _settitle(self, val): self.Molecule.setName(val)
+
+    def _gettitle(self):
+        return self.Molecule.getName()
+
+    def _settitle(self, val):
+        self.Molecule.setName(val)
+
     title = property(_gettitle, _settitle)
+
     @property
     def _exchange(self):
         if self.Molecule.dim > 1:
@@ -320,29 +352,37 @@ class Molecule(object):
         To write multiple molecules to the same file you should use
         the Outputfile class.
         """
-        if ':' in format:
-            format,  options = format.split(':')
+        if ":" in format:
+            format, options = format.split(":")
             if options:
-                options = ':' + options
+                options = ":" + options
         else:
-            options = ''
+            options = ""
         format = format.lower()
         if format not in outformats:
             raise ValueError("%s is not a recognised format" % format)
 
         if filename is not None and not overwrite and os.path.isfile(filename):
-            raise IOError, "%s already exists. Use 'overwrite=True' to overwrite it." % filename
+            raise IOError(
+                "%s already exists. Use 'overwrite=True' to overwrite it." % filename
+            )
 
-        if format in ("smi", 'cxsmi'):
+        if format in ("smi", "cxsmi"):
             if not options:
-                options = ':a-H'
-            out = chemaxon.formats.MolExporter.exportToFormat(self.Molecule,format +'les' + options)
-        elif format == 'inchikey':
-            out = chemaxon.formats.MolExporter.exportToFormat(self.Molecule,'inchikey').replace('InChIKey=', '')
+                options = ":a-H"
+            out = chemaxon.formats.MolExporter.exportToFormat(
+                self.Molecule, format + "les" + options
+            )
+        elif format == "inchikey":
+            out = chemaxon.formats.MolExporter.exportToFormat(
+                self.Molecule, "inchikey"
+            ).replace("InChIKey=", "")
         else:
-            out = chemaxon.formats.MolExporter.exportToFormat(self.Molecule,format + options)
-            if format == 'inchi':
-                out = out.split('AuxInfo=')[0]
+            out = chemaxon.formats.MolExporter.exportToFormat(
+                self.Molecule, format + options
+            )
+            if format == "inchi":
+                out = out.split("AuxInfo=")[0]
         if filename:
             output = open(filename, "w")
             print >> output, out
@@ -350,7 +390,6 @@ class Molecule(object):
             return
         else:
             return out
-
 
     def calcfp(self, fp="ecfp"):
         """Calculate a molecular fingerprint.
@@ -362,11 +401,11 @@ class Molecule(object):
         """
         fp = fp.lower()
         if fp in fps:
-            if fp == 'ecfp':
+            if fp == "ecfp":
                 fp = chemaxon.descriptors.ECFP(ECFPConfiguration)
                 fp.generate(self.Molecule)
         else:
-            raise ValueError, "%s is not a recognised fingerprint type" % fp
+            raise ValueError("%s is not a recognised fingerprint type" % fp)
         return Fingerprint(fp)
 
     def calcdesc(self, descnames=[]):
@@ -384,13 +423,13 @@ class Molecule(object):
         ans = {}
         for descname in descnames:
             if descname not in descs:
-                raise ValueError, "%s is not a recognised descriptor type" % descname
-            if descname == 'RotatableBondsCount':
+                raise ValueError("%s is not a recognised descriptor type" % descname)
+            if descname == "RotatableBondsCount":
                 ta = chemaxon.calculations.TopologyAnalyser()
                 ta.setMolecule(self.Molecule)
                 ans[descname] = ta.rotatableBondCount()
             else:
-                desc = getattr(chemaxon.descriptors.scalars, descname)('')
+                desc = getattr(chemaxon.descriptors.scalars, descname)("")
                 desc.generate(self.Molecule)
                 ans[descname] = desc.toFloatArray()[0]
         return ans
@@ -412,10 +451,8 @@ class Molecule(object):
         self.MolHandler = chemaxon.util.MolHandler(self.Molecule)
         self.MolHandler.aromatize()
 
-    def draw(self, show=True, filename=None, update=False,
-             usecoords=False):
-        """Create a 2D depiction of the molecule.
-        """
+    def draw(self, show=True, filename=None, update=False, usecoords=False):
+        """Create a 2D depiction of the molecule."""
         if not usecoords:
             molecule = self.Molecule.clone()
             molecule.setDim(0)
@@ -425,14 +462,14 @@ class Molecule(object):
             myMolecule = readstring("mol", Molecule(molecule).write("mol"))
             self.Molecule = myMolecule.Molecule
             self.MolHandler = myMolecule.MolHandler
-        bytearray = chemaxon.formats.MolExporter.exportToBinFormat(molecule, 'png')
+        bytearray = chemaxon.formats.MolExporter.exportToBinFormat(molecule, "png")
         if filename:
             of = java.io.FileOutputStream(filename)
             of.write(bytearray)
             of.close()
         if show:
             source = java.io.ByteArrayInputStream(bytearray)
-            reader = javax.imageio.ImageIO.getImageReadersByFormatName('png').next()
+            reader = javax.imageio.ImageIO.getImageReadersByFormatName("png").next()
             iis = javax.imageio.ImageIO.createImageInputStream(source)
             reader.setInput(iis, True)
             param = reader.getDefaultReadParam()
@@ -462,10 +499,13 @@ class Fingerprint(object):
        given two Fingerprints 'a', and 'b', the Tanimoto coefficient is given by:
           tanimoto = a | b
     """
+
     def __init__(self, fingerprint):
         self.fp = fingerprint
+
     def __or__(self, other):
         return 1 - self.fp.getTanimoto(other.fp)
+
     def __getattr__(self, attr):
         if attr == "bits":
             # Create a bits attribute on-the-fly
@@ -476,11 +516,13 @@ class Fingerprint(object):
                 if setbit == -1:
                     break
                 bits.append(setbit)
-            return bits[1:] # Leave out the initial '-1'
+            return bits[1:]  # Leave out the initial '-1'
         else:
-            raise AttributeError, "Fingerprint has no attribute %s" % attr
+            raise AttributeError("Fingerprint has no attribute %s" % attr)
+
     def __str__(self):
         return ", ".join([str(x) for x in self.fp.toIntArray()])
+
 
 class Atom(object):
     """Represent an Atom.
@@ -499,10 +541,13 @@ class Atom(object):
         self.Atom = Atom
 
     @property
-    def atomicnum(self): return self.Atom.getAtno()
+    def atomicnum(self):
+        return self.Atom.getAtno()
+
     @property
     def coords(self):
-            return (self.Atom.x, self.Atom.y, self.Atom.z)
+        return (self.Atom.x, self.Atom.y, self.Atom.z)
+
     @property
     def formalcharge(self):
         return self.Atom.charge
@@ -510,6 +555,7 @@ class Atom(object):
     def __str__(self):
         c = self.coords
         return "Atom: %d (%.2f %.2f %.2f)" % (self.atomicnum, c[0], c[1], c[2])
+
 
 class Smarts(object):
     """A Smarts Pattern Matcher
@@ -526,6 +572,7 @@ class Smarts(object):
     >>> print smarts.findall(mol)
     [(1, 2), (4, 5), (6, 7)]
     """
+
     def __init__(self, smartspattern):
         """Initialise with a SMARTS pattern."""
         self.search = chemaxon.sss.search.MolSearch()
@@ -544,8 +591,9 @@ class Smarts(object):
         match = self.search.findAll()
         result = []
         for i in xrange(len(match)):
-            result.append(tuple([n+1 for n in match[i]]))
+            result.append(tuple([n + 1 for n in match[i]]))
         return result
+
 
 class MoleculeData(object):
     """Store molecule data in a dictionary-type object
@@ -574,43 +622,60 @@ class MoleculeData(object):
     >>> print len(data), data.keys(), data.has_key("NSC")
     1 ['Comment'] False
     """
+
     def __init__(self, Molecule):
         self._data = Molecule.Molecule.properties()
+
     def _testforkey(self, key):
         if not key in self:
-            raise KeyError, "'%s'" % key
+            raise KeyError("'%s'" % key)
+
     def keys(self):
         return list(self._data.keys)
+
     def values(self):
         return [self[k] for k in self._data.keys]
+
     def items(self):
         return [(k, self[k]) for k in self._data.keys]
+
     def __iter__(self):
         return iter(self.keys())
+
     def iteritems(self):
         return iter(self.items())
+
     def __len__(self):
         return len(self._data.keys)
+
     def __contains__(self, key):
         return key in self.keys()
+
     def __delitem__(self, key):
         self._testforkey(key)
         self._data.setString(key, None)
+
     def clear(self):
         for key in self:
             del self[key]
+
     def has_key(self, key):
         return key in self
+
     def update(self, dictionary):
         for k, v in dictionary.iteritems():
             self[k] = v
+
     def __getitem__(self, key):
         self._testforkey(key)
         return self._data.get(key).propValue
+
     def __setitem__(self, key, value):
         self._data.setString(key, str(value))
+
     def __repr__(self):
         return dict(self.iteritems()).__repr__()
+
 
 ECFPConfiguration = """<?xml version="1.0" encoding="UTF-8"?>
 <ECFPConfiguration Version="0.1">
@@ -652,7 +717,7 @@ ECFPConfiguration = """<?xml version="1.0" encoding="UTF-8"?>
 </ECFPConfiguration>
 """
 
-if __name__=="__main__": #pragma: no cover
+if __name__ == "__main__":  # pragma: no cover
     mol = readstring("smi", "CC(=O)Cl")
     mol.title = u"Adrià"
     mol.draw()

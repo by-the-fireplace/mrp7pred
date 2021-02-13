@@ -81,7 +81,7 @@ class Vector3d:
     if is_near_zero(axis_len):
       result = self
     else:
-      result = axis.scaled_vec(dot(self, axis) 
+      result = axis.scaled_vec(dot(self, axis)
                / axis.length() / axis.length())
     return result
 
@@ -279,7 +279,7 @@ class Matrix3d:
         if abs(self.elem(i,j) - rhs.elem(i,j)) > SMALL:
 	      return False
     return True
-	
+
   def __mul__(self, rhs):
     c = Matrix3d()
     for i in range(0, 3):

@@ -1,4 +1,4 @@
-#-*. coding: utf-8 -*-
+# -*. coding: utf-8 -*-
 ## Copyright (c) 2011, Noel O'Boyle; 2012, Adrià Cereto-Massagué
 ## All rights reserved.
 ##
@@ -24,20 +24,30 @@ import tempfile
 if sys.platform[:3] == "cli":
     _indigonet = os.environ["INDIGONET"]
     import clr
-    clr.AddReference('System.Windows.Forms')
-    clr.AddReference('System.Drawing')
+
+    clr.AddReference("System.Windows.Forms")
+    clr.AddReference("System.Drawing")
     clr.AddReferenceToFileAndPath(_indigonet + "\\indigo-dotnet.dll")
     clr.AddReferenceToFileAndPath(_indigonet + "\\indigo-inchi-dotnet.dll")
     clr.AddReferenceToFileAndPath(_indigonet + "\\indigo-renderer-dotnet.dll")
     from System.Windows.Forms import (
-        Application, DockStyle, Form, PictureBox, PictureBoxSizeMode
-        )
+        Application,
+        DockStyle,
+        Form,
+        PictureBox,
+        PictureBoxSizeMode,
+    )
     from System.Drawing import Image, Size
 elif sys.platform[:4] == "java":
     import java, javax
 
 if sys.platform[:3] == "cli" or sys.platform[:4] == "java":
-    from com.ggasoftware.indigo import Indigo, IndigoException, IndigoRenderer, IndigoInchi
+    from com.ggasoftware.indigo import (
+        Indigo,
+        IndigoException,
+        IndigoRenderer,
+        IndigoInchi,
+    )
 else:
     from indigo import Indigo, IndigoException
     from indigo_renderer import IndigoRenderer
@@ -57,16 +67,28 @@ except:
 fps = ["sim", "sub", "sub-res", "sub-tau", "full"]
 """A list of supported fingerprint types"""
 
-_formats = {'smi': "SMILES", 'can': "Canonical SMILES", "rdf": "MDL RDF file",
-            'mol': "MDL MOL file", 'sdf': "MDL SDF file",
-            'cml': "Chemical Markup Language",
-            'inchi': "InChI", 'inchikey': "InChIKey"}
-informats = dict([(_x, _formats[_x]) for _x in ['mol', 'sdf', 'rdf', 'smi',
-                                                'cml', 'inchi']])
+_formats = {
+    "smi": "SMILES",
+    "can": "Canonical SMILES",
+    "rdf": "MDL RDF file",
+    "mol": "MDL MOL file",
+    "sdf": "MDL SDF file",
+    "cml": "Chemical Markup Language",
+    "inchi": "InChI",
+    "inchikey": "InChIKey",
+}
+informats = dict(
+    [(_x, _formats[_x]) for _x in ["mol", "sdf", "rdf", "smi", "cml", "inchi"]]
+)
 """A dictionary of supported input formats"""
-outformats = dict([(_x, _formats[_x]) for _x in ['mol', 'sdf', 'smi', 'can',
-                                                 'cml', 'inchi', 'inchikey']])
+outformats = dict(
+    [
+        (_x, _formats[_x])
+        for _x in ["mol", "sdf", "smi", "can", "cml", "inchi", "inchikey"]
+    ]
+)
 """A dictionary of supported output formats"""
+
 
 def readfile(format, filename):
     """Iterate over the molecules in a file.
@@ -93,42 +115,53 @@ def readfile(format, filename):
     43
     """
     if not os.path.isfile(filename):
-        raise IOError, "No such file: '%s'" % filename
+        raise IOError("No such file: '%s'" % filename)
     format = format.lower()
     # Eagerly evaluate the supplier functions in order to report
     # errors in the format and errors in opening the file.
     # Then switch to an iterator...
-    if format=="sdf":
+    if format == "sdf":
         iterator = indigo.iterateSDFile(filename)
+
         def sdf_reader():
             for mol in iterator:
                 yield Molecule(mol)
+
         return sdf_reader()
-    elif format=="rdf":
+    elif format == "rdf":
         iterator = indigo.iterateRDFile(filename)
+
         def rdf_reader():
             for mol in iterator:
                 yield Molecule(mol)
+
         return rdf_reader()
-    elif format=="mol":
+    elif format == "mol":
+
         def mol_reader():
             yield Molecule(indigo.loadMoleculeFromFile(filename))
+
         return mol_reader()
-    elif format=="smi":
+    elif format == "smi":
         iterator = iterateSmilesFile(filename)
+
         def smi_reader():
             for mol in iterator:
                 yield Molecule(mol)
+
         return smi_reader()
-    elif format=="cml":
+    elif format == "cml":
         iterator = iterateCMLFile(filename)
+
         def cml_reader():
             for mol in iterator:
                 yield Molecule(mol)
+
         return cml_reader()
 
     else:
-        raise ValueError, "%s is not a recognised Indigo format" % format
+        raise ValueError("%s is not a recognised Indigo format" % format)
+
 
 def readstring(format, string):
     """Read in a molecule from a string.
@@ -146,14 +179,13 @@ def readstring(format, string):
     """
     format = format.lower()
     if format not in informats:
-        raise ValueError,"%s is not a recognised Indigo format" % format
+        raise ValueError("%s is not a recognised Indigo format" % format)
 
     module = indigo if format != "inchi" else indigoInchi
     try:
         mol = module.loadMolecule(string)
     except IndigoException:
-        raise IOError, "Failed to convert '%s' to format '%s'" % (
-            string, format)
+        raise IOError("Failed to convert '%s' to format '%s'" % (string, format))
 
     return Molecule(mol)
 
@@ -174,16 +206,20 @@ class Outputfile(object):
        write(molecule)
        close()
     """
+
     def __init__(self, format, filename, overwrite=False):
         self.format = format
         self.filename = filename
         if not overwrite and os.path.isfile(self.filename):
-            raise IOError, "%s already exists. Use 'overwrite=True' to overwrite it." % self.filename
+            raise IOError(
+                "%s already exists. Use 'overwrite=True' to overwrite it."
+                % self.filename
+            )
         if self.format in ["sdf", "cml", "rdf", "smi"]:
             self._writer = indigo.writeFile(self.filename)
         else:
-            raise ValueError,"%s is not supported for multimolecule output" % format
-        self.total = 0 # The total number of molecules written to the file
+            raise ValueError("%s is not supported for multimolecule output" % format)
+        self.total = 0  # The total number of molecules written to the file
 
         if self.format == "cml":
             self._writer.cmlHeader()
@@ -197,7 +233,7 @@ class Outputfile(object):
            molecule
         """
         if not self.filename:
-            raise IOError, "Outputfile instance is closed."
+            raise IOError("Outputfile instance is closed.")
 
         if self.format == "sdf":
             self._writer.sdfAppend(molecule.Mol)
@@ -217,6 +253,7 @@ class Outputfile(object):
         self.filename = None
         del self._writer
 
+
 class Molecule(object):
     """Represent an Indigo Molecule.
 
@@ -233,6 +270,7 @@ class Molecule(object):
     The underlying Indigo Molecule can be accessed using the attribute:
        Mol
     """
+
     _cinfony = True
 
     def __init__(self, Mol):
@@ -247,22 +285,34 @@ class Molecule(object):
         self.Mol = Mol
 
     @property
-    def atoms(self): return [Atom(atom) for atom in self.Mol.iterateAtoms()]
+    def atoms(self):
+        return [Atom(atom) for atom in self.Mol.iterateAtoms()]
+
     @property
-    def data(self): return MoleculeData(self.Mol)
+    def data(self):
+        return MoleculeData(self.Mol)
+
     @property
-    def formula(self): return self.Mol.grossFormula()
+    def formula(self):
+        return self.Mol.grossFormula()
+
     @property
-    def molwt(self): return self.Mol.molecularWeight()
+    def molwt(self):
+        return self.Mol.molecularWeight()
+
     def _gettitle(self):
         return self.Mol.name()
-    def _settitle(self, val): self.Mol.setName(val)
+
+    def _settitle(self, val):
+        self.Mol.setName(val)
+
     title = property(_gettitle, _settitle)
+
     @property
     def _exchange(self):
         if not self.Mol.hasZCoord():
             return (0, self.write("can"))
-        else: # If 3D
+        else:  # If 3D
             return (1, self.write("mol"))
 
     def addh(self):
@@ -292,26 +342,29 @@ class Molecule(object):
         format = format.lower()
         if filename:
             if not overwrite and os.path.isfile(filename):
-                raise IOError, "%s already exists. Use 'overwrite=True' to overwrite it." % filename
-        if format=="smi":
+                raise IOError(
+                    "%s already exists. Use 'overwrite=True' to overwrite it."
+                    % filename
+                )
+        if format == "smi":
             result = self.Mol.smiles()
-        elif format=="can":
+        elif format == "can":
             result = self.Mol.canonicalSmiles()
-        elif format=="mol":
+        elif format == "mol":
             result = self.Mol.molfile()
-        elif format=="inchi":
+        elif format == "inchi":
             result = indigoInchi.getInchi(self.Mol)
-        elif format=="inchikey":
+        elif format == "inchikey":
             result = indigoInchi.getInchiKey(self.write("inchi"))
-        elif format=="cml":
+        elif format == "cml":
             result = self.Mol.cml()
-        elif format=="sdf":
+        elif format == "sdf":
             # No sdf method so use a writeBuffer() as described by Dmitry
             buf = indigo.writeBuffer()
             buf.sdfAppend(self.Mol)
             result = buf.toString()
         else:
-            raise ValueError,"%s is not a recognised Indigo format" % format
+            raise ValueError("%s is not a recognised Indigo format" % format)
         if filename:
             output = open(filename, "w")
             output.write(result)
@@ -331,26 +384,26 @@ class Molecule(object):
     def __str__(self):
         return self.write()
 
-##    def calcdesc(self, descnames=[]):
-##        """Calculate descriptor values.
-##
-##        Optional parameter:
-##           descnames -- a list of names of descriptors
-##
-##        If descnames is not specified, all available descriptors are
-##        calculated. See the descs variable for a list of available
-##        descriptors.
-##        """
-##        if not descnames:
-##            descnames = descs
-##        ans = {}
-##        for descname in descnames:
-##            try:
-##                desc = descDict[descname]
-##            except KeyError:
-##                raise ValueError, "%s is not a recognised RDKit descriptor type" % descname
-##            ans[descname] = desc(self.Mol)
-##        return ans
+    ##    def calcdesc(self, descnames=[]):
+    ##        """Calculate descriptor values.
+    ##
+    ##        Optional parameter:
+    ##           descnames -- a list of names of descriptors
+    ##
+    ##        If descnames is not specified, all available descriptors are
+    ##        calculated. See the descs variable for a list of available
+    ##        descriptors.
+    ##        """
+    ##        if not descnames:
+    ##            descnames = descs
+    ##        ans = {}
+    ##        for descname in descnames:
+    ##            try:
+    ##                desc = descDict[descname]
+    ##            except KeyError:
+    ##                raise ValueError, "%s is not a recognised RDKit descriptor type" % descname
+    ##            ans[descname] = desc(self.Mol)
+    ##        return ans
 
     def calcfp(self, fptype="sim"):
         """Calculate a molecular fingerprint.
@@ -364,7 +417,7 @@ class Molecule(object):
         if fptype in ["sim", "sub", "sub-res", "sub-tau", "full"]:
             fp = Fingerprint(self.Mol.fingerprint(fptype))
         else:
-            raise ValueError, "%s is not a recognised Indigo Fingerprint type" % fptype
+            raise ValueError("%s is not a recognised Indigo Fingerprint type" % fptype)
         return fp
 
     def draw(self, show=True, filename=None, update=False, usecoords=False):
@@ -407,16 +460,22 @@ class Molecule(object):
                 if sys.platform[:4] == "java":
                     image = javax.imageio.ImageIO.read(java.io.File(filename))
                     frame = javax.swing.JFrame(visible=1)
-                    frame.getContentPane().add(javax.swing.JLabel(javax.swing.ImageIcon(image)))
-                    frame.setSize(300,300)
-                    frame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE)
+                    frame.getContentPane().add(
+                        javax.swing.JLabel(javax.swing.ImageIcon(image))
+                    )
+                    frame.setSize(300, 300)
+                    frame.setDefaultCloseOperation(
+                        javax.swing.WindowConstants.DISPOSE_ON_CLOSE
+                    )
                     frame.show()
 
                 elif sys.platform[:3] == "cli":
                     if filedes:
-                        errormessage = ("It is only possible to show the molecule if you "
-                                        "provide a filename. The reason for this is that I kept "
-                                        "having problems when using temporary files.")
+                        errormessage = (
+                            "It is only possible to show the molecule if you "
+                            "provide a filename. The reason for this is that I kept "
+                            "having problems when using temporary files."
+                        )
                         raise RuntimeError(errormessage)
                     form = Form()
                     form.ClientSize = Size(300, 300)
@@ -432,26 +491,32 @@ class Molecule(object):
 
                 else:
                     if not PILtk:
-                        errormessage = ("Tkinter or Python Imaging "
-                                        "Library not found, but is required for image "
-                                        "display. See installation instructions for "
-                                        "more information.")
-                        raise ImportError, errormessage
+                        errormessage = (
+                            "Tkinter or Python Imaging "
+                            "Library not found, but is required for image "
+                            "display. See installation instructions for "
+                            "more information."
+                        )
+                        raise ImportError(errormessage)
 
                     root = tk.Tk()
-                    root.title((hasattr(self, "title") and self.title)
-                               or self.__str__().rstrip())
-                    frame = tk.Frame(root, colormap="new", visual='truecolor').pack()
+                    root.title(
+                        (hasattr(self, "title") and self.title)
+                        or self.__str__().rstrip()
+                    )
+                    frame = tk.Frame(root, colormap="new", visual="truecolor").pack()
                     image = PIL.open(filename)
                     imagedata = PILtk.PhotoImage(image)
                     label = tk.Label(frame, image=imagedata).pack()
-                    quitbutton = tk.Button(root, text="Close", command=root.destroy).pack(fill=tk.X)
+                    quitbutton = tk.Button(
+                        root, text="Close", command=root.destroy
+                    ).pack(fill=tk.X)
                     root.mainloop()
-
 
             if filedes:
                 os.close(filedes)
                 os.remove(filename)
+
 
 class Atom(object):
     """Represent an Indigo Atom.
@@ -468,20 +533,30 @@ class Atom(object):
 
     def __init__(self, Atom):
         self.Atom = Atom
+
     @property
-    def atomicnum(self): return self.Atom.atomicNumber()
+    def atomicnum(self):
+        return self.Atom.atomicNumber()
+
     @property
     def coords(self):
         return tuple(self.Atom.xyz())
+
     @property
-    def formalcharge(self): return self.Atom.charge()
+    def formalcharge(self):
+        return self.Atom.charge()
 
     def __str__(self):
         if hasattr(self, "coords"):
-            return "Atom: %d (%.2f %.2f %.2f)" % (self.atomicnum, self.coords[0],
-                                                    self.coords[1], self.coords[2])
+            return "Atom: %d (%.2f %.2f %.2f)" % (
+                self.atomicnum,
+                self.coords[0],
+                self.coords[1],
+                self.coords[2],
+            )
         else:
             return "Atom: %d (no coords)" % (self.atomicnum)
+
 
 class Smarts(object):
     """A Smarts Pattern Matcher
@@ -502,14 +577,15 @@ class Smarts(object):
     that match the SMARTS pattern. In this case, there are three matches
     for each of the three ethyl groups in the molecule.
     """
-    def __init__(self,smartspattern):
+
+    def __init__(self, smartspattern):
         """Initialise with a SMARTS pattern."""
         try:
             self.smarts = indigo.loadSmarts(smartspattern)
         except IndigoException:
-            raise IOError, "Invalid SMARTS pattern."
+            raise IOError("Invalid SMARTS pattern.")
 
-    def findall(self,molecule):
+    def findall(self, molecule):
         """Find all matches of the SMARTS pattern to a particular molecule.
 
         Required parameters:
@@ -524,6 +600,7 @@ class Smarts(object):
                 a.append(match.mapAtom(queryatom).index())
             ans.append(tuple(a))
         return ans
+
 
 class MoleculeData(object):
     """Store molecule data in a dictionary-type object
@@ -552,44 +629,60 @@ class MoleculeData(object):
     >>> print len(data), data.keys(), data.has_key("NSC")
     1 ['Comment'] False
     """
+
     def __init__(self, Mol):
         self._mol = Mol
+
     def _testforkey(self, key):
         if not self._mol.hasProperty(key):
-            raise KeyError, "'%s'" % key
+            raise KeyError("'%s'" % key)
+
     def keys(self):
         return [prop.name() for prop in self._mol.iterateProperties()]
+
     def values(self):
         return [prop.rawData() for prop in self._mol.iterateProperties()]
+
     def items(self):
-        return [(prop.name(), prop.rawData())
-                for prop in self._mol.iterateProperties()]
+        return [(prop.name(), prop.rawData()) for prop in self._mol.iterateProperties()]
+
     def __iter__(self):
         return iter(self.keys())
+
     def iteritems(self):
         return iter(self.items())
+
     def __len__(self):
         return len(self.keys())
+
     def __contains__(self, key):
         return self._mol.hasProperty(key)
+
     def __delitem__(self, key):
         self._testforkey(key)
         self._mol.removeProperty(key)
+
     def clear(self):
         for key in self:
             del self[key]
+
     def has_key(self, key):
         return key in self
+
     def update(self, dictionary):
         for k, v in dictionary.iteritems():
             self[k] = v
+
     def __getitem__(self, key):
         self._testforkey(key)
         return self._mol.getProperty(key)
+
     def __setitem__(self, key, value):
         self._mol.setProperty(key, str(value))
+
     def __repr__(self):
         return dict(self.iteritems()).__repr__()
+
 
 class Fingerprint(object):
     """A Molecular Fingerprint.
@@ -606,18 +699,24 @@ class Fingerprint(object):
        given two Fingerprints 'a', and 'b', the Tanimoto coefficient is given by:
           tanimoto = a | b
     """
+
     def __init__(self, fingerprint):
         self.fp = fingerprint
+
     def __or__(self, other):
         return indigo.similarity(self.fp, other.fp, "tanimoto")
+
     def _buffer_to_int(self):
         stringrep = self.fp.toString()
-        return [int(stringrep[i:i+1]) for i in range(0, len(stringrep), 1)]
+        return [int(stringrep[i : i + 1]) for i in range(0, len(stringrep), 1)]
+
     @property
     def bits(self):
         return _findbits(self._buffer_to_int(), 8)
+
     def __str__(self):
         return str(self._buffer_to_int())
+
 
 def _toint(string):
     """
@@ -628,6 +727,7 @@ def _toint(string):
         return int(string)
     else:
         return 0
+
 
 def _findbits(fp, bitsperint):
     """Find which bits are set in a list/vector.
@@ -663,12 +763,13 @@ def _compressbits(bitvector, wordsize=32):
         compressed = 0
         for i in range(wordsize):
             if i + start < len(bitvector) and bitvector[i + start]:
-                compressed += 2**i
+                compressed += 2 ** i
         ans.append(compressed)
 
     return ans
 
-if __name__=="__main__": #pragma: no cover
-    import doctest
-    doctest.testmod()
 
+if __name__ == "__main__":  # pragma: no cover
+    import doctest
+
+    doctest.testmod()

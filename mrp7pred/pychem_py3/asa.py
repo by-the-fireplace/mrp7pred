@@ -24,21 +24,21 @@ def generate_sphere_points(n):
     offset = 2 / float(n)
     for k in range(int(n)):
         y = k * offset - 1 + (offset / 2)
-        r = math.sqrt(1 - y*y)
+        r = math.sqrt(1 - y * y)
         phi = k * inc
-        points.append([math.cos(phi)*r, y, math.sin(phi)*r])
+        points.append([math.cos(phi) * r, y, math.sin(phi) * r])
     return points
 
 
 def find_neighbor_indices(atoms, probe, k):
     """
-    Returns list of indices of atoms within probe distance to atom k. 
+    Returns list of indices of atoms within probe distance to atom k.
     """
     neighbor_indices = []
     atom_k = atoms[k]
     radius = atom_k.radius + probe + probe
     indices = range(k)
-    indices.extend(range(k+1, len(atoms)))
+    indices.extend(range(k + 1, len(atoms)))
     for i in indices:
         atom_i = atoms[i]
         dist = pos_distance(atom_k.pos, atom_i.pos)
@@ -68,9 +68,9 @@ def calculate_asa(atoms, probe, n_sphere_point=960):
         for point in sphere_points:
             is_accessible = True
 
-            test_point.x = point[0]*radius + atom_i.pos.x
-            test_point.y = point[1]*radius + atom_i.pos.y
-            test_point.z = point[2]*radius + atom_i.pos.z
+            test_point.x = point[0] * radius + atom_i.pos.x
+            test_point.y = point[1] * radius + atom_i.pos.y
+            test_point.z = point[2] * radius + atom_i.pos.z
 
             cycled_indices = range(j_closest_neighbor, n_neighbor)
             cycled_indices.extend(range(j_closest_neighbor))
@@ -79,21 +79,18 @@ def calculate_asa(atoms, probe, n_sphere_point=960):
                 atom_j = atoms[neighbor_indices[j]]
                 r = atom_j.radius + probe
                 diff_sq = pos_distance_sq(atom_j.pos, test_point)
-                if diff_sq < r*r:
+                if diff_sq < r * r:
                     j_closest_neighbor = j
                     is_accessible = False
                     break
             if is_accessible:
                 n_accessible_point += 1
 
-        area = const*n_accessible_point*radius*radius 
+        area = const * n_accessible_point * radius * radius
         areas.append(area)
     return areas
 
 
-
-  
 if __name__ == "__main__":
-  #main()
-  print generate_sphere_points(10)
-
+    # main()
+    print(generate_sphere_points(10))
