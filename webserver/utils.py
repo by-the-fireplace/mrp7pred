@@ -5,7 +5,7 @@ import os
 import pandas as pd
 from pandas import DataFrame
 
-# from mrp7pred.mrp7pred import MRP7Pred
+from mrp7pred.mrp7pred import MRP7Pred
 from typing import Optional
 import numpy as np
 
