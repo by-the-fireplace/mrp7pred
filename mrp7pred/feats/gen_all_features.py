@@ -11,6 +11,7 @@ import numpy as np
 from pandas import DataFrame, Series
 from numpy import ndarray
 from typing import List, Dict, Tuple, Union, Optional
+
 # from tqdm import tqdm
 import time
 import datetime
@@ -22,14 +23,22 @@ import warnings
 
 warnings.filterwarnings("ignore")
 
+##############################################
+#
+# Another way to control execution time
+#
+##############################################
+from multiprocessing import Pool, TimeoutError
+from time import sleep
 
-class TimeoutException(Exception):
-    def __init__(self, *args, **kwargs):
-        Exception.__init__(self, *args, **kwargs)
+
+# class TimeoutException(Exception):
+#     def __init__(self, *args, **kwargs):
+#         Exception.__init__(self, *args, **kwargs)
 
 
-def _timeout_handler(signum, frame):  # raises exception when signal sent
-    raise TimeoutException
+# def _timeout_handler(signum, frame):  # raises exception when signal sent
+#     raise TimeoutException
 
 
 def _gen_all_features(smi: str) -> Dict[str, Union[int, float]]:
@@ -59,7 +68,7 @@ def _load_feats(pickle_file: str = "./df_feats.pkl") -> DataFrame:
 
 def featurize(
     X: DataFrame,
-    time_limit: int = 10,
+    time_limit: int = 30,
     out_folder: Optional[str] = None,
     smiles_col_name: Optional[str] = None,
     prefix: Optional[str] = None,
@@ -92,6 +101,13 @@ def featurize(
 
     if smiles_col_name is not None and smiles_col_name not in X.columns:
         raise ValueError(f"column {smiles_col_name} is not in input data")
+
+    # In production environment, don't use the option of "smile_col_name"
+    # Ask users to rename their columns instead
+    # Comment for development environment
+    if "name" not in X.columns or "smiles" not in X.columns:
+        raise ValueError("Column 'name' and 'smiles' are required in input data.")
+
     # drop duplicates
     X = X.drop_duplicates(
         subset=["smiles" if smiles_col_name is None else smiles_col_name]
@@ -109,20 +125,30 @@ def featurize(
         time_start = datetime.datetime.now()
 
         # set timer and terminate if exceed time limit
-        signal.signal(signal.SIGALRM, _timeout_handler)
-        signal.alarm(time_limit)
+        # signal.signal(signal.SIGALRM, _timeout_handler)
+        # signal.alarm(time_limit)
+
+        pool = Pool(processes=1)
+        result = pool.apply_async(_gen_all_features, (smi,))
 
         try:
-            smi_feats_d = _gen_all_features(smi)
+            # smi_feats_d = _gen_all_features(smi)
+            smi_feats_d = result.get(timeout=time_limit)
         except KeyError as e:  # elements not supported by featurizers
             # smi_feats = np.nan
             print(f"{name} featurization failed\nSmiles: {smi}\nError: {e}\n")
             failed.append(name)
             # df_feats = pd.concat([df_feats, smi_series.to_frame().T])
             continue
-        except TimeoutException:
+        # except TimeoutException:
+        #     print(
+        #         f"{name} Featurization failed\nSmiles: {smi}\nError: Time out ({time_limit}s\n)"
+        #     )
+        #     failed.append(name)
+        #     continue
+        except TimeoutError:
             print(
-                f"{name} Featurization failed\nSmiles: {smi}\nError: Time out ({time_limit}s\n)"
+                f"{name} Featurization failed\nSmiles: {smi}\nError: Time out ({time_limit}s)\n"
             )
             failed.append(name)
             continue

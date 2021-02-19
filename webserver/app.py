@@ -5,14 +5,16 @@ import os
 import subprocess
 import time
 import sys
-from utils import (
+from webserver_utils import (
     UPLOAD_FOLDER,
     ensure_folder,
     get_current_time,
     random_string,
     get_predictions,
+    generate_report_dict_list,
 )
 import pandas as pd
+import jinja2
 
 
 app = Flask(__name__)
@@ -48,13 +50,15 @@ def run():
             clf_dir="./best_model_20210211-031248.pkl",
             selected_features="./featureid_best_model_20210211-031248.npy",
         )
+        report_d_l = generate_report_dict_list(out)
 
-    return render_template("run.html", data=rs)
+        print(report_d_l)
+    return render_template("result.html", items=report_d_l, filename=filename)
 
 
 @app.route("/positive", methods=["GET", "POST"])
 def positive():
-    with open("./data/positive.csv") as f:
+    with open("./data/sample_pos.csv") as f:
         csv = f.read()
     return Response(
         csv,
@@ -65,7 +69,7 @@ def positive():
 
 @app.route("/negative", methods=["GET", "POST"])
 def negative():
-    with open("./data/negative.csv") as f:
+    with open("./data/sample_neg.csv") as f:
         csv = f.read()
     return Response(
         csv,

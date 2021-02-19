@@ -153,7 +153,7 @@ class MRP7Pred(object):
             df_feat = df.drop(["name", "smiles"], axis=1)
             # print("Done!")
         print("Start predicting ... ", end="", flush=True)
-        if selected_features_arr:
+        if selected_features_arr is not None:
             df_feat = df_feat.dropna().iloc[:, selected_features_arr]
         preds = self.clf.predict(df_feat)
         scores = [score[1] for score in self.clf.predict_proba(df_feat)]

@@ -11,6 +11,7 @@ import numpy as np
 import seaborn as sns
 from numpy import ndarray
 from rdkit import Chem
+from rdkit.Chem import Draw
 from sklearn.metrics import (
     auc,
     roc_curve,
@@ -19,6 +20,8 @@ from sklearn.metrics import (
 )
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.ensemble import RandomForestClassifier
+import re
+
 
 # from tqdm import tqdm
 
@@ -50,31 +53,49 @@ def standardize_smiles(smiles: str) -> str:
 
 
 def draw_molecule(
-    smiles: str, highlight: str = None, subImgSize: Tuple[int, int] = (300, 300)
+    smiles: str,
+    highlight: str = None,
+    subImgSize: Tuple[int, int] = (300, 300),
+    transparentBackground: bool = True,
 ) -> Any:
     """
     Draw 2D structure given a smiles string
     Highlight given substrings
     """
     mol = Chem.MolFromSmiles(smiles)
-    if highlight:
-        query = Chem.MolFromSmarts(highlight)
-        # list of atom groups
-        substructures = list(mol.GetSubstructMatches(query))
-        atoms_l = [atom for atoms in substructures for atom in atoms]
+    drawer = Draw.rdMolDraw2D.MolDraw2DSVG(subImgSize[0], subImgSize[1])
+    drawer.DrawMolecule(mol)
+    drawer.FinishDrawing()
+    svg = drawer.GetDrawingText()
 
-        bonds_l = []
-        for substructure in substructures:
-            for bond in query.GetBonds():
-                aid1 = substructure[bond.GetBeginAtomIdx()]
-                aid2 = substructure[bond.GetEndAtomIdx()]
-                bonds_l.append(mol.GetBondBetweenAtoms(aid1, aid2).GetIdx())
+    # if highlight:
+    #     query = Chem.MolFromSmarts(highlight)
+    #     # list of atom groups
+    #     substructures = list(mol.GetSubstructMatches(query))
+    #     atoms_l = [atom for atoms in substructures for atom in atoms]
 
-        return Chem.Draw.MolToImage(
-            mol=mol, size=subImgSize, highlightAtoms=atoms_l, highlightBonds=bonds_l
-        )
-    else:
-        return Chem.Draw.MolToImage(mol=mol, size=subImgSize)
+    #     bonds_l = []
+    #     for substructure in substructures:
+    #         for bond in query.GetBonds():
+    #             aid1 = substructure[bond.GetBeginAtomIdx()]
+    #             aid2 = substructure[bond.GetEndAtomIdx()]
+    #             bonds_l.append(mol.GetBondBetweenAtoms(aid1, aid2).GetIdx())
+
+    #     return Draw.MolToImage(
+    #         mol=mol, size=subImgSize, highlightAtoms=atoms_l, highlightBonds=bonds_l
+    #     )
+    # else:
+    #     return Draw.MolToImage(mol=mol, size=subImgSize)
+    if transparentBackground:
+        new_svg = ""
+        svg = re.sub("<rect .+>", "", svg)
+    return svg
+
+
+def get_molweight(smiles: str) -> float:
+    mol = Chem.MolFromSmiles(smiles)
+    mw = Chem.Descriptors.ExactMolWt(mol)
+    return round(mw, 2)
 
 
 def get_current_time() -> str:
