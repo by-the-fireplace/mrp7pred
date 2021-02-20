@@ -1,8 +1,16 @@
 from flask_bootstrap import Bootstrap
-from flask import Flask, render_template, Response, request, url_for, redirect, flash
+from flask import (
+    Flask,
+    render_template,
+    Response,
+    request,
+    url_for,
+    redirect,
+    flash,
+    jsonify,
+)
 from werkzeug.utils import secure_filename
 import os
-import subprocess
 import time
 import sys
 from webserver_utils import (
@@ -14,7 +22,7 @@ from webserver_utils import (
     generate_report_dict_list,
 )
 import pandas as pd
-import jinja2
+import pickle
 
 
 app = Flask(__name__)
@@ -29,31 +37,47 @@ def home():
     return render_template("base.html")
 
 
+def run_pred(df, filename):
+    out = get_predictions(
+        df,
+        clf_dir="./best_model_20210211-031248.pkl",
+        selected_features="./featureid_best_model_20210211-031248.npy",
+    )
+    report_d_l = generate_report_dict_list(out)
+    return report_d_l
+
+
+@app.route("/wait", methods=["GET", "POST"])
+def wait():
+    return render_template("wait.html")
+
+
 @app.route("/run", methods=["GET", "POST"])
 def run():
-    ensure_folder(UPLOAD_FOLDER)
-    ts = get_current_time()
-    rs = random_string(10)
-    random_folder = f"{ts}_{rs}"
-    ensure_folder(f"{UPLOAD_FOLDER}/{random_folder}")
-    app.config["UPLOAD_FOLDER"] = f"{UPLOAD_FOLDER}/{random_folder}"
-
     if request.method == "POST":
+        ensure_folder(UPLOAD_FOLDER)
+        ts = get_current_time()
+        rs = random_string(10)
+        random_folder = f"{ts}_{rs}"
+        ensure_folder(f"{UPLOAD_FOLDER}/{random_folder}")
+        app.config["UPLOAD_FOLDER"] = f"{UPLOAD_FOLDER}/{random_folder}"
         file = request.files["csv_file"]
-        filename = secure_filename(file.filename)
+        # filename = secure_filename(file.filename)
+        filename = file.filename
         task_name = f"{ts}_{rs}_{filename}"
-        # current_data = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-        # print(current_data)
         df = pd.read_csv(file)
-        out = get_predictions(
-            df,
-            clf_dir="./best_model_20210211-031248.pkl",
-            selected_features="./featureid_best_model_20210211-031248.npy",
-        )
-        report_d_l = generate_report_dict_list(out)
-
-        print(report_d_l)
-    return render_template("result.html", items=report_d_l, filename=filename)
+        # out_path = f"{UPLOAD_FOLDER}/{random_folder}/{filename}.pkl"
+        # print(out_path)
+        # with open(out_path, "wb") as f:
+        #     pickle.dump(df, f)
+        # jsonify({"out_path": out_path})
+        try:
+            report_d_l = run_pred(df, filename)
+            return render_template("result.html", items=report_d_l, filename=filename)
+        except Exception as e:
+            return render_template("error.html", log=e)
+    if request.method == "GET":
+        return redirect(url_for("wait"))
 
 
 @app.route("/positive", methods=["GET", "POST"])
@@ -79,4 +103,4 @@ def negative():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, use_reloader=False)
+    app.run(debug=True)

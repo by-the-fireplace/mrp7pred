@@ -1,5 +1,4 @@
 <head>
-  <!-- Required meta tags -->
   <meta charset="utf-8" />
   <meta
     name="viewport"
@@ -8,7 +7,6 @@
 
   <title>Mrp7Pred: An online server for discovering MRP7 modulators</title>
 
-  <!-- CSS -->
   <link
     rel="stylesheet"
     href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500&display=swap"
@@ -42,7 +40,6 @@
     href="{{url_for('static', filename='css/media-queries.css')}}"
   />
 
-  <!-- Favicon and touch icons -->
   <link
     rel="shortcut icon"
     href="{{url_for('static', filename='ico/logo-m7p-nobg-icon.png')}}"
@@ -68,28 +65,76 @@
   />
   <style></style>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script>
+    // $.getJSON({
+    //   url: "/run",
+    //   data: { out_path: data_path },
+    //   success: function (data) {
+    //     $("#out_path").html(data.out_path);
+    //   },
+    // });
+    // $.ajax({
+    //   type: "POST",
+    //   url: "/result",
+    //   data: { out_path: out_path },
+    //   success: function () {
+    //     window.location.replace("/result");
+    //   },
+    // });
+  </script>
 </head>
 <body>
+  <p></p>
+  <p></p>
+  <p></p>
+  <p></p>
+  <p></p>
   <div class="logo">
     <img src="{{url_for('static', filename='img/logo-m7p-nobg.png')}}" />
   </div>
-  <p>
-  <p></p>
-  <p></p>
-    Task <strong>{{ data }}</strong> submitted! An email will be sent to you
-    once the prediction is finished.
-    <p></p>
-    <p></p>
-  </p>
-</body>
-<footer class="footer-container">
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        &copy; 2021, Department of Pharmacology, College of Pharmacy and Health
-        Sciences, St. John's University. All rights reserved. For non-commercial
-        use only.
-      </div>
+
+  <div class="gooey">
+    <span class="dot"></span>
+    <div class="dots">
+      <span></span>
+      <span></span>
+      <span></span>
     </div>
   </div>
-</footer>
+  <p></p>
+  <p></p>
+  <p></p>
+  <p></p>
+  <p></p>
+  <p></p>
+  <div id="running">
+    <h2>Running prediction for your data</h2>
+    <span>Do not leave the page</span>
+  </div>
+  <p></p>
+  <p></p>
+  <p></p>
+  <p></p>
+  <p></p>
+  <p></p>
+</body>
+
+<style>
+  #copyright {
+    position: absolute;
+    bottom: 0;
+    width: 1100px;
+    height: 50px;
+    margin: -25px 0 0 -550px;
+    left: 50%;
+  }
+
+  #running {
+    padding: 10px;
+  }
+</style>
+<div id="copyright">
+  &copy; 2021, Department of Pharmacology, College of Pharmacy and Health
+  Sciences, St. John's University. All rights reserved. For non-commercial use
+  only.
+</div>

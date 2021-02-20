@@ -11,7 +11,7 @@ from typing import Optional, Dict, List
 import numpy as np
 
 ## uploading specs ##
-UPLOAD_FOLDER = "./data/"
+UPLOAD_FOLDER = "./data"
 
 
 def ensure_folder(path: str) -> None:

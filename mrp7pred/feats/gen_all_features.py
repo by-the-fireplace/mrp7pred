@@ -167,7 +167,7 @@ def featurize(
         df_feats = pd.concat([df_feats, smi_feats.to_frame().T], ignore_index=True)
 
         print(
-            f"Featurized {index}. {name}\nSMILES: {smi}\nTime cost: {round(elapsed, 3)}s\n"
+            f"Featurized {index+1}. {name}\nSMILES: {smi}\nTime cost: {round(elapsed, 3)}s\n"
         )
     if out_folder:
         ensure_folder(out_folder)

@@ -37,18 +37,6 @@
       rel="stylesheet"
       href="{{url_for('static', filename='css/style.css')}}"
     />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', filename='css/bootstrap.min.css')}}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', filename='css/dataTables.bootstrap4.min.css')}}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', filename='css/media-queries.css')}}"
-    />
 
     <!-- Favicon and touch icons -->
     <link
@@ -104,7 +92,7 @@
           <div class="card rounded shadow border-0">
             <div class="card-body p-5 bg-white rounded">
               <div class="table-responsive">
-                <table id="example" style="width:300px" class="table table-striped table-bordered">
+                <table id="example" style="width:350px" class="table table-striped table-bordered">
                   <thead>
                     <tr>
                       <th>Name</th>
@@ -120,7 +108,7 @@
                     <tr>
                       <td>{{item.name}}</td>
                       <td>{{item.svg | safe}}</td>
-                      <td style="max-width:200px;">{{item.smiles}}</td>
+                      <td style="max-width:270px;">{{item.smiles}}</td>
                       <td>{{item.mw}}</td>
                       <td>{{item.score}}</td>
                       <td>{{item.is_modulator}}</td>

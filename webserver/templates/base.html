@@ -143,21 +143,6 @@
             <i class="fas fa-arrow-up"></i> Top
           </a>
         </div>
-
-        <!-- <div class="dark-light-buttons">
-          <a
-            class="btn btn-primary btn-customized-4 btn-customized-dark"
-            href="#"
-            role="button"
-            >Dark</a
-          >
-          <a
-            class="btn btn-primary btn-customized-4 btn-customized-light"
-            href="#"
-            role="button"
-            >Light</a
-          >
-        </div> -->
       </nav>
       <!-- End sidebar -->
 
@@ -292,9 +277,11 @@
                     <p>
                       Automatic featurization and prediction. Featurization
                       might fail if your SMILES string contains disconnected
-                      structures. Upload the prepared csv file and leave your
-                      email address. An email with a link to your results will
-                      be sent automatically.
+                      structures. Results will be displayed once the prediction
+                      is done.
+                    </p>
+                    <p>
+                      <i>* Execution time varies by structural complexity</i>.
                     </p>
                   </div>
                 </div>
@@ -310,8 +297,8 @@
                     <h3>Getting Results</h3>
                     <p>
                       Results in table format will be generated automatically
-                      with chemical structures, modulator scores and substrate
-                      scores
+                      with scores. Compounds with score > 0.5 is considered an
+                      MRP7 modulator.
                     </p>
                   </div>
                 </div>
@@ -396,6 +383,7 @@
                   method="POST"
                   style="width: 30%; margin-left: 35%; border-radius: 6px"
                   enctype="multipart/form-data"
+                  class="csv_form"
                 >
                   <p>
                     <input
@@ -407,13 +395,57 @@
                     />
                   </p>
                 </form>
+                <div
+                  id="wrapper"
+                  style="
+                    display: none;
+                    background: #ffffff;
+                    position: absolute;
+                    width: 600px;
+                    height: 600px;
+                    z-index: 15;
+                    top: 50%;
+                    left: 50%;
+                    margin: -300px 0 0 -300px;
+                    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+                      0 6px 20px 0 rgba(0, 0, 0, 0.19);
+                  "
+                >
+                  <div class="gooey">
+                    <span class="dot"></span>
+                    <div class="dots">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </div>
+                  </div>
+                  <h2 style="color: #555">Running prediction for your data</h2>
+                  <p style="color: #555">Do not leave the page</p>
+                </div>
+
                 <button
                   class="btn btn-primary btn-customized"
                   type="submit"
                   form="csv_form"
-                  id="upload_csv_file"
+                  id="submit_button"
                 >
-                  <i class="fas fa-running"></i> &nbsp;&nbsp;&nbsp;Run&nbsp;&nbsp;&nbsp;
+                  <script>
+                    $(document).on("submit", "form.csv_form", function () {
+                      $("#wrapper").show();
+                    });
+                    $(document).on("submit", "form.csv_form", function () {
+                      $("#submit_button").hide();
+                    });
+                    $(document).on("submit", "form.csv_form", function () {
+                      $("#csv_file").hide();
+                    });
+                    $(document).on("submit", "form.csv_form", function () {
+                      $("#section-6").hide();
+                    });
+                  </script>
+                  <i class="fas fa-running"></i>
+                  &nbsp;&nbsp;&nbsp;Run&nbsp;&nbsp;&nbsp;
+                </button>
               </div>
             </div>
           </div>
