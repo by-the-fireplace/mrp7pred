@@ -941,3 +941,8 @@ footer {
     transform: translateX(-31px);
   }
 }
+
+.center {
+  margin-left: auto;
+  margin-right: auto;
+}
