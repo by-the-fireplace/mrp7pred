@@ -29,3 +29,7 @@ conda activate mrp7pred
 pip install -e .
 pip install -r requirements.txt
 ```
+
+## Demo
+--------
+Check `demo.ipynb`
