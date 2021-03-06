@@ -114,11 +114,17 @@ def featurize_and_split(
     Returns
     --------
     tuple : Union[DataFrame, ndarray]
+        Selected features id: selected_features_id;
         Featurized data: name_train, name_test, X_train, y_train, X_test, y_test
     """
     if not featurized:
         print("Featurzing data ... ")
-        df = featurize(df, feats_dir=feats_dir, prefix=prefix)
+        selected_features_id, df = featurize(
+            df,
+            feats_dir=feats_dir,
+            prefix=prefix,
+            remove_similar=True,
+        )
         print("Done!")
 
     print("Spliting training and test data ... ", end="", flush=True)
@@ -133,4 +139,4 @@ def featurize_and_split(
         f"Done!\ntrain_1: {np.sum(y_train)}; train_0: {len(y_train)-np.sum(y_train)}; test_1: {np.sum(y_test)}; test_0: {len(y_test)-np.sum(y_test)}"
     )
 
-    return name_train, name_test, X_train, y_train, X_test, y_test
+    return selected_features_id, name_train, name_test, X_train, y_train, X_test, y_test

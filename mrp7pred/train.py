@@ -28,6 +28,7 @@ from mrp7pred.utils import (
     DummyClassifier,
     NoScaler,
     DummyScaler,
+    FeatureSelector,
 )
 from mrp7pred.scoring import get_scoring
 
@@ -38,6 +39,7 @@ __email__ = "jq.wang1214@gmail.com"
 def _train(
     X_train: ndarray,
     y_train: ndarray,
+    selected_feature_id: ndarray,
     grid: Dict[str, Union[List[Any], ndarray]],
     cv_n_splits: int,
     scoring: Union[str, callable] = "accuracy",
@@ -51,6 +53,7 @@ def _train(
 
     pipeline = Pipeline(
         [
+            ("fsel", FeatureSelector(selected_feature_id)),
             ("sclr", DummyScaler()),
             ("clf", DummyClassifier()),
         ]
@@ -104,7 +107,15 @@ def run(
     """
     Start training with output info.
     """
-    name_train, name_test, X_train, y_train, X_test, y_test = featurize_and_split(
+    (
+        selected_features_id,
+        name_train,
+        name_test,
+        X_train,
+        y_train,
+        X_test,
+        y_test,
+    ) = featurize_and_split(
         df,
         ratio=ratio,
         featurized=featurized,
@@ -117,6 +128,7 @@ def run(
     clf_best = _train(
         X_train,
         y_train,
+        selected_features_id,
         grid=grid,
         cv_n_splits=cv_n_splits,
         verbose=verbose,
@@ -129,7 +141,7 @@ def run(
 
     if model_dir is None:
         model_dir = f"{OUTPUT}/model"
-    pkl_name = f"{model_dir}/best_model_{get_current_time()}.pkl"
+    pkl_name = f"{model_dir}/{prefix}best_model_{get_current_time()}.pkl"
     with open(pkl_name, "wb") as mo:
         pickle.dump(clf_best, mo)
     print(f"Best model saved to: {pkl_name}")

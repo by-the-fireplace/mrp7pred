@@ -5,6 +5,8 @@ Helper functions
 import os
 from datetime import datetime
 from typing import Any, Tuple, Union
+from pandas import DataFrame
+from numpy import ndarray
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -214,3 +216,18 @@ class DummyScaler(BaseEstimator, TransformerMixin):
 
     def transform(self, X: ndarray, **kwargs) -> Union[None, ndarray]:
         return self.scaler.transform(X, **kwargs)
+
+
+class FeatureSelector(BaseEstimator, TransformerMixin):
+    """
+    Apply selected feature id to featurized data
+    """
+
+    def __init__(self, selected_feature_id):
+        self.selected_feature_id = selected_feature_id
+
+    def fit(self, X: Union[DataFrame, ndarray], y) -> object:
+        return self
+
+    def transform(self, X: Union[DataFrame, ndarray]) -> Union[DataFrame, ndarray]:
+        return X.iloc[:, self.selected_feature_id]

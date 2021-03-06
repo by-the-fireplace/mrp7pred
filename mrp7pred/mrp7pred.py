@@ -125,7 +125,6 @@ class MRP7Pred(object):
 
     def predict(
         self,
-        selected_features_arr: Optional[ndarray] = None,
         compound_csv_dir: Optional[str] = None,
         compound_df: Optional[DataFrame] = None,
         featurized_df: Optional[DataFrame] = None,
@@ -178,12 +177,10 @@ class MRP7Pred(object):
         if featurized_df is None:
             print("Generating features ... ")
             # df_feats should be purely numeric
-            df = featurize(df, prefix=prefix)
+            _, df = featurize(df, remove_similar=False, prefix=prefix)
             df_feat = df.drop(["name", "smiles"], axis=1)
             # print("Done!")
         print("Start predicting ... ", end="", flush=True)
-        if selected_features_arr is not None:
-            df_feat = df_feat.dropna().iloc[:, selected_features_arr]
         preds = self.clf.predict(df_feat)
         scores = [score[1] for score in self.clf.predict_proba(df_feat)]
         print("Done!")

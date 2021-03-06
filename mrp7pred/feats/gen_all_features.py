@@ -74,7 +74,7 @@ def featurize(
     feats_dir: Optional[str] = None,
     smiles_col_name: Optional[str] = None,
     prefix: Optional[str] = None,
-) -> DataFrame:
+) -> Tuple[ndarray, DataFrame]:
     """
     Batch feature generation from a series of smiles
 
@@ -91,12 +91,12 @@ def featurize(
     smiles_col_name: Optional[str]
         The column name of the one with smiles, if df is not None
     prefix: Optional[str]
-        The featurized data will be saved to "{feats_dir}/{prefix}_full_features_828_{ts}.csv"
+        The featurized data will be saved to "{feats_dir}/{prefix}_full_features_{feats_len}_{ts}.csv"
 
     Returns
     ------
-    df: DataFrame
-        Featurized data
+    selected_feature_id, df: Tuple[ndarray, DataFrame]
+        Featurized data and selected feature id, if remove_similar is False, selected_feature_id will be full columns
     """
 
     df_feats = DataFrame()
@@ -124,7 +124,7 @@ def featurize(
         try:
             label = getattr(row, "label")
         except:
-            print("No label!")
+            label = None
 
         smi = standardize_smiles(smi)
 
@@ -178,29 +178,27 @@ def featurize(
             f"Featurized {index+1}. {name}\nSMILES: {smi}\nTime cost: {round(elapsed, 3)}s\n"
         )
 
+    selected_features_id = np.arange(len(df_feats.columns))
     if remove_similar:
         if label is None:
             df_feats_num = df_feats.drop(["name", "smiles"])
         else:
             df_feats_num = df_feats.drop(["name", "smiles", "label"], axis=1)
         df_feats_num = df_feats_num.astype("float64")
-        suport_similar, df_feats_processed = _remove_similar_features(
+        selected_features_id, df_feats_processed = _remove_similar_features(
             df_feats_num, threshold=0.9
         )
-        np.save(f"{feats_dir}/{prefix}_selected_features.npy")  #
+
         # Add name, smiles, label (if training) back to the dataframe
         df_feats_processed["name"] = df_feats["name"]
         df_feats_processed["smiles"] = df_feats["smiles"]
         if label is not None:
             df_feats_processed["label"] = df_feats["label"]
-        df_feats = df_feats_processed
-
-    feats_len = len(df_feats.select_dtypes(include=["number"]).columns)
 
     if feats_dir:
         ensure_folder(feats_dir)
         ts = get_current_time()
-        out_dir = f"{feats_dir}/{prefix}_full_features_{feats_len}_{ts}.csv"
+        out_dir = f"{feats_dir}/{prefix}_full_features_{len(df_feats.columns)}_{ts}.csv"
         df_feats.to_csv(out_dir)
         print(f"Featurized data saved to {out_dir}. df_feats.shape: {df_feats.shape}")
     else:
@@ -208,7 +206,7 @@ def featurize(
             f"Featurization finished! Average time: {round(total_time/(denom-1), 3)}s"
         )
 
-    return df_feats
+    return selected_features_id, df_feats
 
 
 # if __name__ == "__main__":
