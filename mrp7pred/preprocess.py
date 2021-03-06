@@ -60,7 +60,7 @@ def load_data(path: str) -> DataFrame:
 
 
 def _split_train_test(
-    df: DataFrame, ratio: float = 0.7, random_state: Optional[int] = None
+    df: DataFrame, ratio: float, random_state: Optional[int] = None
 ) -> Tuple[DataFrame, DataFrame]:
     """
     Split processed data into training and test data
@@ -68,9 +68,11 @@ def _split_train_test(
     Parameters
     --------
     df : pandas.DataFrame
-            Cleaned whole data
+        cleaned data with label
     ratio : float
-            Ratio of training and test data (training / test)
+        ratio of training and test data (training / test)
+    random_state: Optional[int]
+        random seed for repeat
 
     Returns
     --------
@@ -81,14 +83,17 @@ def _split_train_test(
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, train_size=ratio, random_state=random_state
     )
+    y_train, y_test = y_train.astype(int), y_test.astype(int)
     return X_train, X_test, y_train, y_test
 
 
-def split_data(
+def featurize_and_split(
     df: DataFrame,
-    ratio: float = 0.7,
+    ratio: float,
     featurized: bool = True,
     random_state: Optional[int] = None,
+    feats_dir: Optional[str] = None,
+    prefix: Optional[str] = None,
 ) -> Tuple[Union[DataFrame, ndarray]]:
     """
     Feturize and split
@@ -96,22 +101,31 @@ def split_data(
     Parameters
     --------
     df : DataFrame
-            Cleaned dataframe
+        Cleaned dataframe
+    ratio: float
+        Train-test ratio
+    featurized: bool
+        True if df is featurized
+    random_state: Optional[int]
+        random seed for repeat
+    feats_dir: Optional[str]
+        featurized data output directory
 
     Returns
     --------
-    df : DataFrame
-            Featurized data
+    tuple : Union[DataFrame, ndarray]
+        Featurized data: name_train, name_test, X_train, y_train, X_test, y_test
     """
     if not featurized:
-        print("Featurzing data ... ", end="", flush=True)
-        df = featurize(df)
+        print("Featurzing data ... ")
+        df = featurize(df, feats_dir=feats_dir, prefix=prefix)
         print("Done!")
 
     print("Spliting training and test data ... ", end="", flush=True)
     X_train, X_test, y_train, y_test = _split_train_test(
         df, ratio=ratio, random_state=random_state
     )
+
     name_train, name_test = X_train["name"], X_test["name"]
     X_train = X_train.drop(["name", "smiles"], axis=1)
     X_test = X_test.drop(["name", "smiles"], axis=1)

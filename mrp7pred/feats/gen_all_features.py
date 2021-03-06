@@ -5,6 +5,7 @@ Generate full features from given compound (smiles) list
 from mrp7pred.feats.rdk_features import _rdk_features
 from mrp7pred.feats.chemopy_features import _chemopy_features
 from mrp7pred.utils import get_current_time, ensure_folder, standardize_smiles
+from mrp7pred.feats.selection import _remove_similar_features
 
 import pandas as pd
 import numpy as np
@@ -69,7 +70,8 @@ def _load_feats(pickle_file: str = "./df_feats.pkl") -> DataFrame:
 def featurize(
     X: DataFrame,
     time_limit: int = 30,
-    out_folder: Optional[str] = None,
+    remove_similar: bool = True,
+    feats_dir: Optional[str] = None,
     smiles_col_name: Optional[str] = None,
     prefix: Optional[str] = None,
 ) -> DataFrame:
@@ -79,17 +81,17 @@ def featurize(
     Parameters
     --------
     X: DataFrame
-        Dataframe with two columns: "name" and "smiles"
-    out_folder: str
-        Directory to store featurized data, default "./"
+        Dataframe with two columns: "name" and "smiles", ("label" if training new model)
     time_limit: int
         Maximum time (s) to featurize one smiles
-    df: Optional[DataFrame]
-        Input could be a dataframe, the function will find the column named "smiles" as input
+    remove_similar: bool
+        true if use feats.selection._remove_similar_features to select features
+    feats_dir: str
+        Directory to store featurized data, default "./"
     smiles_col_name: Optional[str]
         The column name of the one with smiles, if df is not None
     prefix: Optional[str]
-        The featurized data will be saved to "{out_folder}/{prefix}_full_features_828_{ts}.csv"
+        The featurized data will be saved to "{feats_dir}/{prefix}_full_features_828_{ts}.csv"
 
     Returns
     ------
@@ -119,6 +121,10 @@ def featurize(
 
         smi = getattr(row, "smiles")
         name = getattr(row, "name")
+        try:
+            label = getattr(row, "label")
+        except:
+            print("No label!")
 
         smi = standardize_smiles(smi)
 
@@ -159,6 +165,8 @@ def featurize(
 
         smi_feats_d["name"] = name
         smi_feats_d["smiles"] = smi
+        if label is not None:
+            smi_feats_d["label"] = label
         # new_row: smiles   features
         smi_feats = pd.Series(smi_feats_d)
         # new_row = smi_series.append(smi_feats)
@@ -169,10 +177,30 @@ def featurize(
         print(
             f"Featurized {index+1}. {name}\nSMILES: {smi}\nTime cost: {round(elapsed, 3)}s\n"
         )
-    if out_folder:
-        ensure_folder(out_folder)
+
+    if remove_similar:
+        if label is None:
+            df_feats_num = df_feats.drop(["name", "smiles"])
+        else:
+            df_feats_num = df_feats.drop(["name", "smiles", "label"], axis=1)
+        df_feats_num = df_feats_num.astype("float64")
+        suport_similar, df_feats_processed = _remove_similar_features(
+            df_feats_num, threshold=0.9
+        )
+        np.save(f"{feats_dir}/{prefix}_selected_features.npy")  #
+        # Add name, smiles, label (if training) back to the dataframe
+        df_feats_processed["name"] = df_feats["name"]
+        df_feats_processed["smiles"] = df_feats["smiles"]
+        if label is not None:
+            df_feats_processed["label"] = df_feats["label"]
+        df_feats = df_feats_processed
+
+    feats_len = len(df_feats.select_dtypes(include=["number"]).columns)
+
+    if feats_dir:
+        ensure_folder(feats_dir)
         ts = get_current_time()
-        out_dir = f"{out_folder}/{prefix}_full_features_828_{ts}.csv"
+        out_dir = f"{feats_dir}/{prefix}_full_features_{feats_len}_{ts}.csv"
         df_feats.to_csv(out_dir)
         print(f"Featurized data saved to {out_dir}. df_feats.shape: {df_feats.shape}")
     else:

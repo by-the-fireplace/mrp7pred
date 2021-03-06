@@ -17,8 +17,8 @@ grid_light = [
     {
         "clf": [RandomForestClassifier()],
         "clf__n_estimators": [100, 1000],
-        "clf__class_weight": [{0: 0.1, 1: 0.9}, {0: 0.01, 1: 0.99}],
-        "sclr": [Normalizer()],
+        "clf__class_weight": [{0: 0.5, 1: 0.5}, {0: 0.1, 1: 0.9}, {0: 0.01, 1: 0.99}],
+        "sclr": [StandardScaler()],
     },
     # {
     #     "clf": [XGBClassifier()],
@@ -28,8 +28,8 @@ grid_light = [
     {
         "clf": [SVC(probability=True)],
         "clf__kernel": ["rbf", "linear"],
-        "clf__class_weight": [{0: 0.1, 1: 0.9}, {0: 0.01, 1: 0.99}],
-        "sclr": [Normalizer()],
+        "clf__class_weight": [{0: 0.5, 1: 0.5}, {0: 0.1, 1: 0.9}, {0: 0.01, 1: 0.99}],
+        "sclr": [StandardScaler()],
     },
     # {
     #     "clf": [MLPClassifier()],

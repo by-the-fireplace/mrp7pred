@@ -11,12 +11,10 @@ from typing import Optional, Union, Dict, Any, List, Callable
 
 # from mrp7pred.featurization import featurize
 from mrp7pred.feats.gen_all_features import featurize
-from mrp7pred.preprocess import split_data
 from mrp7pred.train import run
 from mrp7pred.utils import (
     DATA,
     MODEL_DIR,
-    OUTPUT,
     get_current_time,
     DummyClassifier,
     DummyScaler,
@@ -32,7 +30,7 @@ from mrp7pred.utils import (
 class MRP7Pred(object):
     def __init__(
         self,
-        clf_dir: str = f"{MODEL_DIR}/best_model_20210111-233521.pkl",
+        clf_dir: Optional[str] = None,
         train_new: bool = False,
     ) -> None:
         """
@@ -44,6 +42,8 @@ class MRP7Pred(object):
         """
         self.train_new = train_new
         if not train_new:
+            if clf_dir is None:
+                raise ValueError("'clf_dir' cannot be None if not training new model.")
             print("Loading trained model ... ", end="", flush=True)
             with open(clf_dir, "rb") as ci:
                 self.clf = pickle.load(ci)
@@ -59,6 +59,10 @@ class MRP7Pred(object):
         train_test_ratio: float = 0.8,
         scoring: Union[str, callable] = "accuracy",
         featurized: bool = False,
+        model_dir: Optional[str] = None,
+        feats_dir: Optional[str] = None,
+        random_state: Optional[str] = None,
+        prefix: Optional[str] = None,
     ):
         """
         Featurize and train models
@@ -74,6 +78,26 @@ class MRP7Pred(object):
             True if data has been featurized else False
         grid: Dict
             Grid for GridSearchCV(), defined in MRP7Pred.grid
+        cv_n_splits: int
+            number of splits. default cv StratifiedKFold()
+        verbose: int
+            verbose indicates how much information is printed
+        n_jobs: int
+            number of processes.
+        train_test_ratio: float
+            ratio of train-test data
+        scoring: Union[str, callable]
+            scoring function, default accuracy
+        featurized: bool
+            true if df is featurized
+        model_dir: Optional[str]
+            directory where trained model is saved
+        feats_dir: Optional[str]
+            directory where featurized data is saved
+        random_state: Optional[int]
+            random seed for repeat
+        prefix: Optional[str]
+            prefix of output data file
 
         Returns
         --------
@@ -93,6 +117,10 @@ class MRP7Pred(object):
             featurized=featurized,
             verbose=verbose,
             n_jobs=n_jobs,
+            model_dir=model_dir,
+            feats_dir=feats_dir,
+            random_state=random_state,
+            prefix=prefix,
         )
 
     def predict(
@@ -102,6 +130,7 @@ class MRP7Pred(object):
         compound_df: Optional[DataFrame] = None,
         featurized_df: Optional[DataFrame] = None,
         prefix: Optional[str] = None,
+        out_dir: Optional[str] = None,
     ) -> DataFrame:
         """
         Featurize data and make predictions
@@ -159,17 +188,19 @@ class MRP7Pred(object):
         scores = [score[1] for score in self.clf.predict_proba(df_feat)]
         print("Done!")
 
-        # print("Writing output ... ", end="", flush=True)
         df_out = pd.DataFrame(columns=["name", "smiles", "pred", "score"])
         df_out["name"] = df["name"]
         df_out["smiles"] = df["smiles"]
         df_out["pred"] = preds
         df_out["score"] = scores
-        # ensure_folder(OUTPUT)
-        # df_out.to_csv(f"{OUTPUT}/{prefix}predicted_{get_current_time()}.csv")
-        # print(
-        #     f"Done! Results saved to: {OUTPUT}/{prefix}predicted_{get_current_time()}.csv"
-        # )
+
+        if out_dir is not None:
+            print("Writing output ... ", end="", flush=True)
+            ensure_folder(out_dir)
+            df_out.to_csv(f"{out_dir}/{prefix}predicted_{get_current_time()}.csv")
+            print(
+                f"Done! Results saved to: {out_dir}/{prefix}predicted_{get_current_time()}.csv"
+            )
         return df_out
 
 
