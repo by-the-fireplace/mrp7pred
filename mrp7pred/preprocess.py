@@ -27,6 +27,7 @@ from numpy import ndarray
 from pandas import DataFrame
 from sklearn.model_selection import train_test_split
 from mrp7pred.featurization import featurize
+from mrp7pred.feats.selection import _remove_similar_features
 
 
 def load_data(path: str) -> DataFrame:
@@ -90,6 +91,7 @@ def _split_train_test(
 def featurize_and_split(
     df: DataFrame,
     ratio: float,
+    time_limit: int,
     featurized: bool = True,
     random_state: Optional[int] = None,
     feats_dir: Optional[str] = None,
@@ -124,10 +126,24 @@ def featurize_and_split(
             feats_dir=feats_dir,
             prefix=prefix,
             remove_similar=True,
+            time_limit=time_limit,
         )
         print("Done!")
 
-    print("Spliting training and test data ... ", end="", flush=True)
+    if featurized:
+        if "label" not in df.columns:
+            df_feats_num = df.drop(["name", "smiles"], axis=1)
+        else:
+            df_feats_num = df.drop(["name", "smiles", "label"], axis=1)
+        df_feats_num = df_feats_num.astype("float64")
+        selected_features_id, df_feats_processed = _remove_similar_features(
+            df_feats_num, threshold=0.9
+        )
+
+    print("Drop nan ... ", end="", flush=True)
+    df = df.dropna()
+    print("Done!")
+    print("Spliting training and test data ... ")
     X_train, X_test, y_train, y_test = _split_train_test(
         df, ratio=ratio, random_state=random_state
     )

@@ -90,6 +90,7 @@ def _remove_similar_features(
     print("Done!")
     to_drop = cg.prune()
     support = list(set(range(X.shape[1])) - set(to_drop))
+    print(f"Selected {len(support)}/{len(X.columns)} features")
     return np.array(support), X.drop(X.columns[to_drop], axis=1)
 
 

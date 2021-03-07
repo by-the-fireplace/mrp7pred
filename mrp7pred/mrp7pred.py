@@ -46,13 +46,14 @@ class MRP7Pred(object):
                 raise ValueError("'clf_dir' cannot be None if not training new model.")
             print("Loading trained model ... ", end="", flush=True)
             with open(clf_dir, "rb") as ci:
-                self.clf = pickle.load(ci)
+                self.clf_best = pickle.load(ci)
             print("Done!")
 
     def auto_train_test(
         self,
         df: DataFrame,
         grid: Dict[str, Union[List[Any], ndarray]],
+        time_limit: int,
         cv_n_splits: int = 5,
         verbose: int = 10,
         n_jobs: int = -1,
@@ -101,7 +102,7 @@ class MRP7Pred(object):
 
         Returns
         --------
-        self.clf: sklearn.pipeline.Pipeline
+        self.clf_best: sklearn.pipeline.Pipeline
             Best model
         """
         if not self.train_new:
@@ -121,6 +122,7 @@ class MRP7Pred(object):
             feats_dir=feats_dir,
             random_state=random_state,
             prefix=prefix,
+            time_limit=time_limit,
         )
 
     def predict(
@@ -181,8 +183,8 @@ class MRP7Pred(object):
             df_feat = df.drop(["name", "smiles"], axis=1)
             # print("Done!")
         print("Start predicting ... ", end="", flush=True)
-        preds = self.clf.predict(df_feat)
-        scores = [score[1] for score in self.clf.predict_proba(df_feat)]
+        preds = self.clf_best.predict(df_feat)
+        scores = [score[1] for score in self.clf_best.predict_proba(df_feat)]
         print("Done!")
 
         df_out = pd.DataFrame(columns=["name", "smiles", "pred", "score"])

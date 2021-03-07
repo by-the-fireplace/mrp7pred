@@ -93,6 +93,7 @@ def _train(
 def run(
     df: DataFrame,
     grid: Dict[str, Union[List[Any], ndarray]],
+    time_limit: int,
     cv_n_splits: int,
     ratio: float,
     verbose: int = 10,
@@ -122,6 +123,7 @@ def run(
         feats_dir=feats_dir,
         random_state=random_state,
         prefix=prefix,
+        time_limit=time_limit,
     )
 
     print("Start training ... ", end="", flush=True)

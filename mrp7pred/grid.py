@@ -9,7 +9,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import MinMaxScaler, Normalizer, StandardScaler
 from sklearn.svm import SVC
 
-# from xgboost import XGBClassifier
+from xgboost import XGBClassifier
 
 from mrp7pred.utils import NoScaler
 
@@ -17,56 +17,49 @@ grid_light = [
     {
         "clf": [RandomForestClassifier()],
         "clf__n_estimators": [100, 1000],
-        "clf__class_weight": [{0: 0.5, 1: 0.5}, {0: 0.1, 1: 0.9}, {0: 0.01, 1: 0.99}],
-        "sclr": [StandardScaler()],
+        "sclr": [StandardScaler(), MinMaxScaler()],
     },
-    # {
-    #     "clf": [XGBClassifier()],
-    #     "clf__n_estimators": [100, 1000],
-    #     "clf__scale_pos_weight": [10, 100, 1000],
-    # },
+    {
+        "clf": [XGBClassifier()],
+        "clf__n_estimators": [100, 1000],
+    },
     {
         "clf": [SVC(probability=True)],
         "clf__kernel": ["rbf", "linear"],
-        "clf__class_weight": [{0: 0.5, 1: 0.5}, {0: 0.1, 1: 0.9}, {0: 0.01, 1: 0.99}],
-        "sclr": [StandardScaler()],
+        "sclr": [StandardScaler(), MinMaxScaler()],
     },
-    # {
-    #     "clf": [MLPClassifier()],
-    #     "clf__solver": ["lbfgs"],
-    #     "clf__max_iter": [1000, 2000],
-    #     "clf__alpha": [0.1, 1],
-    #     "clf__hidden_layer_sizes": [10, 15],
-    #     "sclr__scaler": [MinMaxScaler()],
-    # },
+    {
+        "clf": [MLPClassifier()],
+        "clf__solver": ["lbfgs"],
+        "clf__alpha": [0.1, 1],
+        "sclr__scaler": [StandardScaler(), MinMaxScaler()],
+    },
 ]
 
-grid_light_balance = [
+grid_light_imbalance = [
     {
         "clf": [RandomForestClassifier()],
-        "clf__n_estimators": [100, 1000],
-        # "clf__class_weight": [{0: 0.1, 1: 0.9}, {0: 0.01, 1: 0.99}],
+        "clf__n_estimators": [10, 100, 1000],
+        "clf__class_weight": [{0: 1, 1: 1000}, {0: 1, 1: 10}],
         "sclr": [StandardScaler()],
     },
-    # {
-    #     "clf": [XGBClassifier()],
-    #     "clf__n_estimators": [100, 1000],
-    #     "clf__scale_pos_weight": [1, 10, 100, 1000],
-    # },
+    {
+        "clf": [XGBClassifier()],
+        "clf__n_estimators": [10, 100, 1000],
+        "clf__scale_pos_weight": [1, 10, 100, 1000],
+    },
     {
         "clf": [SVC(probability=True)],
         "clf__kernel": ["rbf", "linear"],
-        # "clf__class_weight": [{0: 0.1, 1: 0.9}, {0: 0.01, 1: 0.99}],
+        "clf__class_weight": [{0: 1, 1: 1000}, {0: 1, 1: 10}],
         "sclr": [StandardScaler()],
     },
-    # {
-    #     "clf": [MLPClassifier()],
-    #     "clf__solver": ["lbfgs"],
-    #     "clf__max_iter": [1000, 2000],
-    #     "clf__alpha": [0.1, 1],
-    #     "clf__hidden_layer_sizes": [10, 15],
-    #     "sclr__scaler": [StandardScaler()],
-    # },
+    {
+        "clf": [MLPClassifier()],
+        "clf__solver": ["lbfgs"],
+        "clf__alpha": [0.001, 0.1],
+        "sclr__scaler": [StandardScaler()],
+    },
 ]
 
 grid = [

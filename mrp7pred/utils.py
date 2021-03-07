@@ -50,7 +50,7 @@ def standardize_smiles(smiles: str) -> str:
     try:
         mol = Chem.CanonSmiles(smiles)
     except Exception:
-        return "error"
+        return Chem.MolFromSmiles(smiles)
     return mol
 
 
