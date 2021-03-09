@@ -23,6 +23,8 @@ from sklearn.metrics import (
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.ensemble import RandomForestClassifier
 import re
+import scipy
+import scipy.cluster.hierarchy as sch
 
 
 # from tqdm import tqdm
@@ -176,6 +178,85 @@ def plot_roc_auc(
     plt.legend(prop={"size": 13}, loc="lower right")
     fig.savefig(f"{out_dir}/ROC_{get_current_time()}.png")
     plt.show()
+
+
+def plot_multicollinearity(
+    data: DataFrame,
+    figsize: Tuple[int, int],
+    dir_path: str = ".",
+    filename: str = "multicollinearity",
+) -> None:
+    """
+    Plots multicollinearity matrix, using Pearson's correlation scores, and saves resulting figure as .png file.
+
+    Parameters
+    --------
+    data: DataFrame
+        training set to avoid data leakage.
+    dir_path: str
+        directory of figure to be saved (default='').
+    filename: str
+        filename of figure to be saved (default='multicollinearity_matrix').
+
+    Returns
+    --------
+    None. Displays multicollinearity matrix and saves figure as .png file.
+    """
+    sns.set_style("whitegrid")
+    corr_matrix = data.corr(method="pearson")
+    clustered_corr = cluster_corr(corr_matrix)
+    plt.figure(figsize=figsize)
+    plt.title("Multicollinearity Matrix: Pearson Correlation")
+    # mask = (corr_matrix, dtype=np.bool)
+    # mask[np.triu_indices_from(mask)] = True
+    cmap = sns.diverging_palette(220, 10, as_cmap=True)
+    fig = sns.heatmap(
+        corr_matrix,
+        # mask=mask,
+        cmap=cmap,
+        center=0,
+        vmax=1,
+        vmin=-1,
+        annot=False,
+        square=True,
+        linewidth=0,
+        cbar_kws={"shrink": 0.5},
+    )
+    fig = fig.get_figure()
+    fig.savefig(dir_path + "/" + filename + ".png", bbox_inches="tight")
+
+
+def cluster_corr(corr_array, inplace=False):
+    """
+    From: https://wil.yegelwel.com/cluster-correlation-matrix/
+
+    Rearranges the correlation matrix, corr_array, so that groups of highly
+    correlated variables are next to eachother
+
+    Parameters
+    ----------
+    corr_array : pandas.DataFrame or numpy.ndarray
+        a NxN correlation matrix
+
+    Returns
+    -------
+    pandas.DataFrame or numpy.ndarray
+        a NxN correlation matrix with the columns and rows rearranged
+    """
+    pairwise_distances = sch.distance.pdist(corr_array)
+    linkage = sch.linkage(pairwise_distances, method="complete")
+    cluster_distance_threshold = pairwise_distances.max() / 2
+    idx_to_cluster_array = sch.fcluster(
+        linkage, cluster_distance_threshold, criterion="distance"
+    )
+    idx = np.argsort(idx_to_cluster_array)
+
+    if not inplace:
+        corr_array = corr_array.copy()
+
+    if isinstance(corr_array, DataFrame):
+        return corr_array.iloc[idx, :].T.iloc[idx, :]
+    return corr_array[idx, :][:, idx]
 
 
 class DummyClassifier(BaseEstimator):

@@ -7,7 +7,6 @@ notebook/output
 notebook/.ipynb_checkpoints
 notebook/*.pkl
 notebook/*.csv
-notebook/*.ipynb
 mrp7pred/feats/all_features_*
 mrp7pred/feats/*.pkl
 mrp7pred/__pycache__
@@ -18,3 +17,4 @@ mrp7pred.egg-info
 __pycache__
 .DS_Store
 mrp7pred/*.csv
+*.png

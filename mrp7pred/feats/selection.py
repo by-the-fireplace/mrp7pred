@@ -60,6 +60,20 @@ def _remove_low_variance_features(
     return selector.get_support(indices=True), selector.fit_transform(X)
 
 
+def _remove_all_zero_features(
+    X: Union[ndarray, DataFrame]
+) -> Tuple[ndarray, DataFrame]:
+    """
+    Remove all zero features
+    """
+    print("Remove features with all zeros ... ", end="", flush=True)
+    mask = (X == 0).all()
+    support_zero = np.where(~mask)[0]
+    print("Done!")
+    print(f"Selected {len(support_zero)}/{len(X.columns)} features")
+    return support_zero, X.iloc[:, support_zero]
+
+
 def _remove_similar_features(
     X: Union[ndarray, DataFrame], threshold: float = 0.9
 ) -> Tuple[ndarray, DataFrame]:

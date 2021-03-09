@@ -5,7 +5,7 @@ Generate full features from given compound (smiles) list
 from mrp7pred.feats.rdk_features import _rdk_features
 from mrp7pred.feats.chemopy_features import _chemopy_features
 from mrp7pred.utils import get_current_time, ensure_folder, standardize_smiles
-from mrp7pred.feats.selection import _remove_similar_features
+from mrp7pred.feats.selection import _remove_similar_features, _remove_all_zero_features
 
 import pandas as pd
 import numpy as np
@@ -189,11 +189,17 @@ def featurize(
 
     signal.alarm(0)
     selected_features_id = np.arange(len(df_feats.columns))
+
+    # extract numeric columns
+    if label is None:
+        df_feats_num = df_feats.drop(["name", "smiles"], axis=1)
+    else:
+        df_feats_num = df_feats.drop(["name", "smiles", "label"], axis=1)
+
+    # remove all zero features
+    support_zero, _ = _remove_all_zero_features(df_feats_num)
+
     if remove_similar:
-        if label is None:
-            df_feats_num = df_feats.drop(["name", "smiles"])
-        else:
-            df_feats_num = df_feats.drop(["name", "smiles", "label"], axis=1)
         df_feats_num = df_feats_num.astype("float64")
         selected_features_id, df_feats_processed = _remove_similar_features(
             df_feats_num, threshold=0.9
@@ -204,6 +210,8 @@ def featurize(
         df_feats_processed["smiles"] = df_feats["smiles"]
         if label is not None:
             df_feats_processed["label"] = df_feats["label"]
+
+    selected_features_id = np.intersect1d(support_zero, selected_features_id)
 
     if feats_dir:
         ensure_folder(feats_dir)
