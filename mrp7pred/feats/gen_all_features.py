@@ -71,6 +71,7 @@ def featurize(
     X: DataFrame,
     time_limit: int = 30,
     remove_similar: bool = True,
+    threshold: float = 0.7,
     feats_dir: Optional[str] = None,
     smiles_col_name: Optional[str] = None,
     prefix: Optional[str] = None,
@@ -202,7 +203,7 @@ def featurize(
     if remove_similar:
         df_feats_num = df_feats_num.astype("float64")
         selected_features_id, df_feats_processed = _remove_similar_features(
-            df_feats_num, threshold=0.9
+            df_feats_num, threshold=threshold
         )
 
         # Add name, smiles, label (if training) back to the dataframe

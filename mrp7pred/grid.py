@@ -17,23 +17,27 @@ grid_light = [
     {
         "clf": [RandomForestClassifier()],
         "clf__n_estimators": [100, 1000],
+        "clf__criterion": ["gini", "entropy"],
+        "clf__max_depth": [3, 5, 7],
         "sclr": [StandardScaler(), MinMaxScaler()],
     },
     {
         "clf": [XGBClassifier()],
+        "clf__gamma": [0, 1, 5],
+        "clf__learning_rate": [0.001, 0.01, 0.1],
         "clf__n_estimators": [100, 1000],
     },
     {
         "clf": [SVC(probability=True)],
         "clf__kernel": ["rbf", "linear"],
+        "clf__C": [1, 10, 100, 1000],
         "sclr": [StandardScaler(), MinMaxScaler()],
     },
-    {
-        "clf": [MLPClassifier()],
-        "clf__solver": ["lbfgs"],
-        "clf__alpha": [0.1, 1],
-        "sclr__scaler": [StandardScaler(), MinMaxScaler()],
-    },
+    # {
+    #     "clf": [MLPClassifier()],
+    #     "clf__solver": ["lbfgs"],
+    #     "sclr__scaler": [StandardScaler(), MinMaxScaler()],
+    # },
 ]
 
 grid_light_imbalance = [

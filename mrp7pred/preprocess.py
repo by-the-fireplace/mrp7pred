@@ -27,7 +27,7 @@ from numpy import ndarray
 from pandas import DataFrame
 from sklearn.model_selection import train_test_split
 from mrp7pred.featurization import featurize
-from mrp7pred.feats.selection import _remove_similar_features
+from mrp7pred.feats.selection import _remove_similar_features, _remove_all_zero_features
 
 
 def load_data(path: str) -> DataFrame:
@@ -93,6 +93,7 @@ def featurize_and_split(
     ratio: float,
     time_limit: int,
     featurized: bool = True,
+    threshold: float = 0.8,
     random_state: Optional[int] = None,
     feats_dir: Optional[str] = None,
     prefix: Optional[str] = None,
@@ -127,6 +128,7 @@ def featurize_and_split(
             prefix=prefix,
             remove_similar=True,
             time_limit=time_limit,
+            threshold=threshold,
         )
         print("Done!")
 
@@ -136,9 +138,11 @@ def featurize_and_split(
         else:
             df_feats_num = df.drop(["name", "smiles", "label"], axis=1)
         df_feats_num = df_feats_num.astype("float64")
+        support_zero, _ = _remove_all_zero_features(df_feats_num)
         selected_features_id, df_feats_processed = _remove_similar_features(
-            df_feats_num, threshold=0.9
+            df_feats_num, threshold=threshold
         )
+        selected_features_id = np.intersect1d(support_zero, selected_features_id)
 
     print("Drop nan ... ", end="", flush=True)
     df = df.dropna()
