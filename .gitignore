@@ -7,6 +7,7 @@ notebook/output
 notebook/.ipynb_checkpoints
 notebook/*.pkl
 notebook/*.csv
+notebook/*.csv
 mrp7pred/feats/all_features_*
 mrp7pred/feats/*.pkl
 mrp7pred/__pycache__
