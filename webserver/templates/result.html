@@ -100,8 +100,8 @@
                       <th>2D Structure</th>
                       <th>SMILES</th>
                       <th>Molecular Weight</th>
-                      <th>Score</th>
-                      <th>Is Modulator?</th>
+                      <th>Modulator Score</th>
+                      <th>Substrate Score</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -111,8 +111,8 @@
                       <td>{{item.svg | safe}}</td>
                       <td style="max-width:270px;">{{item.smiles}}</td>
                       <td>{{item.mw}}</td>
-                      <td>{{item.score}}</td>
-                      <td>{{item.is_modulator}}</td>
+                      <td>{{item.modulator_score}}</td>
+                      <td>{{item.substrate_score}}</td>
                     </tr>
                     {% endfor %}
                   </tbody>

@@ -71,6 +71,7 @@ def featurize(
     X: DataFrame,
     time_limit: int = 30,
     remove_similar: bool = True,
+    remove_zeros: bool = True,
     threshold: float = 0.7,
     feats_dir: Optional[str] = None,
     smiles_col_name: Optional[str] = None,
@@ -137,15 +138,15 @@ def featurize(
         time_start = datetime.datetime.now()
 
         # set timer and terminate if exceed time limit
-        signal.signal(signal.SIGALRM, _timeout_handler)
-        signal.alarm(time_limit)
+        # signal.signal(signal.SIGALRM, _timeout_handler)
+        # signal.alarm(time_limit)
 
-        # pool = Pool(processes=1)
-        # result = pool.apply_async(_gen_all_features, (smi,))
+        pool = Pool(processes=1)
+        result = pool.apply_async(_gen_all_features, (smi,))
 
         try:
-            smi_feats_d = _gen_all_features(smi)
-            # smi_feats_d = result.get(timeout=time_limit)
+            # smi_feats_d = _gen_all_features(smi)
+            smi_feats_d = result.get(timeout=time_limit)
         except KeyError as e:  # elements not supported by featurizers
             # smi_feats = np.nan
             print(f"{name} featurization failed\nSmiles: {smi}\nError: {e}\n")
@@ -156,18 +157,18 @@ def featurize(
             print(f"{name} featurization failed\nSmiles: {smi}\nError: {e}\n")
             failed.append(name)
             continue
-        except TimeoutException:
-            print(
-                f"{name} Featurization failed\nSmiles: {smi}\nError: Time out ({time_limit}s)\n"
-            )
-            failed.append(name)
-            continue
-        # except TimeoutError:
+        # except TimeoutException:
         #     print(
         #         f"{name} Featurization failed\nSmiles: {smi}\nError: Time out ({time_limit}s)\n"
         #     )
         #     failed.append(name)
         #     continue
+        except TimeoutError:
+            print(
+                f"{name} Featurization failed\nSmiles: {smi}\nError: Time out ({time_limit}s)\n"
+            )
+            failed.append(name)
+            continue
 
         elapsed = (datetime.datetime.now() - time_start).total_seconds()
         denom += 1
@@ -188,7 +189,7 @@ def featurize(
             f"Featurized {index+1}. {name}\nSMILES: {smi}\nTime cost: {round(elapsed, 3)}s\n"
         )
 
-    signal.alarm(0)
+    # signal.alarm(0)
     selected_features_id = np.arange(len(df_feats.columns))
 
     # extract numeric columns
@@ -197,8 +198,10 @@ def featurize(
     else:
         df_feats_num = df_feats.drop(["name", "smiles", "label"], axis=1)
 
+    support_zero = np.arange(len(df_feats.columns))
     # remove all zero features
-    support_zero, _ = _remove_all_zero_features(df_feats_num)
+    if remove_zeros:
+        support_zero, _ = _remove_all_zero_features(df_feats_num)
 
     if remove_similar:
         df_feats_num = df_feats_num.astype("float64")

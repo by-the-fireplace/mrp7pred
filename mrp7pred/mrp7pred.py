@@ -158,6 +158,7 @@ class MRP7Pred(object):
             )
 
         if featurized_df is None:
+            self.featurized_df = None
             if compound_csv_dir:
                 df = pd.read_csv(compound_csv_dir)
             elif compound_df is not None:
@@ -179,7 +180,10 @@ class MRP7Pred(object):
         if featurized_df is None:
             print("Generating features ... ")
             # df_feats should be purely numeric
-            _, df = featurize(df, remove_similar=False, prefix=prefix)
+            _, df = featurize(
+                df, remove_similar=False, remove_zeros=False, prefix=prefix
+            )
+            self.featurized_df = df
             df_feat = df.drop(["name", "smiles"], axis=1)
             # print("Done!")
         print("Start predicting ... ", end="", flush=True)

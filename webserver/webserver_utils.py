@@ -31,21 +31,6 @@ def random_string(N: int) -> str:
     )
 
 
-def get_predictions(
-    df: DataFrame, clf_dir: str, selected_features: Optional[str] = None
-):
-    m7p = MRP7Pred(clf_dir=clf_dir)
-    selected_features_arr = np.load(selected_features)
-    out = m7p.predict(
-        compound_df=df,
-        selected_features_arr=selected_features_arr,
-        prefix=f"{get_current_time()}",
-    )
-    out = out.sort_values(by=["score"], ascending=False)
-    # print(out.head())
-    return out
-
-
 def generate_report_dict_list(out: DataFrame) -> List[Dict[str, str]]:
     """
     Generate html report from prediction output
@@ -70,8 +55,11 @@ def generate_report_dict_list(out: DataFrame) -> List[Dict[str, str]]:
         smiles = getattr(row, "smiles")
         report_d["name"] = getattr(row, "name")
         report_d["smiles"] = standardize_smiles(smiles)
-        report_d["score"] = round(getattr(row, "score"), 3)
-        report_d["is_modulator"] = "Yes" if getattr(row, "score") >= 0.5 else "No"
+        report_d["substrate_score"] = round(getattr(row, "substrate_score"), 3)
+        report_d["modulator_score"] = round(getattr(row, "modulator_score"), 3)
+        report_d["is_modulator"] = (
+            "Yes" if getattr(row, "modulator_score") >= 0.5 else "No"
+        )
         report_d["mw"] = get_molweight(smiles)
         report_d["svg"] = draw_molecule(smiles, subImgSize=(300, 200))
         report_d_l.append(report_d)

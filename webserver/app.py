@@ -18,17 +18,16 @@ from webserver_utils import (
     ensure_folder,
     get_current_time,
     random_string,
-    get_predictions,
     generate_report_dict_list,
 )
 import pandas as pd
 import pickle
+from mrp7pred.mrp7pred import MRP7Pred
 
 
 app = Flask(__name__)
 
 bootstrap = Bootstrap(app)
-
 current_data = ""
 
 # @app.route("/home", methods=["GET", "POST"])
@@ -37,12 +36,25 @@ def home():
     return render_template("base.html")
 
 
-def run_pred(df, filename):
-    out = get_predictions(
-        df,
-        clf_dir="./best_model_20210211-031248.pkl",
-        selected_features="./featureid_best_model_20210211-031248.npy",
+def run_pred(df, *clf_dir):
+    if len(clf_dir) != 2:
+        raise ValueError("Must provide both substrate and modulator models!")
+    m7p_mod = MRP7Pred(clf_dir=clf_dir[0])
+    out_mod = m7p_mod.predict(
+        compound_df=df,
+        prefix=f"{get_current_time()}",
     )
+    df_feats = m7p_mod.featurized_df
+    m7p_sub = MRP7Pred(clf_dir=clf_dir[1])
+    out_sub = m7p_sub.predict(
+        compound_df=df,
+        prefix=f"{get_current_time()}",
+        featurized_df=df_feats,
+    )
+
+    out_mod["substrate_score"] = out_sub["score"]
+    out_mod = out_mod.rename(columns={"score": "modulator_score"})
+    out = out_mod.sort_values(by=["modulator_score"], ascending=False)
     report_d_l = generate_report_dict_list(out)
     return report_d_l
 
@@ -72,10 +84,13 @@ def run():
         #     pickle.dump(df, f)
         # jsonify({"out_path": out_path})
         try:
-            report_d_l = run_pred(df, filename)
+            clf_modulator_dir = "./man_modulator_115_best_model_20210311-233712.pkl"
+            clf_substrate_dir = "./nsc_substrate_mix_103_best_model_20210306-190110.pkl"
+            report_d_l = run_pred(df, clf_modulator_dir, clf_substrate_dir)
+
             return render_template("result.html", items=report_d_l, filename=filename)
         except Exception as e:
-            return render_template("error.html", log=e)
+            return render_template("error.html", log=e, filename=filename)
     if request.method == "GET":
         return redirect(url_for("wait"))
 
