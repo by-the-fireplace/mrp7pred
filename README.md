@@ -2,7 +2,7 @@
 
 A machine learning pipeline to predict putative MRP7 ligands
 
-_* More details will be revealed in our paper, which is still in preparation now._
+_* More details will be revealed in our paper, which is under review._
 
 ## Overview
 --------
