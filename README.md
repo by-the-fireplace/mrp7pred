@@ -1,4 +1,4 @@
-# mrp7pred
+# Mrp7Pred
 
 A machine learning pipeline to predict putative MRP7 ligands
 
